@@ -92,11 +92,11 @@ jobs:
           sha=`sha256sum mewsic_${{ env.VERSION_TAG }}.deb | awk '{ print $1 }'`
           echo "DEB_SHA=$sha" >> $GITHUB_ENV
           
-          mv desktop-macos-latest/dmg/mewsic-*.dmg mewsic-${{ env.VERSION_TAG }}.dmg
+          mv desktop-macos-latest/dmg/Mewsic-*.dmg mewsic-${{ env.VERSION_TAG }}.dmg
           sha=`sha256sum mewsic-${{ env.VERSION_TAG }}.dmg | awk '{ print $1 }'`
           echo "DMG_SHA=$sha" >> $GITHUB_ENV
           
-          mv desktop-windows-latest/msi/mewsic-*.msi mewsic-${{ env.VERSION_TAG }}.msi
+          mv desktop-windows-latest/msi/Mewsic-*.msi mewsic-${{ env.VERSION_TAG }}.msi
           sha=`sha256sum mewsic-${{ env.VERSION_TAG }}.msi | awk '{ print $1 }'`
           echo "MSI_SHA=$sha" >> $GITHUB_ENV
 
