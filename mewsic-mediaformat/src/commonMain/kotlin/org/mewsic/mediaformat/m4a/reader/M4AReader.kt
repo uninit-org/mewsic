@@ -11,9 +11,30 @@ class FullHeader(reader: SeekableBinaryReader) {
     val flags = reader.readEndian(3).toInt()
 }
 
-sealed interface Box
+abstract class Box(protected val reader: SeekableBinaryReader) {
+    protected val nested = mutableMapOf<String, MutableList<Long>>()
 
-class Ftyp(reader: SeekableBinaryReader) : Box {
+    fun scanNested() {
+        while (reader.position() < reader.length()) {
+            val at = reader.position()
+            val size = reader.readUInt().toLong()
+            val type = reader.readString(4)
+            val list = nested.getOrPut(type, ::mutableListOf)
+            list.add(at)
+            reader.skip(size - 8)
+        }
+    }
+
+    fun <T: Box> getAll(type: String, constructor: (SeekableBinaryReader) -> T): List<T> {
+        val list = nested[type] ?: return emptyList()
+        return list.map { at ->
+            reader.seek(at + 8)
+            constructor(reader)
+        }
+    }
+}
+
+class Ftyp(reader: SeekableBinaryReader) : Box(reader) {
     val majorBrand = reader.readString(4)
     val minorVersion = reader.readInt()
     val compatibleBrands: List<String>
@@ -27,18 +48,18 @@ class Ftyp(reader: SeekableBinaryReader) : Box {
     }
 }
 
-class Moov(reader: SeekableBinaryReader) : Box {
+class Moov(reader: SeekableBinaryReader) : Box(reader) {
     val mvhd: Mvhd
     val trak: List<Trak>
 
     init {
-        val nested = reader.readNestedBoxes()
-        mvhd = nested.filterIsInstance<Mvhd>().first()
-        trak = nested.filterIsInstance<Trak>()
+        scanNested()
+        mvhd = getAll("mvhd", ::Mvhd).first()
+        trak = getAll("trak", ::Trak)
     }
 }
 
-class Mvhd(reader: SeekableBinaryReader) : Box {
+class Mvhd(reader: SeekableBinaryReader) : Box(reader) {
     val fullHeader = FullHeader(reader)
     val creationTime: Long
     val modificationTime: Long
@@ -71,18 +92,18 @@ class Mvhd(reader: SeekableBinaryReader) : Box {
 
 }
 
-class Trak(reader: SeekableBinaryReader) : Box {
+class Trak(reader: SeekableBinaryReader) : Box(reader) {
     val tkhd: Tkhd
     val mdia: Mdia
 
     init {
-        val nested = reader.readNestedBoxes()
-        tkhd = nested.filterIsInstance<Tkhd>().first()
-        mdia = nested.filterIsInstance<Mdia>().first()
+        scanNested()
+        tkhd = getAll("tkhd", ::Tkhd).first()
+        mdia = getAll("mdia", ::Mdia).first()
     }
 }
 
-class Tkhd(reader: SeekableBinaryReader) : Box {
+class Tkhd(reader: SeekableBinaryReader) : Box(reader) {
     val fullHeader = FullHeader(reader)
     val creationTime: Long
     val modificationTime: Long
@@ -123,23 +144,35 @@ class Tkhd(reader: SeekableBinaryReader) : Box {
     }
 }
 
-class Mdia(reader: SeekableBinaryReader) : Box {
-    // I just learned hdlr specifies how to parse minf, making it impossible to parse the way we currently do
-    // TODO: Rewrite to scan for children first?
-//    val mdhd: Mdhd
-//    val hdlr: Hdlr
-//    val minf: Minf
-//
-//    init {
-//        val nested = reader.readNestedBoxes()
-//        mdhd = nested.filterIsInstance<Mdhd>().first()
-//        hdlr = nested.filterIsInstance<Hdlr>().first()
-//        minf = nested.filterIsInstance<Minf>().first()
-//    }
+class Mdia(reader: SeekableBinaryReader) : Box(reader) {
+    val mdhd: Mdhd
+    val hdlr: Hdlr
+    val minf: Minf
+
+    init {
+        scanNested()
+        mdhd = getAll("mdhd", ::Mdhd).first()
+        hdlr = getAll("hdlr", ::Hdlr).first()
+        minf = getAll("minf") { Minf(it, hdlr) }.first()
+    }
 }
 
+class Mdhd(reader: SeekableBinaryReader) : Box(reader) {
+    // TODO
+}
+
+class Hdlr(reader: SeekableBinaryReader) : Box(reader) {
+    // TODO
+}
+
+class Minf(reader: SeekableBinaryReader, hdlr: Hdlr) : Box(reader) {
+    // TODO
+}
+
+
+
 // To be used for things we don't care about like mvex or iods
-object EMPTY : Box
+object EMPTY : Box(SeekableBinaryReader(ByteArrayInputStream(ByteArray(0))))
 
 fun BinaryReader.readBox(): Box {
     val size = readInt()
@@ -148,14 +181,10 @@ fun BinaryReader.readBox(): Box {
     val data = read(size - 8)
     val reader = SeekableBinaryReader(ByteArrayInputStream(data), false)
 
+    // Top-level boxes only!
     return when (type) {
-        // Top-level boxes:
         "ftyp" -> Ftyp(reader)
         "moov" -> Moov(reader)
-
-        // Nested boxes:
-        "tkhd" -> Tkhd(reader)
-        "mdia" -> Mdia(reader)
 
         // Not implemented:
         else -> {
@@ -163,14 +192,6 @@ fun BinaryReader.readBox(): Box {
             EMPTY
         }
     }
-}
-
-fun SeekableBinaryReader.readNestedBoxes(): List<Box> {
-    val boxes = mutableListOf<Box>()
-    while (position() < length()) {
-        boxes.add(readBox())
-    }
-    return boxes
 }
 
 
