@@ -14,6 +14,7 @@ rootProject.name = "mewsic"
 include(
     ":mewsic-commons",
     ":mewsic-mediaformat",
+    ":mewsic-audioplayer",
     ":mewsic-innertube",
     ":mewsic-application",
 )

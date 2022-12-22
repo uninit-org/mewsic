@@ -82,10 +82,10 @@ interface MewsicCommonPlugin : Plugin<Project> {
                     dependsOn(commonMain)
                 }
                 val desktopMain by getting {
-                    dependsOn(commonMain)
+                    dependsOn(jvmMain)
                 }
                 val androidMain by getting {
-                    dependsOn(commonMain)
+                    dependsOn(jvmMain)
                 }
             }
         }
