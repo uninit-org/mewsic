@@ -4,6 +4,8 @@ import com.github.gmazzo.gradle.plugins.BuildConfigExtension
 import org.mewsic.gradle.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.ExtraPropertiesExtension
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.findByType
 
 open class MewsicRootPlugin : Plugin<Project> {
@@ -15,14 +17,12 @@ open class MewsicRootPlugin : Plugin<Project> {
         val build_version by defaultProperty(getGitTag() ?: "v1.0.0-${commitCount}-${gitSha}")
         version = build_version
 
-        afterEvaluate {
-            subprojects {
-                extensions.findByType<BuildConfigExtension>()?.apply {
-                    buildConfigField("Int", "COMMIT_COUNT", commitCount)
-                    buildConfigField("String", "COMMIT_SHA", "\"${gitSha}\"")
-                    buildConfigField("String", "BUILD_TIME", "\"${buildTime}\"")
-                }
-            }
+        target.configure<ExtraPropertiesExtension> {
+            this.set("buildconfig_entries", listOf(
+                Triple("Int", "COMMIT_COUNT", commitCount),
+                Triple("String", "COMMIT_SHA", "\"$gitSha\""),
+                Triple("String", "BUILD_TIME", "\"$buildTime\""),
+            ))
         }
     }
 }

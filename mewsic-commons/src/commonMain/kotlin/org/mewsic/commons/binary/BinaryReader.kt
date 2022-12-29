@@ -2,7 +2,7 @@ package org.mewsic.commons.binary
 
 import org.mewsic.commons.streams.api.InputStream
 
-open class BinaryReader(protected val stream: InputStream, private val littleEndian: Boolean = true) {
+open class BinaryReader(protected val stream: InputStream, private val bigEndian: Boolean = true) {
     fun read(n: Int): ByteArray {
         val bytes = ByteArray(n)
         stream.read(bytes)
@@ -12,7 +12,7 @@ open class BinaryReader(protected val stream: InputStream, private val littleEnd
     fun readEndian(n: Int): Long {
         val bytes = ByteArray(n)
         stream.read(bytes)
-        if (littleEndian) {
+        if (bigEndian) {
             bytes.reverse()
         }
         var value = 0L

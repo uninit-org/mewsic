@@ -1,0 +1,44 @@
+package net.sourceforge.jaad.mp4.boxes.impl.fd
+
+import net.sourceforge.jaad.mp4.MP4InputStream
+
+/**
+ * The FEC reservoir box associates the source file identified in the file
+ * partition box with FEC reservoirs stored as additional items. It contains a
+ * list that starts with the first FEC reservoir associated with the first
+ * source block of the source file and continues sequentially through the source
+ * blocks of the source file.
+ *
+ * @author in-somnia
+ */
+class FECReservoirBox : FullBox("FEC Reservoir Box") {
+    /**
+     * The item ID indicates the location of the FEC reservoir associated with a
+     * source block.
+     *
+     * @return all item IDs
+     */
+    var itemIDs: IntArray
+        private set
+
+    /**
+     * The symbol count indicates the number of repair symbols contained in the
+     * FEC reservoir.
+     *
+     * @return all symbol counts
+     */
+    var symbolCounts: LongArray
+        private set
+
+    @Throws(java.io.IOException::class)
+    fun decode(`in`: MP4InputStream) {
+        super.decode(`in`)
+        val entryCount = `in`.readBytes(2) as Int
+        itemIDs = IntArray(entryCount)
+        symbolCounts = LongArray(entryCount)
+        for (i in 0 until entryCount) {
+            itemIDs[i] = `in`.readBytes(2) as Int
+            symbolCounts[i] = `in`.readBytes(4)
+        }
+    }
+}
