@@ -41,6 +41,10 @@ class ByteArrayInputStream(private val array: ByteArray) : SeekableInputStream {
         this.offset = offset.toInt()
     }
 
+    override fun back(offset: Long) {
+        this.offset -= offset.toInt()
+    }
+
     override fun position(): Long {
         return offset.toLong()
     }

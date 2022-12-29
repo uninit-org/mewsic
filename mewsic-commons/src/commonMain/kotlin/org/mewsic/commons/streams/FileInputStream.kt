@@ -34,6 +34,10 @@ class FileInputStream(val path: String) : SeekableInputStream{
         TODO("Not yet implemented")
     }
 
+    override fun back(offset: Long) {
+        TODO("Not yet implemented")
+    }
+
     override fun position(): Long {
         TODO("Not yet implemented")
     }

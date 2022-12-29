@@ -1,6 +1,8 @@
 package net.sourceforge.jaad.mp4.api.codec
 
 import net.sourceforge.jaad.mp4.api.DecoderInfo
+import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.AC3SpecificBox
+import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.CodecSpecificBox
 
 class AC3DecoderInfo(box: CodecSpecificBox) : DecoderInfo() {
     private val box: AC3SpecificBox
@@ -10,15 +12,15 @@ class AC3DecoderInfo(box: CodecSpecificBox) : DecoderInfo() {
     }
 
     val isLfeon: Boolean
-        get() = box.isLfeon()
+        get() = box.isLfeon
     val fscod: Int
-        get() = box.getFscod()
+        get() = box.fscod
     val bsmod: Int
-        get() = box.getBsmod()
+        get() = box.bsmod
     val bsid: Int
-        get() = box.getBsid()
+        get() = box.bsid
     val bitRateCode: Int
-        get() = box.getBitRateCode()
+        get() = box.bitRateCode
     val acmod: Int
-        get() = box.getAcmod()
+        get() = box.acmod
 }

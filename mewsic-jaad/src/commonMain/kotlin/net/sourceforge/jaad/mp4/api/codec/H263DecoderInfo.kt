@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.api.codec
+import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.H263SpecificBox
+import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.CodecSpecificBox
 
 import net.sourceforge.jaad.mp4.api.DecoderInfo
 
@@ -10,11 +12,11 @@ class H263DecoderInfo(box: CodecSpecificBox) : DecoderInfo() {
     }
 
     val decoderVersion: Int
-        get() = box.getDecoderVersion()
+        get() = box.decoderVersion
     val vendor: Long
-        get() = box.getVendor()
+        get() = box.vendor
     val level: Int
-        get() = box.getLevel()
+        get() = box.level
     val profile: Int
-        get() = box.getProfile()
+        get() = box.profile
 }

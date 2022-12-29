@@ -1,6 +1,8 @@
 package net.sourceforge.jaad.mp4.api.codec
 
 import net.sourceforge.jaad.mp4.api.DecoderInfo
+import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.AMRSpecificBox
+import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.CodecSpecificBox
 
 class AMRDecoderInfo(box: CodecSpecificBox) : DecoderInfo() {
     private val box: AMRSpecificBox
@@ -10,13 +12,13 @@ class AMRDecoderInfo(box: CodecSpecificBox) : DecoderInfo() {
     }
 
     val decoderVersion: Int
-        get() = box.getDecoderVersion()
+        get() = box.decoderVersion
     val vendor: Long
-        get() = box.getVendor()
+        get() = box.vendor
     val modeSet: Int
-        get() = box.getModeSet()
+        get() = box.modeSet
     val modeChangePeriod: Int
-        get() = box.getModeChangePeriod()
+        get() = box.modeChangePeriod
     val framesPerSample: Int
-        get() = box.getFramesPerSample()
+        get() = box.framesPerSample
 }

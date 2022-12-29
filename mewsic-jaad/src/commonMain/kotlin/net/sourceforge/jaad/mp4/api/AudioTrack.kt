@@ -1,6 +1,12 @@
 package net.sourceforge.jaad.mp4.api
 
 import net.sourceforge.jaad.mp4.MP4InputStream
+import net.sourceforge.jaad.mp4.boxes.Box
+import net.sourceforge.jaad.mp4.boxes.BoxTypes
+import net.sourceforge.jaad.mp4.boxes.impl.ESDBox
+import net.sourceforge.jaad.mp4.boxes.impl.SampleDescriptionBox
+import net.sourceforge.jaad.mp4.boxes.impl.SoundMediaHeaderBox
+import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.AudioSampleEntry
 
 class AudioTrack(trak: Box, `in`: MP4InputStream) : Track(trak, `in`) {
     enum class AudioCodec : Codec {
@@ -18,27 +24,27 @@ class AudioTrack(trak: Box, `in`: MP4InputStream) : Track(trak, `in`) {
 
     private val smhd: SoundMediaHeaderBox
     private var sampleEntry: AudioSampleEntry? = null
-    private override var codec: Codec? = null
+    override lateinit var codec: Codec
 
     init {
-        val mdia: Box = trak.getChild(BoxTypes.MEDIA_BOX)
-        val minf: Box = mdia.getChild(BoxTypes.MEDIA_INFORMATION_BOX)
+        val mdia: Box = trak.getChild(BoxTypes.MEDIA_BOX)!!
+        val minf: Box = mdia.getChild(BoxTypes.MEDIA_INFORMATION_BOX)!!
         smhd = minf.getChild(BoxTypes.SOUND_MEDIA_HEADER_BOX) as SoundMediaHeaderBox
-        val stbl: Box = minf.getChild(BoxTypes.SAMPLE_TABLE_BOX)
+        val stbl: Box = minf.getChild(BoxTypes.SAMPLE_TABLE_BOX)!!
 
         //sample descriptions: 'mp4a' and 'enca' have an ESDBox, all others have a CodecSpecificBox
         val stsd: SampleDescriptionBox = stbl.getChild(BoxTypes.SAMPLE_DESCRIPTION_BOX) as SampleDescriptionBox
-        if (stsd.getChildren().get(0) is AudioSampleEntry) {
-            sampleEntry = stsd.getChildren().get(0) as AudioSampleEntry
-            val type: Long = sampleEntry.getType()
-            if (sampleEntry.hasChild(BoxTypes.ESD_BOX)) findDecoderSpecificInfo(sampleEntry.getChild(BoxTypes.ESD_BOX) as ESDBox) else decoderInfo =
-                net.sourceforge.jaad.mp4.api.DecoderInfo.parse(sampleEntry.getChildren().get(0) as CodecSpecificBox)
+        if (stsd.getChildren()[0] is AudioSampleEntry) {
+            sampleEntry = stsd.getChildren()[0] as AudioSampleEntry
+            val type: Long = sampleEntry!!.type
+            if (sampleEntry!!.hasChild(BoxTypes.ESD_BOX)) findDecoderSpecificInfo(sampleEntry!!.getChild(BoxTypes.ESD_BOX) as ESDBox) else decoderInfo =
+                net.sourceforge.jaad.mp4.api.DecoderInfo.parse(sampleEntry!!.getChildren()[0] as CodecSpecificBox)
             if (type == BoxTypes.ENCRYPTED_AUDIO_SAMPLE_ENTRY || type == BoxTypes.DRMS_SAMPLE_ENTRY) {
-                findDecoderSpecificInfo(sampleEntry.getChild(BoxTypes.ESD_BOX) as ESDBox)
+                findDecoderSpecificInfo(sampleEntry!!.getChild(BoxTypes.ESD_BOX) as ESDBox)
                 protection =
-                    Protection.Companion.parse(sampleEntry.getChild(BoxTypes.PROTECTION_SCHEME_INFORMATION_BOX))
-                codec = protection.getOriginalFormat()
-            } else codec = AudioCodec.forType(sampleEntry.getType())
+                    Protection.Companion.parse(sampleEntry!!.getChild(BoxTypes.PROTECTION_SCHEME_INFORMATION_BOX))
+                codec = protection!!.getOriginalFormat()!!
+            } else codec = AudioCodec.forType(sampleEntry!!.type)
         } else {
             sampleEntry = null
             codec = AudioCodec.UNKNOWN_AUDIO_CODEC
@@ -60,7 +66,7 @@ class AudioTrack(trak: Box, `in`: MP4InputStream) : Track(trak, `in`) {
          *
          * @return the stereo balance for a this track
          */
-        get() = smhd.getBalance()
+        get() = smhd.balance
     val channelCount: Int
         /**
          * Returns the number of channels in this audio track.

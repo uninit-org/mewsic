@@ -2,7 +2,7 @@ package net.sourceforge.jaad.mp4.boxes
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
-class BoxImpl(override val name: String) : net.sourceforge.jaad.mp4.boxes.Box {
+open class BoxImpl(override val name: String) : net.sourceforge.jaad.mp4.boxes.Box {
     override var size: Long = 0
         protected set
     override var type: Long = 0
@@ -10,7 +10,7 @@ class BoxImpl(override val name: String) : net.sourceforge.jaad.mp4.boxes.Box {
     override var offset: Long = 0
         protected set
     protected override var parent: net.sourceforge.jaad.mp4.boxes.Box? = null
-    protected override val children: MutableList<net.sourceforge.jaad.mp4.boxes.Box>
+    override val children: MutableList<net.sourceforge.jaad.mp4.boxes.Box>
 
     init {
         children = java.util.ArrayList<net.sourceforge.jaad.mp4.boxes.Box>(4)

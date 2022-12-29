@@ -21,7 +21,7 @@ package net.sourceforge.jaad.mp4.boxes.impl.sampleentries
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
-class AudioSampleEntry(name: String?) : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.SampleEntry(name) {
+class AudioSampleEntry(name: String) : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.SampleEntry(name) {
     var channelCount = 0
         private set
     var sampleSize = 0
@@ -29,7 +29,7 @@ class AudioSampleEntry(name: String?) : net.sourceforge.jaad.mp4.boxes.impl.samp
     var sampleRate = 0
         private set
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         `in`.skipBytes(8) //reserved

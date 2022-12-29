@@ -6,6 +6,7 @@ import net.sourceforge.jaad.aac.SampleFrequency
 import net.sourceforge.jaad.aac.filterbank.FilterBank
 import net.sourceforge.jaad.aac.syntax.*
 import kotlin.math.*
+import org.mewsic.commons.lang.Arrays
 
 /**
  * Long-term prediction

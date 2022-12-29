@@ -1,6 +1,8 @@
 package net.sourceforge.jaad.mp4.api.codec
 
 import net.sourceforge.jaad.mp4.api.DecoderInfo
+import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.AVCSpecificBox
+import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.CodecSpecificBox
 
 class AVCDecoderInfo(box: CodecSpecificBox) : DecoderInfo() {
     private val box: AVCSpecificBox
@@ -10,17 +12,17 @@ class AVCDecoderInfo(box: CodecSpecificBox) : DecoderInfo() {
     }
 
     val configurationVersion: Int
-        get() = box.getConfigurationVersion()
+        get() = box.configurationVersion
     val profile: Int
-        get() = box.getProfile()
+        get() = box.profile
     val profileCompatibility: Byte
-        get() = box.getProfileCompatibility()
+        get() = box.profileCompatibility
     val level: Int
-        get() = box.getLevel()
+        get() = box.level
     val lengthSize: Int
-        get() = box.getLengthSize()
+        get() = box.lengthSize
     val sequenceParameterSetNALUnits: Array<ByteArray>
-        get() = box.getSequenceParameterSetNALUnits()
+        get() = box.sequenceParameterSetNALUnits
     val pictureParameterSetNALUnits: Array<ByteArray>
-        get() = box.getPictureParameterSetNALUnits()
+        get() = box.pictureParameterSetNALUnits
 }

@@ -43,7 +43,7 @@ class AVCSpecificBox : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.C
      *
      * @return all SPS NAL units
      */
-    var sequenceParameterSetNALUnits: Array<ByteArray?>
+    var sequenceParameterSetNALUnits: Array<ByteArray>
         private set
 
     /**
@@ -52,7 +52,7 @@ class AVCSpecificBox : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.C
      *
      * @return all PPS NAL units
      */
-    var pictureParameterSetNALUnits: Array<ByteArray?>
+    var pictureParameterSetNALUnits: Array<ByteArray>
         private set
 
     @Throws(java.io.IOException::class)

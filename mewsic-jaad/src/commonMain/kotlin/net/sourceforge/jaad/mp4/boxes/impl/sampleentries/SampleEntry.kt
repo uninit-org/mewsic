@@ -20,8 +20,9 @@
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries
 
 import net.sourceforge.jaad.mp4.MP4InputStream
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
-abstract class SampleEntry protected constructor(name: String?) : BoxImpl(name) {
+abstract class SampleEntry protected constructor(name: String) : BoxImpl(name) {
     /**
      * The data reference index is an integer that contains the index of the
      * data reference to use to retrieve data associated with samples that use
@@ -31,8 +32,8 @@ abstract class SampleEntry protected constructor(name: String?) : BoxImpl(name) 
     var dataReferenceIndex: Long = 0
         private set
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    open fun decode(`in`: MP4InputStream) {
         `in`.skipBytes(6) //reserved
         dataReferenceIndex = `in`.readBytes(2)
     }

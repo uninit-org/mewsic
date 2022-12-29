@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.api.codec
+import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.CodecSpecificBox
+import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.QCELPSpecificBox
 
 import net.sourceforge.jaad.mp4.api.DecoderInfo
 
@@ -10,9 +12,9 @@ class QCELPDecoderInfo(box: CodecSpecificBox) : DecoderInfo() {
     }
 
     val decoderVersion: Int
-        get() = box.getDecoderVersion()
+        get() = box.decoderVersion
     val vendor: Long
-        get() = box.getVendor()
+        get() = box.vendor
     val framesPerSample: Int
-        get() = box.getFramesPerSample()
+        get() = box.framesPerSample
 }

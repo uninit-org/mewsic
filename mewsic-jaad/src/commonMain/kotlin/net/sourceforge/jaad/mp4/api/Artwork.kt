@@ -1,8 +1,8 @@
 package net.sourceforge.jaad.mp4.api
 
-import net.sourceforge.jaad.mp4.api.Artwork.Typeimport
+import net.sourceforge.jaad.mp4.boxes.impl.meta.ITunesMetadataBox
+import org.mewsic.commons.streams.ByteArrayInputStream
 
-net.sourceforge.jaad.mp4.boxes.impl .meta.ITunesMetadataBox.DataType
 class Artwork internal constructor(
     /**
      * Returns the type of data in this artwork.
@@ -24,34 +24,29 @@ class Artwork internal constructor(
         GIF, JPEG, PNG, BMP;
 
         companion object {
-            fun forDataType(dataType: DataType?): Type? {
-                val type: Type?
-                type = when (dataType) {
-                    GIF -> GIF
-                    JPEG -> JPEG
-                    PNG -> PNG
-                    BMP -> BMP
-                    else -> null
-                }
-                return type
+            fun forDataType(dataType: ITunesMetadataBox.DataType?) = when (dataType) {
+                ITunesMetadataBox.DataType.GIF -> GIF
+                ITunesMetadataBox.DataType.JPEG -> JPEG
+                ITunesMetadataBox.DataType.PNG -> PNG
+                ITunesMetadataBox.DataType.BMP -> BMP
+                else -> null
             }
         }
     }
 
-    @get:Throws(java.io.IOException::class)
-    var image: java.awt.Image? = null
+    @get:Throws(Exception::class)
+    // FIXME: No impl for image in multiplatform
+    var image: ByteArrayInputStream? = null
         /**
          * Returns the decoded image, that can be painted.
          *
          * @return the decoded image
-         * @throws IOException if decoding fails
+         * @throws Exception if decoding fails
          */
         get() = try {
-            if (field == null) field = ImageIO.read(java.io.ByteArrayInputStream(data))
+            if (field == null) field = ByteArrayInputStream(data)
             field
-        } catch (e: java.io.IOException) {
-            java.util.logging.Logger.getLogger("MP4 API")
-                .log(java.util.logging.Level.SEVERE, "Artwork.getImage failed: {0}", e.toString())
+        } catch (e: Exception) {
             throw e
         }
         private set
