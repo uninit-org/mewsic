@@ -31,11 +31,9 @@ open class JavaInputStream(private val stream: JInputStream) : InputStream {
     }
 
     override fun readNBytes(n: Int): ByteArray {
-        try {
-            return stream.readNBytes(n)
-        } catch (e: EOFException) {
-            throw EndOfStreamException()
-        }
+        // NOTICE: This used to call stream.readNBytes but that is not available in the Android API we're compiling for.
+        val bytes = ByteArray(n)
+        return read(bytes, 0, n).let { if (it == -1) ByteArray(0) else bytes }
     }
 
     override fun skip(n: Long) = stream.skip(n)

@@ -10,4 +10,8 @@ open class JavaOutputStream(private val stream: JOutputStream) : OutputStream {
     override fun write(bytes: ByteArray) = stream.write(bytes)
 
     override fun write(bytes: ByteArray, offset: Int, length: Int) = stream.write(bytes, offset, length)
+    override fun skip(n: Long): Long {
+        println("[WARN] why are we skipping in an outputstream?")
+        TODO("Not yet implemented")
+    }
 }
