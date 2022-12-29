@@ -78,14 +78,31 @@ interface MewsicCommonPlugin : Plugin<Project> {
 
             sourceSets {
                 val commonMain by getting
+                val commonTest by getting {
+                    dependencies {
+                        implementation(kotlin("test"))
+                    }
+                }
+
                 val jvmMain by creating {
                     dependsOn(commonMain)
                 }
+                val jvmTest by creating {
+                    dependsOn(commonTest)
+                }
+
                 val desktopMain by getting {
                     dependsOn(jvmMain)
                 }
+                val desktopTest by getting {
+                    dependsOn(jvmTest)
+                }
+
                 val androidMain by getting {
                     dependsOn(jvmMain)
+                }
+                val androidTest by getting {
+                    dependsOn(jvmTest)
                 }
             }
         }
@@ -104,6 +121,11 @@ interface MewsicCommonPlugin : Plugin<Project> {
             buildConfigField("String", "VERSION", "\"$version\"")
             buildConfigField("String", "GROUP", "\"$group\"")
             buildConfigField("Boolean", "DEVELOPMENT", "$development")
+
+            val buildconfig_entries: List<Triple<String, String, String>> by project
+            buildconfig_entries.forEach { (type, name, value) ->
+                buildConfigField(type, name, value)
+            }
         }
     }
 
