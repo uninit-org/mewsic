@@ -1,6 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
+import net.sourceforge.jaad.mp4.boxes.FullBox
 
 /**
  * The sound media header contains general presentation information, independent
@@ -20,8 +22,8 @@ class SoundMediaHeaderBox : FullBox("Sound Media Header Box") {
     var balance = 0.0
         private set
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         balance = `in`.readFixedPoint(8, 8)
         `in`.skipBytes(2) //reserved

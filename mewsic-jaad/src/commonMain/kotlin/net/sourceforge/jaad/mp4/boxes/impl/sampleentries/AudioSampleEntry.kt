@@ -18,6 +18,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -30,7 +32,7 @@ class AudioSampleEntry(name: String) : net.sourceforge.jaad.mp4.boxes.impl.sampl
         private set
 
     @Throws(Exception::class)
-    override fun decode(`in`: MP4InputStream) {
+    override override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         `in`.skipBytes(8) //reserved
         channelCount = `in`.readBytes(2) as Int

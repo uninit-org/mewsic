@@ -54,7 +54,7 @@ interface Box {
      *
      * @return this box's children
      */
-    val children: List<Box?>?
+    val children: List<Box>?
 
     /**
      * Returns an ordered and unmodifiable list of all direct children of this
@@ -65,7 +65,7 @@ interface Box {
      * @param type the type of child boxes to look for
      * @return this box's children with the given type
      */
-    fun getChildren(type: Long): List<Box?>?
+    fun getChildren(type: Long): List<Box>?
 
     /**
      * Returns the child box with the specified type. If this box has no child

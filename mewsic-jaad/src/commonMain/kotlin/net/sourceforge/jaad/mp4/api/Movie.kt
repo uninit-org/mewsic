@@ -1,6 +1,11 @@
 package net.sourceforge.jaad.mp4.api
 
 import net.sourceforge.jaad.mp4.MP4InputStream
+import net.sourceforge.jaad.mp4.boxes.Box
+import net.sourceforge.jaad.mp4.boxes.BoxTypes
+import net.sourceforge.jaad.mp4.boxes.impl.HandlerBox
+import net.sourceforge.jaad.mp4.boxes.impl.ItemProtectionBox
+import net.sourceforge.jaad.mp4.boxes.impl.MovieHeaderBox
 
 class Movie(moov: Box, `in`: MP4InputStream) {
     private val `in`: MP4InputStream
@@ -14,8 +19,8 @@ class Movie(moov: Box, `in`: MP4InputStream) {
 
         //create tracks
         mvhd = moov.getChild(BoxTypes.MOVIE_HEADER_BOX) as MovieHeaderBox
-        val trackBoxes: List<Box> = moov.getChildren(BoxTypes.TRACK_BOX)
-        tracks = java.util.ArrayList<Track>(trackBoxes.size)
+        val trackBoxes: List<Box> = moov.getChildren(BoxTypes.TRACK_BOX)!!
+        tracks = ArrayList<Track>(trackBoxes.size)
         var track: Track?
         for (i in trackBoxes.indices) {
             track = createTrack(trackBoxes[i])
@@ -26,27 +31,27 @@ class Movie(moov: Box, `in`: MP4InputStream) {
         metaData = net.sourceforge.jaad.mp4.api.MetaData()
         if (moov.hasChild(BoxTypes.META_BOX)) metaData.parse(
             null,
-            moov.getChild(BoxTypes.META_BOX)
+            moov.getChild(BoxTypes.META_BOX)!!
         ) else if (moov.hasChild(BoxTypes.USER_DATA_BOX)) {
-            val udta: Box = moov.getChild(BoxTypes.USER_DATA_BOX)
-            if (udta.hasChild(BoxTypes.META_BOX)) metaData.parse(udta, udta.getChild(BoxTypes.META_BOX))
+            val udta: Box = moov.getChild(BoxTypes.USER_DATA_BOX)!!
+            if (udta.hasChild(BoxTypes.META_BOX)) metaData.parse(udta, udta.getChild(BoxTypes.META_BOX)!!)
         }
 
         //detect DRM
-        protections = java.util.ArrayList<Protection>()
+        protections = ArrayList<Protection>()
         if (moov.hasChild(BoxTypes.ITEM_PROTECTION_BOX)) {
-            val ipro: Box = moov.getChild(BoxTypes.ITEM_PROTECTION_BOX)
-            for (sinf in ipro.getChildren(BoxTypes.PROTECTION_SCHEME_INFORMATION_BOX)) {
-                protections.add(Protection.Companion.parse(sinf))
+            val ipro: Box = moov.getChild(BoxTypes.ITEM_PROTECTION_BOX) as ItemProtectionBox
+            for (sinf in ipro.getChildren(BoxTypes.PROTECTION_SCHEME_INFORMATION_BOX)!!) {
+                protections.add(Protection.parse(sinf))
             }
         }
     }
 
     //TODO: support hint and meta
     private fun createTrack(trak: Box): Track? {
-        val hdlr: HandlerBox = trak.getChild(BoxTypes.MEDIA_BOX).getChild(BoxTypes.HANDLER_BOX) as HandlerBox
+        val hdlr: HandlerBox = trak.getChild(BoxTypes.MEDIA_BOX)?.getChild(BoxTypes.HANDLER_BOX) as HandlerBox
         val track: Track?
-        when (hdlr.getHandlerType()) {
+        when (hdlr.handlerType.toInt()) {
             HandlerBox.TYPE_VIDEO -> track = net.sourceforge.jaad.mp4.api.VideoTrack(trak, `in`)
             HandlerBox.TYPE_SOUND -> track = AudioTrack(trak, `in`)
             else -> track = null
@@ -61,7 +66,7 @@ class Movie(moov: Box, `in`: MP4InputStream) {
      * @return the tracks contained by this movie
      */
     fun getTracks(): List<Track> {
-        return java.util.Collections.unmodifiableList<Track>(tracks)
+        return tracks.toList()
     }
 
     /**
@@ -72,11 +77,11 @@ class Movie(moov: Box, `in`: MP4InputStream) {
      * @return the tracks contained by this movie with the passed type
      */
     fun getTracks(type: net.sourceforge.jaad.mp4.api.Type): List<Track> {
-        val l: MutableList<Track> = java.util.ArrayList<Track>()
+        val l: MutableList<Track> = ArrayList<Track>()
         for (t in tracks) {
-            if (t.getType() == type) l.add(t)
+            if (t.type == type) l.add(t)
         }
-        return java.util.Collections.unmodifiableList<Track>(l)
+        return l.toList()
     }
 
     /**
@@ -87,11 +92,11 @@ class Movie(moov: Box, `in`: MP4InputStream) {
      * @return the tracks contained by this movie with the passed type
      */
     fun getTracks(codec: net.sourceforge.jaad.mp4.api.Track.Codec): List<Track> {
-        val l: MutableList<Track> = java.util.ArrayList<Track>()
+        val l: MutableList<Track> = ArrayList<Track>()
         for (t in tracks) {
-            if (t.getCodec() == codec) l.add(t)
+            if (t.codec == codec) l.add(t)
         }
-        return java.util.Collections.unmodifiableList<Track>(l)
+        return l.toList()
     }
 
     /**
@@ -121,28 +126,28 @@ class Movie(moov: Box, `in`: MP4InputStream) {
      * @return a list of protection informations
      */
     fun getProtections(): List<Protection> {
-        return java.util.Collections.unmodifiableList<Protection>(protections)
+        return protections.toList()
     }
 
     //mvhd
-    val creationTime: java.util.Date
+    val creationTime: Long
         /**
          * Returns the time this movie was created.
          * @return the creation time
          */
-        get() = net.sourceforge.jaad.mp4.api.Utils.getDate(mvhd.getCreationTime())
-    val modificationTime: java.util.Date
+        get() = net.sourceforge.jaad.mp4.api.Utils.getDate(mvhd.creationTime)
+    val modificationTime: Long
         /**
          * Returns the last time this movie was modified.
          * @return the modification time
          */
-        get() = net.sourceforge.jaad.mp4.api.Utils.getDate(mvhd.getModificationTime())
+        get() = net.sourceforge.jaad.mp4.api.Utils.getDate(mvhd.modificationTime)
     val duration: Double
         /**
          * Returns the duration in seconds.
          * @return the duration
          */
-        get() = mvhd.getDuration() as Double / mvhd.getTimeScale() as Double
+        get() = (mvhd.duration  / mvhd.timeScale).toDouble()
 
     /**
      * Indicates if there are more frames to be read in this movie.
@@ -164,12 +169,12 @@ class Movie(moov: Box, `in`: MP4InputStream) {
      * @return the next frame or null if there are no more frames to read from this movie.
      * @throws IOException if reading fails
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun readNextFrame(): net.sourceforge.jaad.mp4.api.Frame? {
         var track: Track? = null
         for (t in tracks) {
-            if (t.hasMoreFrames() && (track == null || t.getNextTimeStamp() < track.getNextTimeStamp())) track = t
+            if (t.hasMoreFrames() && (track == null || t.nextTimeStamp < track.nextTimeStamp)) track = t
         }
-        return if (track == null) null else track.readNextFrame()
+        return track?.readNextFrame()
     }
 }

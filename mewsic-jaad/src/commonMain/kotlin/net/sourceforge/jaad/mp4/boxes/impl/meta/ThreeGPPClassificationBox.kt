@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl.meta
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -9,8 +11,8 @@ class ThreeGPPClassificationBox :
     var table = 0
         private set
 
-    @Throws(java.io.IOException::class)
-    override fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
         decodeCommon(`in`)
         entity = `in`.readBytes(4)
         table = `in`.readBytes(2) as Int

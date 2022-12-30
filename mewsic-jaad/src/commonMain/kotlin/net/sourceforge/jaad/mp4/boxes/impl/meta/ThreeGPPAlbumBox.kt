@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl.meta
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -12,8 +14,8 @@ class ThreeGPPAlbumBox : net.sourceforge.jaad.mp4.boxes.impl.meta.ThreeGPPMetada
     var trackNumber = 0
         private set
 
-    @Throws(java.io.IOException::class)
-    override fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         trackNumber = if (getLeft(`in`) > 0) `in`.read() else -1
     }

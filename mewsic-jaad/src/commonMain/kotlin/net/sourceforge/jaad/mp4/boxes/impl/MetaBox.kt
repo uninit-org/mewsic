@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -6,8 +8,8 @@ import net.sourceforge.jaad.mp4.MP4InputStream
 /* TODO: this class shouldn't be needed. at least here, things become too
 complicated. change this!!! */
 class MetaBox : FullBox("Meta Box") {
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override fun decode(`in`: MP4InputStream) {
         // some encoders (such as Android's MexiaMuxer) do not include
         // the version and flags fields in the meta box, instead going
         // directly to the hdlr box

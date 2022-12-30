@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl.oma
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -54,8 +56,8 @@ class OMACommonHeadersBox : FullBox("OMA DRM Common Header Box") {
     var rightsIssuerURL: ByteArray
         private set
     private var textualHeaders: MutableMap<String, String>? = null
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         encryptionMethod = `in`.read()
         paddingScheme = `in`.read()

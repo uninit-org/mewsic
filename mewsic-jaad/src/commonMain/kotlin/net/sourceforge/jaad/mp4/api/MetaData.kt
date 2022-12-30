@@ -1,6 +1,11 @@
 package net.sourceforge.jaad.mp4.api
 
 import net.sourceforge.jaad.mp4.boxes.Box
+import net.sourceforge.jaad.mp4.boxes.BoxTypes
+import net.sourceforge.jaad.mp4.boxes.impl.CopyrightBox
+import net.sourceforge.jaad.mp4.boxes.impl.meta.*
+import org.mewsic.commons.streams.ByteArrayInputStream
+import org.mewsic.commons.streams.DataInputStream
 
 /**
  * This class contains the metadata for a movie. It parses different metadata
@@ -19,23 +24,23 @@ class MetaData internal constructor() {
             val ALBUM_ARTIST = Field<String?>("Album Artist")
             val ALBUM = Field<String?>("Album")
             val TRACK_NUMBER = Field<Int?>("Track Number")
-            val TOTAL_TRACKS = Field<Int>("Total Tracks")
+            val TOTAL_TRACKS = Field<Int?>("Total Tracks")
             val DISK_NUMBER = Field<Int?>("Disk Number")
             val TOTAL_DISKS = Field<Int>("Total disks")
             val COMPOSER = Field<String?>("Composer")
             val COMMENTS = Field<String?>("Comments")
             val TEMPO = Field<Int?>("Tempo")
-            val LENGTH_IN_MILLISECONDS = Field<Int>("Length in milliseconds")
-            val RELEASE_DATE: Field<java.util.Date?> = Field<java.util.Date?>("Release Date")
+            val LENGTH_IN_MILLISECONDS = Field<Int?>("Length in milliseconds")
+            val RELEASE_DATE: Field<String?> = Field<String?>("Release Date")
             val GENRE = Field<String?>("Genre")
             val ENCODER_NAME = Field<String?>("Encoder Name")
             val ENCODER_TOOL = Field<String?>("Encoder Tool")
-            val ENCODING_DATE: Field<java.util.Date?> = Field<java.util.Date?>("Encoding Date")
+            val ENCODING_DATE: Field<String?> = Field<String?>("Encoding Date")
             val COPYRIGHT = Field<String?>("Copyright")
             val PUBLISHER = Field<String?>("Publisher")
             val COMPILATION = Field<Boolean?>("Part of compilation")
-            val COVER_ARTWORKS: Field<MutableList<net.sourceforge.jaad.mp4.api.Artwork>> =
-                Field<MutableList<net.sourceforge.jaad.mp4.api.Artwork>>("Cover Artworks")
+            val COVER_ARTWORKS: Field<MutableList<net.sourceforge.jaad.mp4.api.Artwork>?> =
+                Field<MutableList<net.sourceforge.jaad.mp4.api.Artwork>?>("Cover Artworks")
             val GROUPING = Field<String?>("Grouping")
             val LOCATION = Field<String?>("Location")
             val LYRICS = Field<String?>("Lyrics")
@@ -44,18 +49,18 @@ class MetaData internal constructor() {
             val PODCAST_URL = Field<String?>("Podcast URL")
             val CATEGORY = Field<String?>("Category")
             val KEYWORDS = Field<String?>("Keywords")
-            val EPISODE_GLOBAL_UNIQUE_ID = Field<Int>("Episode Global Unique ID")
+            val EPISODE_GLOBAL_UNIQUE_ID = Field<Int?>("Episode Global Unique ID")
             val DESCRIPTION = Field<String?>("Description")
             val TV_SHOW = Field<String?>("TV Show")
             val TV_NETWORK = Field<String?>("TV Network")
             val TV_EPISODE = Field<String?>("TV Episode")
             val TV_EPISODE_NUMBER = Field<Int?>("TV Episode Number")
             val TV_SEASON = Field<Int?>("TV Season")
-            val INTERNET_RADIO_STATION = Field<String>("Internet Radio Station")
+            val INTERNET_RADIO_STATION = Field<String?>("Internet Radio Station")
             val PURCHASE_DATE = Field<String?>("Purchase Date")
             val GAPLESS_PLAYBACK = Field<String?>("Gapless Playback")
             val HD_VIDEO = Field<Boolean?>("HD Video")
-            val LANGUAGE: Field<java.util.Locale?> = Field<java.util.Locale?>("Language")
+            val LANGUAGE: Field<String?> = Field<String?>("Language")
 
             //sorting
             val ARTIST_SORT_TEXT = Field<String?>("Artist Sort Text")
@@ -64,10 +69,10 @@ class MetaData internal constructor() {
         }
     }
 
-    private val contents: MutableMap<Field<*>, Any>
+    private val contents: MutableMap<Field<*>, Any?>
 
     init {
-        contents = java.util.HashMap<Field<*>, Any>()
+        contents = HashMap()
     }
 
     /*moov.udta:
@@ -83,8 +88,8 @@ class MetaData internal constructor() {
         //standard boxes
         if (meta.hasChild(BoxTypes.COPYRIGHT_BOX)) {
             val cprt: CopyrightBox = meta.getChild(BoxTypes.COPYRIGHT_BOX) as CopyrightBox
-            put<java.util.Locale?>(Field.LANGUAGE, java.util.Locale(cprt.getLanguageCode()))
-            put(Field.COPYRIGHT, cprt.getNotice())
+            put(Field.LANGUAGE, cprt.languageCode)
+            put(Field.COPYRIGHT, cprt.notice)
         }
         //3gpp user data
         if (udta != null) parse3GPPData(udta)
@@ -101,159 +106,151 @@ class MetaData internal constructor() {
     private fun parse3GPPData(udta: Box) {
         if (udta.hasChild(BoxTypes.THREE_GPP_ALBUM_BOX)) {
             val albm: ThreeGPPAlbumBox = udta.getChild(BoxTypes.THREE_GPP_ALBUM_BOX) as ThreeGPPAlbumBox
-            put(Field.ALBUM, albm.getData())
-            put(Field.TRACK_NUMBER, albm.getTrackNumber())
+            put(Field.ALBUM, albm.data)
+            put(Field.TRACK_NUMBER, albm.trackNumber)
         }
         //if(udta.hasChild(BoxTypes.THREE_GPP_AUTHOR_BOX));
         //if(udta.hasChild(BoxTypes.THREE_GPP_CLASSIFICATION_BOX));
         if (udta.hasChild(BoxTypes.THREE_GPP_DESCRIPTION_BOX)) put(
             Field.DESCRIPTION,
-            (udta.getChild(BoxTypes.THREE_GPP_DESCRIPTION_BOX) as ThreeGPPMetadataBox).getData()
+            (udta.getChild(BoxTypes.THREE_GPP_DESCRIPTION_BOX) as ThreeGPPMetadataBox).data
         )
         if (udta.hasChild(BoxTypes.THREE_GPP_KEYWORDS_BOX)) put(
             Field.KEYWORDS,
-            (udta.getChild(BoxTypes.THREE_GPP_KEYWORDS_BOX) as ThreeGPPMetadataBox).getData()
+            (udta.getChild(BoxTypes.THREE_GPP_KEYWORDS_BOX) as ThreeGPPMetadataBox).data
         )
         if (udta.hasChild(BoxTypes.THREE_GPP_LOCATION_INFORMATION_BOX)) put(
             Field.LOCATION,
-            (udta.getChild(BoxTypes.THREE_GPP_LOCATION_INFORMATION_BOX) as ThreeGPPLocationBox).getPlaceName()
+            (udta.getChild(BoxTypes.THREE_GPP_LOCATION_INFORMATION_BOX) as ThreeGPPLocationBox).placeName
         )
         if (udta.hasChild(BoxTypes.THREE_GPP_PERFORMER_BOX)) put(
             Field.ARTIST,
-            (udta.getChild(BoxTypes.THREE_GPP_PERFORMER_BOX) as ThreeGPPMetadataBox).getData()
+            (udta.getChild(BoxTypes.THREE_GPP_PERFORMER_BOX) as ThreeGPPMetadataBox).data
         )
         if (udta.hasChild(BoxTypes.THREE_GPP_RECORDING_YEAR_BOX)) {
-            val value: String = (udta.getChild(BoxTypes.THREE_GPP_RECORDING_YEAR_BOX) as ThreeGPPMetadataBox).getData()
-            try {
-                put<java.util.Date?>(Field.RELEASE_DATE, java.util.Date(value.toInt()))
-            } catch (e: java.lang.NumberFormatException) {
-                java.util.logging.Logger.getLogger("MP4 API").log(
-                    java.util.logging.Level.INFO,
-                    "unable to parse 3GPP metadata: recording year value: {0}",
-                    value
-                )
-            }
+            val value: String = (udta.getChild(BoxTypes.THREE_GPP_RECORDING_YEAR_BOX) as ThreeGPPMetadataBox).data!!
+            put(Field.RELEASE_DATE, value)
         }
         if (udta.hasChild(BoxTypes.THREE_GPP_TITLE_BOX)) put(
             Field.TITLE,
-            (udta.getChild(BoxTypes.THREE_GPP_TITLE_BOX) as ThreeGPPMetadataBox).getData()
+            (udta.getChild(BoxTypes.THREE_GPP_TITLE_BOX) as ThreeGPPMetadataBox).data
         )
     }
 
     //parses children of 'ilst': iTunes
     private fun parseITunesMetaData(ilst: Box) {
-        val boxes: List<Box> = ilst.getChildren()
+        val boxes: List<Box> = ilst.children!!
         var l: Long
         var data: ITunesMetadataBox
         for (box in boxes) {
-            l = box.getType()
+            l = box.type
             data = box.getChild(BoxTypes.ITUNES_METADATA_BOX) as ITunesMetadataBox
             if (l == BoxTypes.ARTIST_NAME_BOX) put(
                 Field.ARTIST,
-                data.getText()
+                data.text
             ) else if (l == BoxTypes.TRACK_NAME_BOX) put(
-                Field.TITLE, data.getText()
+                Field.TITLE, data.text
             ) else if (l == BoxTypes.ALBUM_ARTIST_NAME_BOX) put(
                 Field.ALBUM_ARTIST,
-                data.getText()
+                data.text
             ) else if (l == BoxTypes.ALBUM_NAME_BOX) put(
-                Field.ALBUM, data.getText()
+                Field.ALBUM, data.text
             ) else if (l == BoxTypes.TRACK_NUMBER_BOX) {
                 val b: ByteArray = data.getData()
-                put<Int?>(Field.TRACK_NUMBER, b[3])
+                put<Int?>(Field.TRACK_NUMBER, b[3].toInt())
                 put(Field.TOTAL_TRACKS, b[5].toInt())
             } else if (l == BoxTypes.DISK_NUMBER_BOX) put(
                 Field.DISK_NUMBER,
-                data.getInteger()
+                data.integer
             ) else if (l == BoxTypes.COMPOSER_NAME_BOX) put(
-                Field.COMPOSER, data.getText()
+                Field.COMPOSER, data.text
             ) else if (l == BoxTypes.COMMENTS_BOX) put(
                 Field.COMMENTS,
-                data.getText()
+                data.text
             ) else if (l == BoxTypes.TEMPO_BOX) put(
-                Field.TEMPO, data.getInteger()
+                Field.TEMPO, data.integer
             ) else if (l == BoxTypes.RELEASE_DATE_BOX) put(
                 Field.RELEASE_DATE,
-                data.getDate()
+                data.date
             ) else if (l == BoxTypes.GENRE_BOX || l == BoxTypes.CUSTOM_GENRE_BOX) {
                 var s: String? = null
-                if (data.getDataType() === ITunesMetadataBox.DataType.UTF8) s = data.getText() else {
-                    val i: Int = data.getInteger()
-                    if (i > 0 && i < STANDARD_GENRES.size) s = STANDARD_GENRES[data.getInteger()]
+                if (data.dataType === ITunesMetadataBox.DataType.UTF8) s = data.text else {
+                    val i: Int = data.integer
+                    if (i > 0 && i < STANDARD_GENRES.size) s = STANDARD_GENRES[data.integer]
                 }
                 if (s != null) put<String?>(Field.GENRE, s)
             } else if (l == BoxTypes.ENCODER_NAME_BOX) put(
                 Field.ENCODER_NAME,
-                data.getText()
+                data.text
             ) else if (l == BoxTypes.ENCODER_TOOL_BOX) put(
-                Field.ENCODER_TOOL, data.getText()
+                Field.ENCODER_TOOL, data.text
             ) else if (l == BoxTypes.COPYRIGHT_BOX) put(
                 Field.COPYRIGHT,
-                data.getText()
+                data.text
             ) else if (l == BoxTypes.COMPILATION_PART_BOX) put(
-                Field.COMPILATION, data.getBoolean()
+                Field.COMPILATION, data.boolean
             ) else if (l == BoxTypes.COVER_BOX) {
                 val aw: net.sourceforge.jaad.mp4.api.Artwork = net.sourceforge.jaad.mp4.api.Artwork(
-                    net.sourceforge.jaad.mp4.api.Artwork.Type.Companion.forDataType(data.getDataType()), data.getData()
+                    net.sourceforge.jaad.mp4.api.Artwork.Type.Companion.forDataType(data.dataType), data.getData()
                 )
-                if (contents.containsKey(Field.COVER_ARTWORKS)) get<MutableList<net.sourceforge.jaad.mp4.api.Artwork>>(
+                if (contents.containsKey(Field.COVER_ARTWORKS)) get(
                     Field.COVER_ARTWORKS
                 )!!.add(aw) else {
                     val list: MutableList<net.sourceforge.jaad.mp4.api.Artwork> =
-                        java.util.ArrayList<net.sourceforge.jaad.mp4.api.Artwork>()
+                        ArrayList<net.sourceforge.jaad.mp4.api.Artwork>()
                     list.add(aw)
-                    put<MutableList<net.sourceforge.jaad.mp4.api.Artwork>>(Field.COVER_ARTWORKS, list)
+                    put(Field.COVER_ARTWORKS, list)
                 }
             } else if (l == BoxTypes.GROUPING_BOX) put(
                 Field.GROUPING,
-                data.getText()
+                data.text
             ) else if (l == BoxTypes.LYRICS_BOX) put(
-                Field.LYRICS, data.getText()
+                Field.LYRICS, data.text
             ) else if (l == BoxTypes.RATING_BOX) put(
                 Field.RATING,
-                data.getInteger()
+                data.integer
             ) else if (l == BoxTypes.PODCAST_BOX) put(
-                Field.PODCAST, data.getInteger()
+                Field.PODCAST, data.integer
             ) else if (l == BoxTypes.PODCAST_URL_BOX) put(
                 Field.PODCAST_URL,
-                data.getText()
+                data.text
             ) else if (l == BoxTypes.CATEGORY_BOX) put(
-                Field.CATEGORY, data.getText()
+                Field.CATEGORY, data.text
             ) else if (l == BoxTypes.KEYWORD_BOX) put(
                 Field.KEYWORDS,
-                data.getText()
+                data.text
             ) else if (l == BoxTypes.DESCRIPTION_BOX) put(
-                Field.DESCRIPTION, data.getText()
+                Field.DESCRIPTION, data.text
             ) else if (l == BoxTypes.LONG_DESCRIPTION_BOX) put(
                 Field.DESCRIPTION,
-                data.getText()
+                data.text
             ) else if (l == BoxTypes.TV_SHOW_BOX) put(
-                Field.TV_SHOW, data.getText()
+                Field.TV_SHOW, data.text
             ) else if (l == BoxTypes.TV_NETWORK_NAME_BOX) put(
                 Field.TV_NETWORK,
-                data.getText()
+                data.text
             ) else if (l == BoxTypes.TV_EPISODE_BOX) put(
-                Field.TV_EPISODE, data.getText()
+                Field.TV_EPISODE, data.text
             ) else if (l == BoxTypes.TV_EPISODE_NUMBER_BOX) put(
                 Field.TV_EPISODE_NUMBER,
-                data.getInteger()
+                data.integer
             ) else if (l == BoxTypes.TV_SEASON_BOX) put(
-                Field.TV_SEASON, data.getInteger()
+                Field.TV_SEASON, data.integer
             ) else if (l == BoxTypes.PURCHASE_DATE_BOX) put(
                 Field.PURCHASE_DATE,
-                data.getText()
+                data.text
             ) else if (l == BoxTypes.GAPLESS_PLAYBACK_BOX) put(
-                Field.GAPLESS_PLAYBACK, data.getText()
+                Field.GAPLESS_PLAYBACK, data.text
             ) else if (l == BoxTypes.HD_VIDEO_BOX) put(
                 Field.HD_VIDEO,
-                data.getBoolean()
+                data.boolean
             ) else if (l == BoxTypes.ARTIST_SORT_BOX) put(
-                Field.ARTIST_SORT_TEXT, data.getText()
+                Field.ARTIST_SORT_TEXT, data.text
             ) else if (l == BoxTypes.TRACK_SORT_BOX) put(
                 Field.TITLE_SORT_TEXT,
-                data.getText()
+                data.text
             ) else if (l == BoxTypes.ALBUM_SORT_BOX) put(
-                Field.ALBUM_SORT_TEXT, data.getText()
+                Field.ALBUM_SORT_TEXT, data.text
             )
         }
     }
@@ -261,101 +258,101 @@ class MetaData internal constructor() {
     //parses children of ID3
     private fun parseID3(box: ID3TagBox) {
         try {
-            val `in`: java.io.DataInputStream = java.io.DataInputStream(java.io.ByteArrayInputStream(box.getID3Data()))
-            val tag: net.sourceforge.jaad.mp4.api.ID3Tag = net.sourceforge.jaad.mp4.api.ID3Tag(`in`)
+            val `in` = DataInputStream(ByteArrayInputStream(box.iD3Data))
+            val tag = ID3Tag(`in`)
             var num: IntArray
             for (frame in tag.getFrames()) {
-                when (frame.getID()) {
+                when (frame.iD) {
                     net.sourceforge.jaad.mp4.api.ID3Frame.Companion.TITLE -> put<String?>(
                         Field.TITLE,
-                        frame.getEncodedText()
+                        frame.encodedText
                     )
 
                     net.sourceforge.jaad.mp4.api.ID3Frame.Companion.ALBUM_TITLE -> put<String?>(
                         Field.ALBUM,
-                        frame.getEncodedText()
+                        frame.encodedText
                     )
 
                     net.sourceforge.jaad.mp4.api.ID3Frame.Companion.TRACK_NUMBER -> {
-                        num = frame.getNumbers()
+                        num = frame.numbers
                         put<Int?>(Field.TRACK_NUMBER, num[0])
                         if (num.size > 1) put(Field.TOTAL_TRACKS, num[1])
                     }
 
                     net.sourceforge.jaad.mp4.api.ID3Frame.Companion.ARTIST -> put<String?>(
                         Field.ARTIST,
-                        frame.getEncodedText()
+                        frame.encodedText
                     )
 
                     net.sourceforge.jaad.mp4.api.ID3Frame.Companion.COMPOSER -> put<String?>(
                         Field.COMPOSER,
-                        frame.getEncodedText()
+                        frame.encodedText
                     )
 
                     net.sourceforge.jaad.mp4.api.ID3Frame.Companion.BEATS_PER_MINUTE -> put<Int?>(
                         Field.TEMPO,
-                        frame.getNumber()
+                        frame.number
                     )
 
                     net.sourceforge.jaad.mp4.api.ID3Frame.Companion.LENGTH -> put(
                         Field.LENGTH_IN_MILLISECONDS,
-                        frame.getNumber()
+                        frame.number
                     )
 
-                    net.sourceforge.jaad.mp4.api.ID3Frame.Companion.LANGUAGES -> put<java.util.Locale?>(
+                    net.sourceforge.jaad.mp4.api.ID3Frame.Companion.LANGUAGES -> put(
                         Field.LANGUAGE,
-                        frame.getLocale()
+                        frame.locale
                     )
 
                     net.sourceforge.jaad.mp4.api.ID3Frame.Companion.COPYRIGHT_MESSAGE -> put<String?>(
                         Field.COPYRIGHT,
-                        frame.getEncodedText()
+                        frame.encodedText
                     )
 
                     net.sourceforge.jaad.mp4.api.ID3Frame.Companion.PUBLISHER -> put<String?>(
                         Field.PUBLISHER,
-                        frame.getEncodedText()
+                        frame.encodedText
                     )
 
                     net.sourceforge.jaad.mp4.api.ID3Frame.Companion.INTERNET_RADIO_STATION_NAME -> put(
                         Field.INTERNET_RADIO_STATION,
-                        frame.getEncodedText()
+                        frame.encodedText
                     )
 
-                    net.sourceforge.jaad.mp4.api.ID3Frame.Companion.ENCODING_TIME -> put<java.util.Date?>(
+                    net.sourceforge.jaad.mp4.api.ID3Frame.Companion.ENCODING_TIME -> put(
                         Field.ENCODING_DATE,
-                        frame.getDate()
+                        frame.date
                     )
 
-                    net.sourceforge.jaad.mp4.api.ID3Frame.Companion.RELEASE_TIME -> put<java.util.Date?>(
+                    net.sourceforge.jaad.mp4.api.ID3Frame.Companion.RELEASE_TIME -> put(
                         Field.RELEASE_DATE,
-                        frame.getDate()
+                        frame.date
                     )
 
                     net.sourceforge.jaad.mp4.api.ID3Frame.Companion.ENCODING_TOOLS_AND_SETTINGS -> put<String?>(
                         Field.ENCODER_TOOL,
-                        frame.getEncodedText()
+                        frame.encodedText
                     )
 
                     net.sourceforge.jaad.mp4.api.ID3Frame.Companion.PERFORMER_SORT_ORDER -> put<String?>(
                         Field.ARTIST_SORT_TEXT,
-                        frame.getEncodedText()
+                        frame.encodedText
                     )
 
                     net.sourceforge.jaad.mp4.api.ID3Frame.Companion.TITLE_SORT_ORDER -> put<String?>(
                         Field.TITLE_SORT_TEXT,
-                        frame.getEncodedText()
+                        frame.encodedText
                     )
 
                     net.sourceforge.jaad.mp4.api.ID3Frame.Companion.ALBUM_SORT_ORDER -> put<String?>(
                         Field.ALBUM_SORT_TEXT,
-                        frame.getEncodedText()
+                        frame.encodedText
                     )
                 }
             }
-        } catch (e: java.io.IOException) {
-            java.util.logging.Logger.getLogger("MP4 API")
-                .log(java.util.logging.Level.SEVERE, "Exception in MetaData.parseID3: {0}", e.toString())
+        } catch (e: Exception) {
+//            java.util.logging.Logger.getLogger("MP4 API")
+//                .log(java.util.logging.Level.SEVERE, "Exception in MetaData.parseID3: {0}", e.toString())
         }
     }
 
@@ -371,11 +368,7 @@ class MetaData internal constructor() {
                 if (key == NERO_TAGS[2]) put(Field.ALBUM, `val`)
                 if (key == NERO_TAGS[3]) put<Int?>(Field.TRACK_NUMBER, `val`!!.toInt())
                 if (key == NERO_TAGS[4]) put(Field.TOTAL_TRACKS, `val`!!.toInt())
-                if (key == NERO_TAGS[5]) {
-                    val c: java.util.Calendar = java.util.Calendar.getInstance()
-                    c.set(java.util.Calendar.YEAR, `val`!!.toInt())
-                    put<java.util.Date?>(Field.RELEASE_DATE, c.getTime())
-                }
+                if (key == NERO_TAGS[5]) put(Field.RELEASE_DATE, `val`!!.toInt().toString())
                 if (key == NERO_TAGS[6]) put(Field.GENRE, `val`)
                 if (key == NERO_TAGS[7]) put<Int?>(Field.DISK_NUMBER, `val`!!.toInt())
                 if (key == NERO_TAGS[8]) put(Field.TOTAL_DISKS, `val`!!.toInt())
@@ -390,14 +383,14 @@ class MetaData internal constructor() {
                 if (key == NERO_TAGS[17]);
                 if (key == NERO_TAGS[18]);
                 if (key == NERO_TAGS[19]) put<Int?>(Field.TEMPO, `val`!!.toInt())
-            } catch (e: java.lang.NumberFormatException) {
-                java.util.logging.Logger.getLogger("MP4 API")
-                    .log(java.util.logging.Level.SEVERE, "Exception in MetaData.parseNeroTags: {0}", e.toString())
+            } catch (e: NumberFormatException) {
+//                java.util.logging.Logger.getLogger("MP4 API")
+//                    .log(java.util.logging.Level.SEVERE, "Exception in MetaData.parseNeroTags: {0}", e.toString())
             }
         }
     }
 
-    private fun <T> put(field: Field<T?>, value: T) {
+    private fun <T : Any?> put(field: Field<T>, value: T) {
         contents[field] = value
     }
 
@@ -406,11 +399,11 @@ class MetaData internal constructor() {
     }
 
     operator fun <T> get(field: Field<T>): T? {
-        return contents[field] as T?
+        return (contents[field] as? T)
     }
 
-    val all: Map<Field<*>, Any>
-        get() = java.util.Collections.unmodifiableMap<Field<*>, Any>(contents)
+    val all: Map<Field<*>, Any?>
+        get() = contents.toList().toMap()
 
     companion object {
         private val STANDARD_GENRES = arrayOf(

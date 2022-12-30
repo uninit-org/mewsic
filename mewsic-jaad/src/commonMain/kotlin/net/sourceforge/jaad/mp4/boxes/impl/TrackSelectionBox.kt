@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -54,8 +56,8 @@ class TrackSelectionBox : FullBox("Track Selection Box") {
         attributes = java.util.ArrayList<Long>()
     }
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         switchGroup = `in`.readBytes(4)
         while (getLeft(`in`) > 3) {

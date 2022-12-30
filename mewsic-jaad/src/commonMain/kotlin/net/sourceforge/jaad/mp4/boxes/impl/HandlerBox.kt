@@ -1,6 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
+import net.sourceforge.jaad.mp4.boxes.FullBox
 
 /**
  * This box within a Media Box declares the process by which the media-data in
@@ -47,8 +49,8 @@ class HandlerBox : FullBox("Handler Box") {
     var handlerName: String? = null
         private set
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         `in`.skipBytes(4) //pre-defined: 0
         handlerType = `in`.readBytes(4)

@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -9,7 +11,7 @@ import net.sourceforge.jaad.mp4.MP4InputStream
  * @author in-somnia
  */
 class FreeSpaceBox : BoxImpl("Free Space Box") {
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun decode(`in`: MP4InputStream?) {
         //no need to read, box will be skipped
     }

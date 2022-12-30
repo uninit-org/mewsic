@@ -18,6 +18,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -51,8 +53,8 @@ class FDHintSampleEntry : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.Samp
     var fECOverhead = 0.0
         private set
 
-    @Throws(java.io.IOException::class)
-    override fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         hintTrackVersion = `in`.readBytes(2) as Int
         highestCompatibleVersion = `in`.readBytes(2) as Int

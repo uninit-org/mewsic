@@ -1,6 +1,11 @@
 package net.sourceforge.jaad.mp4.api
 
 import net.sourceforge.jaad.mp4.api.Track.Codec
+import net.sourceforge.jaad.mp4.api.drm.ITunesProtection
+import net.sourceforge.jaad.mp4.boxes.Box
+import net.sourceforge.jaad.mp4.boxes.BoxTypes
+import net.sourceforge.jaad.mp4.boxes.impl.OriginalFormatBox
+import net.sourceforge.jaad.mp4.boxes.impl.SchemeTypeBox
 
 /**
  * This class contains information about a DRM system.
@@ -14,12 +19,11 @@ abstract class Protection protected constructor(sinf: Box) {
 
     init {
         //original format
-        val type: Long = (sinf.getChild(BoxTypes.ORIGINAL_FORMAT_BOX) as OriginalFormatBox).getOriginalFormat()
+        val type: Long = (sinf.getChild(BoxTypes.ORIGINAL_FORMAT_BOX) as OriginalFormatBox).originalFormat
         var c: Codec?
         //TODO: currently it tests for audio and video codec, can do this any other way?
-        if (!AudioCodec.Companion.forType(type).also { c = it }.equals(AudioCodec.UNKNOWN_AUDIO_CODEC)) originalFormat =
-            c else if (!net.sourceforge.jaad.mp4.api.VideoTrack.VideoCodec.Companion.forType(type).also { c = it }
-                .equals(net.sourceforge.jaad.mp4.api.VideoTrack.VideoCodec.UNKNOWN_VIDEO_CODEC)) originalFormat =
+        if (!AudioTrack.AudioCodec.Companion.forType(type).also { c = it }.equals(AudioTrack.AudioCodec.UNKNOWN_AUDIO_CODEC)) originalFormat =
+            c else if (net.sourceforge.jaad.mp4.api.VideoTrack.VideoCodec.Companion.forType(type).also { c = it } != net.sourceforge.jaad.mp4.api.VideoTrack.VideoCodec.UNKNOWN_VIDEO_CODEC) originalFormat =
             c else originalFormat = null
     }
 
@@ -31,9 +35,10 @@ abstract class Protection protected constructor(sinf: Box) {
 
     //default implementation for unknown protection schemes
     private class UnknownProtection internal constructor(sinf: Box) : Protection(sinf) {
-        override fun getScheme(): Scheme? {
-            return Scheme.UNKNOWN
-        }
+        override val scheme: Scheme
+            get() = Scheme.UNKNOWN
+       
+       
     }
 
     companion object {
@@ -41,7 +46,7 @@ abstract class Protection protected constructor(sinf: Box) {
             var p: Protection? = null
             if (sinf.hasChild(BoxTypes.SCHEME_TYPE_BOX)) {
                 val schm: SchemeTypeBox = sinf.getChild(BoxTypes.SCHEME_TYPE_BOX) as SchemeTypeBox
-                val l: Long = schm.getSchemeType()
+                val l: Long = schm.schemeType
                 if (l == Scheme.ITUNES_FAIR_PLAY.type) p = ITunesProtection(sinf)
             }
             if (p == null) p = UnknownProtection(sinf)

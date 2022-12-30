@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -103,8 +105,8 @@ class EAC3SpecificBox : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.
      * @return the 'lfeon' values for all independent substreams
      */
     val lfeons: BooleanArray
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override fun decode(`in`: MP4InputStream) {
         var l: Long = `in`.readBytes(2)
         //13 bits dataRate
         dataRate = (l shr 3 and 0x1FFFL).toInt()

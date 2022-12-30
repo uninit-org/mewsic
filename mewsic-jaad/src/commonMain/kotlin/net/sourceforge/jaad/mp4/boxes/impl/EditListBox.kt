@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -50,8 +52,8 @@ class EditListBox : FullBox("Edit List Box") {
     var mediaRate: DoubleArray
         private set
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         val entryCount = `in`.readBytes(4) as Int
         val len = if (version === 1) 8 else 4

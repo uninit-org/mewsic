@@ -1,4 +1,5 @@
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec
+import net.sourceforge.jaad.mp4.boxes.FullBox
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 import net.sourceforge.jaad.mp4.boxes.BoxImpl

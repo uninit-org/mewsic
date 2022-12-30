@@ -50,7 +50,7 @@ class ObjectDescriptor : net.sourceforge.jaad.mp4.od.Descriptor() {
     var uRL: String? = null
         private set
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         //10 bits objectDescriptorID, 1 bit url flag, 5 bits reserved
         val x = `in`.readBytes(2) as Int

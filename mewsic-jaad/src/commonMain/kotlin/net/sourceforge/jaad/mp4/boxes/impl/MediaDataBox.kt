@@ -1,4 +1,5 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.FullBox
 
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -13,7 +14,7 @@ import net.sourceforge.jaad.mp4.boxes.BoxImpl
  * @author in-somnia
  */
 class MediaDataBox : BoxImpl("Media Data Box") {
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream?) {
         //if random access: skip, else: do nothing
     }

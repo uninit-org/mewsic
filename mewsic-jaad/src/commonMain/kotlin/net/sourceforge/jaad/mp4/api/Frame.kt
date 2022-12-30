@@ -6,7 +6,7 @@ class Frame internal constructor(type: net.sourceforge.jaad.mp4.api.Type, offset
     val offset: Long
     val size: Long
     val time: Double
-    var data: ByteArray
+    lateinit var data: ByteArray
 
     init {
         this.type = type

@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -87,8 +89,8 @@ class AC3SpecificBox : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.C
     var isLfeon = false
         private set
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override fun decode(`in`: MP4InputStream) {
         val l: Long = `in`.readBytes(3)
 
         //2 bits fscod

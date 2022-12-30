@@ -18,14 +18,14 @@ abstract class Descriptor protected constructor() {
     private val children: MutableList<Descriptor>
 
     init {
-        children = java.util.ArrayList<Descriptor>()
+        children = ArrayList<Descriptor>()
     }
 
-    @Throws(java.io.IOException::class)
-    abstract fun decode(`in`: MP4InputStream?)
+    @Throws(Exception::class)
+    abstract fun decode(`in`: MP4InputStream)
 
     //children
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     protected fun readChildren(`in`: MP4InputStream) {
         var desc: Descriptor
         while (size - (`in`.getOffset() - start) > 0) {
@@ -35,7 +35,7 @@ abstract class Descriptor protected constructor() {
     }
 
     fun getChildren(): List<Descriptor> {
-        return java.util.Collections.unmodifiableList<Descriptor>(children)
+        return children.toList()
     }
 
     companion object {
@@ -47,7 +47,7 @@ abstract class Descriptor protected constructor() {
         const val TYPE_SL_CONFIG_DESCRIPTOR = 6
         const val TYPE_ES_ID_INC = 14
         const val TYPE_MP4_INITIAL_OBJECT_DESCRIPTOR = 16
-        @Throws(java.io.IOException::class)
+        @Throws(Exception::class)
         fun createDescriptor(`in`: MP4InputStream): Descriptor {
             //read tag and size
             val type: Int = `in`.read()
@@ -72,11 +72,11 @@ abstract class Descriptor protected constructor() {
             //skip remaining bytes
             val remaining: Long = size - (`in`.getOffset() - desc.start)
             if (remaining > 0) {
-                java.util.logging.Logger.getLogger("MP4 Boxes").log(
-                    java.util.logging.Level.INFO,
-                    "Descriptor: bytes left: {0}, offset: {1}",
-                    arrayOf(remaining, `in`.getOffset())
-                )
+//                java.util.logging.Logger.getLogger("MP4 Boxes").log(
+//                    java.util.logging.Level.INFO,
+//                    "Descriptor: bytes left: {0}, offset: {1}",
+//                    arrayOf(remaining, `in`.getOffset())
+//                )
                 `in`.skipBytes(remaining)
             }
             desc.size += read //include type and size fields
@@ -94,14 +94,14 @@ abstract class Descriptor protected constructor() {
                 TYPE_DECODER_CONFIG_DESCRIPTOR -> desc = net.sourceforge.jaad.mp4.od.DecoderConfigDescriptor()
                 TYPE_DECODER_SPECIFIC_INFO -> desc = net.sourceforge.jaad.mp4.od.DecoderSpecificInfo()
                 TYPE_SL_CONFIG_DESCRIPTOR -> {
-                    java.util.logging.Logger.getLogger("MP4 Boxes")
-                        .log(java.util.logging.Level.INFO, "Unknown descriptor type: {0}", tag)
+//                    java.util.logging.Logger.getLogger("MP4 Boxes")
+//                        .log(java.util.logging.Level.INFO, "Unknown descriptor type: {0}", tag)
                     desc = net.sourceforge.jaad.mp4.od.UnknownDescriptor()
                 }
 
                 else -> {
-                    java.util.logging.Logger.getLogger("MP4 Boxes")
-                        .log(java.util.logging.Level.INFO, "Unknown descriptor type: {0}", tag)
+//                    java.util.logging.Logger.getLogger("MP4 Boxes")
+//                        .log(java.util.logging.Level.INFO, "Unknown descriptor type: {0}", tag)
                     desc = net.sourceforge.jaad.mp4.od.UnknownDescriptor()
                 }
             }

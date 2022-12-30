@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -55,8 +57,8 @@ class AVCSpecificBox : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.C
     var pictureParameterSetNALUnits: Array<ByteArray>
         private set
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override fun decode(`in`: MP4InputStream) {
         configurationVersion = `in`.read()
         profile = `in`.read()
         profileCompatibility = `in`.read() as Byte

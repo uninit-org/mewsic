@@ -1,6 +1,10 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
+import net.sourceforge.jaad.mp4.boxes.BoxTypes
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.Utils
 
 /**
  * The Copyright box contains a copyright declaration which applies to the
@@ -22,13 +26,13 @@ class CopyrightBox : FullBox("Copyright Box") {
     var notice: String? = null
         private set
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
-        if (parent.getType() === BoxTypes.USER_DATA_BOX) {
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
+        if (parent?.type == BoxTypes.USER_DATA_BOX) {
             super.decode(`in`)
             //1 bit padding, 5*3 bits language code (ISO-639-2/T)
             languageCode = Utils.getLanguageCode(`in`.readBytes(2))
-            notice = `in`.readUTFString(getLeft(`in`) as Int)
-        } else if (parent.getType() === BoxTypes.ITUNES_META_LIST_BOX) readChildren(`in`)
+            notice = `in`.readUTFString(getLeft(`in`).toInt())
+        } else if (parent?.type == BoxTypes.ITUNES_META_LIST_BOX) readChildren(`in`)
     }
 }

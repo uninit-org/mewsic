@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl.oma
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -8,11 +10,11 @@ class OMAContentObjectBox : FullBox("OMA Content Object Box") {
      *
      * @return the data
      */
-    var data: ByteArray
+    lateinit var data: ByteArray
         private set
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         val len = `in`.readBytes(4) as Int
         data = ByteArray(len)

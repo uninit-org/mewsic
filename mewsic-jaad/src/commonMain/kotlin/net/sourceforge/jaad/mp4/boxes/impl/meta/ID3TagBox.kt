@@ -1,6 +1,9 @@
 package net.sourceforge.jaad.mp4.boxes.impl.meta
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.Utils
 
 //TODO: use nio ByteBuffer instead of array
 class ID3TagBox : FullBox("ID3 Tag Box") {
@@ -10,14 +13,14 @@ class ID3TagBox : FullBox("ID3 Tag Box") {
      */
     var language: String? = null
         private set
-    var iD3Data: ByteArray
+    lateinit var iD3Data: ByteArray
         private set
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         language = Utils.getLanguageCode(`in`.readBytes(2))
-        iD3Data = ByteArray(getLeft(`in`) as Int)
+        iD3Data = ByteArray(getLeft(`in`).toInt())
         `in`.readBytes(iD3Data)
     }
 }

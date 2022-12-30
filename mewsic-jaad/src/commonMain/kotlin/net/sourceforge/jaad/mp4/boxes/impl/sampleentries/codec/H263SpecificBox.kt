@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -8,8 +10,8 @@ class H263SpecificBox : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.
     var profile = 0
         private set
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override fun decode(`in`: MP4InputStream) {
         decodeCommon(`in`)
         level = `in`.read()
         profile = `in`.read()

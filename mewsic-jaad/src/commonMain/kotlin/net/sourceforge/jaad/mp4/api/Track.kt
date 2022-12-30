@@ -1,6 +1,11 @@
 package net.sourceforge.jaad.mp4.api
 
 import net.sourceforge.jaad.mp4.MP4InputStream
+import net.sourceforge.jaad.mp4.boxes.Box
+import net.sourceforge.jaad.mp4.boxes.BoxTypes
+import net.sourceforge.jaad.mp4.boxes.impl.*
+import net.sourceforge.jaad.mp4.od.DecoderSpecificInfo
+import net.sourceforge.jaad.mp4.od.Descriptor
 
 /**
  * This class represents a track in a movie.
@@ -27,8 +32,8 @@ abstract class Track internal constructor(trak: Box, `in`: MP4InputStream) {
      * @return true if the data is in this file (stream), false otherwise
      */
     var isInFile = false
-    private var frames: List<net.sourceforge.jaad.mp4.api.Frame>? = null
-    private var location: java.net.URL? = null
+    private var frames: MutableList<net.sourceforge.jaad.mp4.api.Frame>? = null
+    private var location: String? = null
     private var currentFrame: Int
 
     //info structures
@@ -39,24 +44,24 @@ abstract class Track internal constructor(trak: Box, `in`: MP4InputStream) {
     init {
         this.`in` = `in`
         tkhd = trak.getChild(BoxTypes.TRACK_HEADER_BOX) as TrackHeaderBox
-        val mdia: Box = trak.getChild(BoxTypes.MEDIA_BOX)
+        val mdia: Box = trak.getChild(BoxTypes.MEDIA_BOX)!!
         mdhd = mdia.getChild(BoxTypes.MEDIA_HEADER_BOX) as MediaHeaderBox
-        val minf: Box = mdia.getChild(BoxTypes.MEDIA_INFORMATION_BOX)
-        val dinf: Box = minf.getChild(BoxTypes.DATA_INFORMATION_BOX)
+        val minf: Box = mdia.getChild(BoxTypes.MEDIA_INFORMATION_BOX) as MediaHeaderBox
+        val dinf: Box = minf.getChild(BoxTypes.DATA_INFORMATION_BOX)!!
         val dref: DataReferenceBox = dinf.getChild(BoxTypes.DATA_REFERENCE_BOX) as DataReferenceBox
         //TODO: support URNs
         if (dref.hasChild(BoxTypes.DATA_ENTRY_URL_BOX)) {
             val url: DataEntryUrlBox = dref.getChild(BoxTypes.DATA_ENTRY_URL_BOX) as DataEntryUrlBox
-            isInFile = url.isInFile()
+            isInFile = url.isInFile
             if (!isInFile) {
                 location = try {
-                    java.net.URL(url.getLocation())
-                } catch (e: java.net.MalformedURLException) {
-                    java.util.logging.Logger.getLogger("MP4 API").log(
-                        java.util.logging.Level.WARNING,
-                        "Parsing URL-Box failed: {0}, url: {1}",
-                        arrayOf<String>(e.toString(), url.getLocation())
-                    )
+                    url.location
+                } catch (e: Exception) {
+//                    java.util.logging.Logger.getLogger("MP4 API").log(
+//                        java.util.logging.Level.WARNING,
+//                        "Parsing URL-Box failed: {0}, url: {1}",
+//                        arrayOf<String>(e.toString(), url.getLocation())
+//                    )
                     null
                 }
             }
@@ -66,39 +71,38 @@ abstract class Track internal constructor(trak: Box, `in`: MP4InputStream) {
         }
 
         //sample table
-        val stbl: Box = minf.getChild(BoxTypes.SAMPLE_TABLE_BOX)
+        val stbl: Box = minf.getChild(BoxTypes.SAMPLE_TABLE_BOX)!!
         if (stbl.hasChildren()) {
-            frames = java.util.ArrayList<net.sourceforge.jaad.mp4.api.Frame>()
+            frames = ArrayList<net.sourceforge.jaad.mp4.api.Frame>()
             parseSampleTable(stbl)
-        } else frames = emptyList<net.sourceforge.jaad.mp4.api.Frame>()
+        } else frames = mutableListOf<net.sourceforge.jaad.mp4.api.Frame>()
         currentFrame = 0
     }
 
     private fun parseSampleTable(stbl: Box) {
-        val timeScale: Double = mdhd.getTimeScale()
+        val timeScale: Long = mdhd.timeScale
         val type: net.sourceforge.jaad.mp4.api.Type = type
 
         //sample sizes
-        val sampleSizes: LongArray = (stbl.getChild(BoxTypes.SAMPLE_SIZE_BOX) as SampleSizeBox).getSampleSizes()
+        val sampleSizes: LongArray = (stbl.getChild(BoxTypes.SAMPLE_SIZE_BOX) as SampleSizeBox).sampleSizes
 
         //chunk offsets
-        val stco: ChunkOffsetBox
-        stco =
+        val stco =
             if (stbl.hasChild(BoxTypes.CHUNK_OFFSET_BOX)) stbl.getChild(BoxTypes.CHUNK_OFFSET_BOX) as ChunkOffsetBox else stbl.getChild(
                 BoxTypes.CHUNK_LARGE_OFFSET_BOX
             ) as ChunkOffsetBox
-        val chunkOffsets: LongArray = stco.getChunks()
+        val chunkOffsets: LongArray = stco.chunks
 
         //samples to chunks
         val stsc: SampleToChunkBox = stbl.getChild(BoxTypes.SAMPLE_TO_CHUNK_BOX) as SampleToChunkBox
-        val firstChunks: LongArray = stsc.getFirstChunks()
-        val samplesPerChunk: LongArray = stsc.getSamplesPerChunk()
+        val firstChunks: LongArray = stsc.firstChunks
+        val samplesPerChunk: LongArray = stsc.samplesPerChunk
 
         //sample durations/timestamps
         val stts: DecodingTimeToSampleBox =
             stbl.getChild(BoxTypes.DECODING_TIME_TO_SAMPLE_BOX) as DecodingTimeToSampleBox
-        val sampleCounts: LongArray = stts.getSampleCounts()
-        val sampleDeltas: LongArray = stts.getSampleDeltas()
+        val sampleCounts: LongArray = stts.sampleCounts
+        val sampleDeltas: LongArray = stts.sampleDeltas
         val timeOffsets = LongArray(sampleSizes.size)
         var tmp: Long = 0
         var off = 0
@@ -127,7 +131,7 @@ abstract class Track internal constructor(trak: Box, `in`: MP4InputStream) {
                 for (k in 0 until samplesPerChunk[i]) {
                     //create samples
                     timeStamp = timeOffsets[current].toDouble() / timeScale
-                    frames.add(net.sourceforge.jaad.mp4.api.Frame(type, offset, sampleSizes[current], timeStamp))
+                    frames?.add(net.sourceforge.jaad.mp4.api.Frame(type, offset, sampleSizes[current], timeStamp))
                     offset += sampleSizes[current]
                     current++
                 }
@@ -136,36 +140,28 @@ abstract class Track internal constructor(trak: Box, `in`: MP4InputStream) {
 
         //frames need not to be time-ordered: sort by timestamp
         //TODO: is it possible to add them to the specific position?
-        java.util.Collections.sort<net.sourceforge.jaad.mp4.api.Frame>(frames)
+//        java.util.Collections.sort<net.sourceforge.jaad.mp4.api.Frame>(frames)
+        frames?.sortBy { it.offset } // FIXME: Check if this is correct
     }
 
     //TODO: implement other entry descriptors
     protected fun findDecoderSpecificInfo(esds: ESDBox) {
-        val ed: Descriptor = esds.getEntryDescriptor()
+        val ed: Descriptor = esds.entryDescriptor!!
         val children: List<Descriptor> = ed.getChildren()
         var children2: List<Descriptor?>
         for (e in children) {
             children2 = e.getChildren()
             for (e2 in children2) {
-                when (e2.getType()) {
+                when (e2.type) {
                     Descriptor.TYPE_DECODER_SPECIFIC_INFO -> decoderSpecificInfo = e2 as DecoderSpecificInfo
                 }
             }
         }
     }
 
-    protected fun <T> parseSampleEntry(sampleEntry: Box, clazz: java.lang.Class<T>) {
-        val type: T
-        try {
-            type = clazz.newInstance()
-            if (sampleEntry.getClass().isInstance(type)) {
-                println("true")
-            }
-        } catch (ex: java.lang.InstantiationException) {
-            ex.printStackTrace()
-        } catch (ex: java.lang.IllegalAccessException) {
-            ex.printStackTrace()
-        }
+    @Deprecated("Unused, only not removed just incase it's used somewhere right now. Will be removed in the future.")
+    protected fun <T> parseSampleEntry(sampleEntry: Box, clazz: Any) {
+
     }
 
     abstract val type: net.sourceforge.jaad.mp4.api.Type
@@ -178,39 +174,39 @@ abstract class Track internal constructor(trak: Box, `in`: MP4InputStream) {
          * it were not present.
          * @return true if the track is enabled
          */
-        get() = tkhd.isTrackEnabled()
+        get() = tkhd.isTrackEnabled
     val isUsed: Boolean
         /**
          * Returns true if the track is used in the presentation.
          * @return true if the track is used
          */
-        get() = tkhd.isTrackInMovie()
+        get() = tkhd.isTrackInMovie
     val isUsedForPreview: Boolean
         /**
          * Returns true if the track is used in previews.
          * @return true if the track is used in previews
          */
-        get() = tkhd.isTrackInPreview()
-    val creationTime: java.util.Date
+        get() = tkhd.isTrackInPreview
+    val creationTime: Long
         /**
          * Returns the time this track was created.
          * @return the creation time
          */
-        get() = net.sourceforge.jaad.mp4.api.Utils.getDate(tkhd.getCreationTime())
-    val modificationTime: java.util.Date
+        get() = net.sourceforge.jaad.mp4.api.Utils.getDate(tkhd.creationTime)
+    val modificationTime: Long
         /**
          * Returns the last time this track was modified.
          * @return the modification time
          */
-        get() = net.sourceforge.jaad.mp4.api.Utils.getDate(tkhd.getModificationTime())
+        get() = net.sourceforge.jaad.mp4.api.Utils.getDate(tkhd.modificationTime)
 
     //mdhd
-    val language: java.util.Locale
+    val language: String
         /**
          * Returns the language for this media.
          * @return the language
          */
-        get() = java.util.Locale(mdhd.getLanguage())
+        get() = mdhd.language ?: "und"
 
     /**
      * If the data for this track is not present in this file (if
@@ -218,8 +214,8 @@ abstract class Track internal constructor(trak: Box, `in`: MP4InputStream) {
      * location. Else null is returned.
      * @return the data's location or null if the data is in this file
      */
-    fun getLocation(): java.net.URL? {
-        return location
+    fun getLocation(): String {
+        return location ?: ""
     }
     //info structures
     /**
@@ -231,7 +227,7 @@ abstract class Track internal constructor(trak: Box, `in`: MP4InputStream) {
      * @return the decoder specific info
      */
     fun getDecoderSpecificInfo(): ByteArray {
-        return decoderSpecificInfo.getData()
+        return decoderSpecificInfo!!.data
     }
 
     /**
@@ -274,34 +270,34 @@ abstract class Track internal constructor(trak: Box, `in`: MP4InputStream) {
      * @return the next frame or null if there are no more frames to read
      * @throws IOException if reading fails
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun readNextFrame(): net.sourceforge.jaad.mp4.api.Frame? {
         var frame: net.sourceforge.jaad.mp4.api.Frame? = null
         if (hasMoreFrames()) {
             frame = frames!![currentFrame]
-            val diff: Long = frame.getOffset() - `in`.getOffset()
+            val diff: Long = frame.offset - `in`.getOffset()
             if (diff > 0) `in`.skipBytes(diff) else if (diff < 0) {
-                if (`in`.hasRandomAccess()) `in`.seek(frame.getOffset()) else {
-                    java.util.logging.Logger.getLogger("MP4 API").log(
-                        java.util.logging.Level.WARNING,
-                        "readNextFrame failed: frame {0} already skipped, offset:{1}, stream:{2}",
-                        arrayOf<Any>(currentFrame, frame.getOffset(), `in`.getOffset())
-                    )
-                    throw java.io.IOException("frame already skipped and no random access")
+                if (`in`.hasRandomAccess()) `in`.seek(frame.offset) else {
+//                    java.util.logging.Logger.getLogger("MP4 API").log(
+//                        java.util.logging.Level.WARNING,
+//                        "readNextFrame failed: frame {0} already skipped, offset:{1}, stream:{2}",
+//                        arrayOf<Any>(currentFrame, frame.getOffset(), `in`.getOffset())
+//                    )
+                    throw Exception("frame already skipped and no random access")
                 }
             }
-            val b = ByteArray(frame.getSize().toInt())
+            val b = ByteArray(frame.size.toInt())
             try {
                 `in`.readBytes(b)
-            } catch (e: java.io.EOFException) {
-                java.util.logging.Logger.getLogger("MP4 API").log(
-                    java.util.logging.Level.WARNING,
-                    "readNextFrame failed: tried to read {0} bytes at {1}",
-                    arrayOf<Long>(frame.getSize(), `in`.getOffset())
-                )
+            } catch (e: Exception) {
+//                java.util.logging.Logger.getLogger("MP4 API").log(
+//                    java.util.logging.Level.WARNING,
+//                    "readNextFrame failed: tried to read {0} bytes at {1}",
+//                    arrayOf<Long>(frame.getSize(), `in`.getOffset())
+//                )
                 throw e
             }
-            frame.setData(b)
+            frame.data = b
             currentFrame++
         }
         return frame
@@ -321,13 +317,13 @@ abstract class Track internal constructor(trak: Box, `in`: MP4InputStream) {
         var i = 0
         while (i < frames!!.size) {
             frame = frames!![i++]
-            if (frame.getTime() > timestamp) {
+            if (frame.time > timestamp) {
                 currentFrame = i
                 break
             }
             i++
         }
-        return if (frame == null) -1 else frame.getTime()
+        return if (frame == null) -1.0 else frame.time
     }
 
     val nextTimeStamp: Double
@@ -337,5 +333,5 @@ abstract class Track internal constructor(trak: Box, `in`: MP4InputStream) {
          *
          * @return the next frame's timestamp
          */
-        get() = frames!![currentFrame].getTime()
+        get() = frames!![currentFrame].time
 }

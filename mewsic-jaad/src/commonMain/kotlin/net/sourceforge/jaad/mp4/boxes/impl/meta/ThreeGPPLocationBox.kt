@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl.meta
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -88,8 +90,8 @@ class ThreeGPPLocationBox :
     var additionalNotes: String? = null
         private set
 
-    @Throws(java.io.IOException::class)
-    override fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
         decodeCommon(`in`)
         placeName = `in`.readUTFString(getLeft(`in`) as Int)
         role = `in`.read()

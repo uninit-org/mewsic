@@ -1,6 +1,8 @@
 package net.sourceforge.jaad.mp4.api
 
-internal class ID3Frame(`in`: java.io.DataInputStream) {
+import org.mewsic.commons.streams.DataInputStream
+
+internal class ID3Frame(`in`: DataInputStream) {
     val size: Long
 
     //header data
@@ -16,11 +18,11 @@ internal class ID3Frame(`in`: java.io.DataInputStream) {
         iD = `in`.readInt()
         size = net.sourceforge.jaad.mp4.api.ID3Tag.Companion.readSynch(`in`).toLong()
         flags = `in`.readShort().toInt()
-        if (isInGroup) groupID = `in`.read()
-        if (isEncrypted) encryptionMethod = `in`.read()
+        if (isInGroup) groupID = `in`.read().toInt()
+        if (isEncrypted) encryptionMethod = `in`.read().toInt()
         //TODO: data length indicator, unsync
         data = ByteArray(size.toInt())
-        `in`.readFully(data)
+        `in`.read(data)
     }
 
     val isInGroup: Boolean
@@ -30,7 +32,9 @@ internal class ID3Frame(`in`: java.io.DataInputStream) {
     val isEncrypted: Boolean
         get() = flags and 4 == 4
     val text: String
-        get() = String(data, java.nio.charset.Charset.forName(TEXT_ENCODINGS[0]))
+        // FIXME: 12/29/22 | this (maybe incorrectly) assumes UTF8 encoding
+        get() = data.decodeToString()
+//        get() = String(data, java.nio.charset.Charset.forName(TEXT_ENCODINGS[0]))
     val encodedText: String
         get() {
             //first byte indicates encoding
@@ -43,40 +47,40 @@ internal class ID3Frame(`in`: java.io.DataInputStream) {
                 if (data[i].toInt() == 0 && (enc == 0 || enc == 3 || data[i + 1].toInt() == 0)) t = i
                 i++
             }
-            return String(data, 1, t - 1, java.nio.charset.Charset.forName(TEXT_ENCODINGS[enc]))
+            // FIXME: 12/29/22 | we need to change this to use the correct encoding
+            return data.decodeToString(1, t-1 )
+
         }
     val number: Int
-        get() = kotlin.String(data).toInt()
+        get() = data.decodeToString().toInt()
     val numbers: IntArray
         get() {
             //multiple numbers separated by '/'
-            val x = String(data, java.nio.charset.Charset.forName(TEXT_ENCODINGS[0]))
+            val x = text
             val i = x.indexOf('/')
-            val y: IntArray
-            y = if (i > 0) intArrayOf(
+            val y: IntArray = if (i > 0) intArrayOf(
                 x.substring(0, i).toInt(),
                 x.substring(i + 1).toInt()
             ) else intArrayOf(x.toInt())
             return y
         }
-    val date: java.util.Date?
+    val date: String
         get() {
+            return data.decodeToString()
+            // FIXME: 12/29/22 | this is broken, we need kotlinx datetime
             //timestamp lengths: 4,7,10,13,16,19
-            val i: Int = java.lang.Math.floor((data.size / 3).toDouble()).toInt() - 1
-            val date: java.util.Date?
-            date = if (i >= 0 && i < VALID_TIMESTAMPS.size) {
-                val sdf: java.text.SimpleDateFormat =
-                    java.text.SimpleDateFormat(VALID_TIMESTAMPS[i])
-                sdf.parse(kotlin.String(data), java.text.ParsePosition(0))
-            } else null
-            return date
+//            val i: Int = java.lang.Math.floor((data.size / 3).toDouble()).toInt() - 1
+//            val date: java.util.Date?
+//            date = if (i >= 0 && i < VALID_TIMESTAMPS.size) {
+//                val sdf: java.text.SimpleDateFormat =
+//                    java.text.SimpleDateFormat(VALID_TIMESTAMPS[i])
+//                sdf.parse(kotlin.String(data), java.text.ParsePosition(0))
+//            } else null
+//            return date
         }
-    val locale: java.util.Locale?
+    val locale: String
         get() {
-            val s = kotlin.String(data).lowercase(java.util.Locale.getDefault())
-            val l: java.util.Locale?
-            l = if (s == UNKNOWN_LANGUAGE) null else java.util.Locale(s)
-            return l
+            return data.decodeToString().lowercase()
         }
 
     companion object {

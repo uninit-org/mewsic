@@ -9,11 +9,11 @@ open class BoxImpl(override val name: String) : net.sourceforge.jaad.mp4.boxes.B
         protected set
     override var offset: Long = 0
         protected set
-    protected override var parent: net.sourceforge.jaad.mp4.boxes.Box? = null
+    override var parent: net.sourceforge.jaad.mp4.boxes.Box? = null
     override val children: MutableList<net.sourceforge.jaad.mp4.boxes.Box>
 
     init {
-        children = java.util.ArrayList<net.sourceforge.jaad.mp4.boxes.Box>(4)
+        children = ArrayList<net.sourceforge.jaad.mp4.boxes.Box>(4)
     }
 
     fun setParams(parent: net.sourceforge.jaad.mp4.boxes.Box?, size: Long, type: Long, offset: Long) {
@@ -23,7 +23,7 @@ open class BoxImpl(override val name: String) : net.sourceforge.jaad.mp4.boxes.B
         this.offset = offset
     }
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     protected fun getLeft(`in`: MP4InputStream): Long {
         return offset + size - `in`.getOffset()
     }
@@ -35,11 +35,11 @@ open class BoxImpl(override val name: String) : net.sourceforge.jaad.mp4.boxes.B
      * @param in an input stream
      * @throws IOException if an error occurs while reading
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun decode(`in`: MP4InputStream?) {
     }
 
-    override fun getParent(): net.sourceforge.jaad.mp4.boxes.Box? {
+    fun getParent(): net.sourceforge.jaad.mp4.boxes.Box? {
         return parent
     }
 
@@ -55,7 +55,7 @@ open class BoxImpl(override val name: String) : net.sourceforge.jaad.mp4.boxes.B
     override fun hasChild(type: Long): Boolean {
         var b = false
         for (box in children) {
-            if (box.getType() == type) {
+            if (box.type == type) {
                 b = true
                 break
             }
@@ -69,21 +69,21 @@ open class BoxImpl(override val name: String) : net.sourceforge.jaad.mp4.boxes.B
         var i = 0
         while (box == null && i < children.size) {
             b = children[i]
-            if (b.getType() == type) box = b
+            if (b.type == type) box = b
             i++
         }
         return box
     }
 
-    override fun getChildren(): List<net.sourceforge.jaad.mp4.boxes.Box> {
-        return java.util.Collections.unmodifiableList<net.sourceforge.jaad.mp4.boxes.Box>(children)
+    fun getChildren(): List<net.sourceforge.jaad.mp4.boxes.Box> {
+        return children.toList()
     }
 
     override fun getChildren(type: Long): List<net.sourceforge.jaad.mp4.boxes.Box> {
         val l: MutableList<net.sourceforge.jaad.mp4.boxes.Box> =
-            java.util.ArrayList<net.sourceforge.jaad.mp4.boxes.Box>()
+            ArrayList<net.sourceforge.jaad.mp4.boxes.Box>()
         for (box in children) {
-            if (box.getType() == type) l.add(box)
+            if (box.type == type) l.add(box)
         }
         return l
     }

@@ -1,4 +1,5 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
@@ -10,7 +11,7 @@ import net.sourceforge.jaad.mp4.boxes.FullBox
  */
 class SampleDescriptionBox : FullBox("Sample Description Box") {
     @Throws(Exception::class)
-    override fun decode(`in`: MP4InputStream) {
+    override override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         val entryCount = `in`.readBytes(4) as Int
         readChildren(`in`, entryCount)

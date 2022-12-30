@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -34,7 +36,7 @@ class TrackReferenceBox : BoxImpl("Track Reference Box") {
         trackIDs = java.util.ArrayList<Long>()
     }
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun decode(`in`: MP4InputStream) {
         referenceType = `in`.readString(4)
         while (getLeft(`in`) > 3) {

@@ -1,6 +1,9 @@
 package net.sourceforge.jaad.mp4.boxes.impl.meta
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import org.mewsic.commons.lang.Arrays
 
 /**
  * This box contains the data for a metadata tag. It is right below an
@@ -58,13 +61,13 @@ class ITunesMetadataBox : FullBox("iTunes Metadata Box") {
 
     var dataType: DataType? = null
         private set
-    private var data: ByteArray
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    private lateinit var data: ByteArray
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         dataType = DataType.forInt(flags)
         `in`.skipBytes(4) //padding?
-        data = ByteArray(getLeft(`in`) as Int)
+        data = ByteArray(getLeft(`in`).toInt())
         `in`.readBytes(data)
     }
 
@@ -75,7 +78,7 @@ class ITunesMetadataBox : FullBox("iTunes Metadata Box") {
      * @return the raw metadata
      */
     fun getData(): ByteArray {
-        return java.util.Arrays.copyOf(data, data.size)
+        return Arrays.copyOf(data, data.size)
     }
 
     val text: String
@@ -84,7 +87,8 @@ class ITunesMetadataBox : FullBox("iTunes Metadata Box") {
          * @return the metadata as text
          */
         get() =//first four bytes are padding (zero)
-            String(data, 0, data.size, java.nio.charset.Charset.forName("UTF-8"))
+            data.decodeToString(0, data.size)
+//            String(data, 0, data.size, java.nio.charset.Charset.forName("UTF-8"))
     val number: Long
         /**
          * Returns the content as an unsigned 8-bit integer.
@@ -107,16 +111,38 @@ class ITunesMetadataBox : FullBox("iTunes Metadata Box") {
          * @return the metadata as a boolean
          */
         get() = number != 0L
-    val date: java.util.Date?
+    val date: String?
         get() {
             //timestamp lengths: 4,7,9
-            val i: Int = java.lang.Math.floor((data.size / 3).toDouble()).toInt() - 1
-            val date: java.util.Date?
-            date = if (i >= 0 && i < TIMESTAMPS.size) {
-                val sdf: java.text.SimpleDateFormat = java.text.SimpleDateFormat(TIMESTAMPS[i])
-                sdf.parse(kotlin.String(data), java.text.ParsePosition(0))
-            } else null
-            return date
+            return when (data.size) { // FIXME: this is not correct
+                4 -> {
+                    val year = number.toInt()
+                    if (year == 0) null else year.toString()
+                }
+                7 -> {
+                    val year = number.toInt() shr 16
+                    val month = number.toInt() shr 8 and 0xFF
+                    val day = number.toInt() and 0xFF
+                    if (year == 0) null else "$year-$month-$day"
+                }
+                9 -> {
+                    val year = number.toInt() shr 16
+                    val month = number.toInt() shr 8 and 0xFF
+                    val day = number.toInt() and 0xFF
+                    val hour = number.toInt() shr 24
+                    val minute = number.toInt() shr 16 and 0xFF
+                    val second = number.toInt() shr 8 and 0xFF
+                    if (year == 0) null else "$year-$month-$day $hour:$minute:$second"
+                }
+                else -> null
+            }
+//            val i: Int = java.lang.Math.floor((data.size / 3).toDouble()).toInt() - 1
+//            val date: java.util.Date?
+//            date = if (i >= 0 && i < TIMESTAMPS.size) {
+//                val sdf: java.text.SimpleDateFormat = java.text.SimpleDateFormat(TIMESTAMPS[i])
+//                sdf.parse(kotlin.String(data), java.text.ParsePosition(0))
+//            } else null
+//            return date
         }
 
     companion object {

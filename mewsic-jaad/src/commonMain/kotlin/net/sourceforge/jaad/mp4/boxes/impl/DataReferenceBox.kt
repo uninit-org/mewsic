@@ -1,6 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
+import net.sourceforge.jaad.mp4.boxes.FullBox
 
 /**
  * The data reference object contains a table of data references (normally URLs)
@@ -13,10 +15,10 @@ import net.sourceforge.jaad.mp4.MP4InputStream
  * @author in-somnia
  */
 class DataReferenceBox : FullBox("Data Reference Box") {
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        val entryCount = `in`.readBytes(4) as Int
+        val entryCount = `in`.readBytes(4).toInt()
         readChildren(`in`, entryCount) //DataEntryUrlBox, DataEntryUrnBox
     }
 }

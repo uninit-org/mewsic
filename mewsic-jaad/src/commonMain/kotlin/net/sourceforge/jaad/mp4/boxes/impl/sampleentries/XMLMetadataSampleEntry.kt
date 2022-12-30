@@ -18,6 +18,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -42,8 +44,8 @@ class XMLMetadataSampleEntry :
     var schemaLocation: String? = null
         private set
 
-    @Throws(java.io.IOException::class)
-    override fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         namespace = `in`.readUTFString(getLeft(`in`) as Int, MP4InputStream.UTF8)
         schemaLocation = `in`.readUTFString(getLeft(`in`) as Int, MP4InputStream.UTF8)

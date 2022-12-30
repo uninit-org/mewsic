@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl.oma
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -10,8 +12,8 @@ class OMAAccessUnitFormatBox : FullBox("OMA DRM Access Unit Format Box") {
     var initialVectorLength = 0
         private set
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
 
         //1 bit selective encryption, 7 bits reserved

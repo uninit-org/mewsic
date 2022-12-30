@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -72,8 +74,8 @@ class ItemInformationEntry : FullBox("Item Information Entry") {
     var extension: Extension? = null
         private set
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         if (version === 0 || version === 1) {
             itemID = `in`.readBytes(2) as Int
@@ -93,8 +95,8 @@ class ItemInformationEntry : FullBox("Item Information Entry") {
     }
 
     abstract class Extension {
-        @Throws(java.io.IOException::class)
-        abstract fun decode(`in`: MP4InputStream?)
+        @Throws(Exception::class)
+        abstract override fun decode(`in`: MP4InputStream?)
 
         companion object {
             private const val TYPE_FDEL = 1717855596 //fdel
@@ -155,8 +157,8 @@ class ItemInformationEntry : FullBox("Item Information Entry") {
         var groupID: LongArray
             private set
 
-        @Throws(java.io.IOException::class)
-        override fun decode(`in`: MP4InputStream) {
+        @Throws(Exception::class)
+        override override fun decode(`in`: MP4InputStream) {
             contentLocation = `in`.readUTFString(100, MP4InputStream.UTF8)
             contentMD5 = `in`.readUTFString(100, MP4InputStream.UTF8)
             contentLength = `in`.readBytes(8)

@@ -1,6 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
+import net.sourceforge.jaad.mp4.boxes.FullBox
 
 /**
  * The video media header contains general presentation information, independent
@@ -15,9 +17,9 @@ class VideoMediaHeaderBox : FullBox("Video Media Header Box") {
      */
     var graphicsMode: Long = 0
         private set
-    private var color: java.awt.Color? = null
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    private var color: IntArray? = null
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         graphicsMode = `in`.readBytes(2)
         //6 byte RGB color
@@ -25,13 +27,13 @@ class VideoMediaHeaderBox : FullBox("Video Media Header Box") {
         for (i in 0..2) {
             c[i] = `in`.read() and 0xFF or (`in`.read() shl 8 and 0xFF)
         }
-        color = java.awt.Color(c[0], c[1], c[2])
+        color = c
     }
 
     /**
      * A color available for use by graphics modes.
      */
-    fun getColor(): java.awt.Color? {
+    fun getColor(): IntArray? {
         return color
     }
 }

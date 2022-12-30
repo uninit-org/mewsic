@@ -1,6 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
+import net.sourceforge.jaad.mp4.boxes.FullBox
 
 /**
  * When the primary data is in XML format and it is desired that the XML be
@@ -16,11 +18,11 @@ class BinaryXMLBox : FullBox("Binary XML Box") {
     /**
      * The binary data.
      */
-    var data: ByteArray
+    lateinit var data: ByteArray
         private set
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         data = ByteArray(getLeft(`in`) as Int)
         `in`.readBytes(data)

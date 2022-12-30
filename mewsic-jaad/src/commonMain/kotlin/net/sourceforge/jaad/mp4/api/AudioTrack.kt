@@ -7,6 +7,7 @@ import net.sourceforge.jaad.mp4.boxes.impl.ESDBox
 import net.sourceforge.jaad.mp4.boxes.impl.SampleDescriptionBox
 import net.sourceforge.jaad.mp4.boxes.impl.SoundMediaHeaderBox
 import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.AudioSampleEntry
+import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.CodecSpecificBox
 
 class AudioTrack(trak: Box, `in`: MP4InputStream) : Track(trak, `in`) {
     enum class AudioCodec : Codec {
@@ -54,7 +55,7 @@ class AudioTrack(trak: Box, `in`: MP4InputStream) : Track(trak, `in`) {
     override val type: net.sourceforge.jaad.mp4.api.Type
         get() = net.sourceforge.jaad.mp4.api.Type.AUDIO
 
-    override fun getCodec(): Codec? {
+    fun getCodec(): Codec {
         return codec
     }
 
@@ -72,19 +73,19 @@ class AudioTrack(trak: Box, `in`: MP4InputStream) : Track(trak, `in`) {
          * Returns the number of channels in this audio track.
          * @return the number of channels
          */
-        get() = sampleEntry.getChannelCount()
+        get() = sampleEntry!!.channelCount
     val sampleRate: Int
         /**
          * Returns the sample rate of this audio track.
          * @return the sample rate
          */
-        get() = sampleEntry.getSampleRate()
+        get() = sampleEntry!!.sampleRate
     val sampleSize: Int
         /**
          * Returns the sample size in bits for this track.
          * @return the sample size
          */
-        get() = sampleEntry.getSampleSize()
+        get() = sampleEntry!!.sampleSize
     val volume: Double
-        get() = tkhd.getVolume()
+        get() = tkhd.volume
 }

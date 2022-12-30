@@ -1,6 +1,9 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.Utils
 
 /**
  * This box specifies the characteristics of a single track. Exactly one Track
@@ -140,8 +143,8 @@ class TrackHeaderBox : FullBox("Track Header Box") {
         matrix = DoubleArray(9)
     }
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         isTrackEnabled = flags and 1 === 1
         isTrackInMovie = flags and 2 === 2

@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl.fd
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -9,8 +11,8 @@ class GroupIDToNameBox : FullBox("Group ID To Name Box") {
         map = java.util.HashMap<Long, String>()
     }
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         val entryCount = `in`.readBytes(2) as Int
         var id: Long

@@ -1,16 +1,17 @@
 package net.sourceforge.jaad.mp4.boxes.impl.drm
+import net.sourceforge.jaad.mp4.boxes.FullBox
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 class FairPlayDataBox : BoxImpl("iTunes FairPlay Data Box") {
-    var data: ByteArray
+    lateinit var data: ByteArray
         private set
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        data = ByteArray(getLeft(`in`) as Int)
+        data = ByteArray(getLeft(`in`).toInt())
         `in`.readBytes(data)
     }
 }

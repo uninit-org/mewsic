@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -30,8 +32,8 @@ import net.sourceforge.jaad.mp4.MP4InputStream
  */
 class IPMPInfoBox : FullBox("IPMP Info Box") {
     private var ipmpDescriptors: MutableList<Descriptor?>? = null
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream?) {
+    @Throws(Exception::class)
+    override fun decode(`in`: MP4InputStream?) {
         super.decode(`in`)
         ipmpDescriptors = java.util.ArrayList<Descriptor>()
         /*IPMP*/

@@ -1,9 +1,16 @@
 package net.sourceforge.jaad.mp4
 
+import org.mewsic.commons.lang.Arrays
+import org.mewsic.commons.streams.FileInputStream
+import org.mewsic.commons.streams.api.InputStream
+import kotlin.math.*
+
+// TODO: This needs to be somewhat completely rewritten
+//  to more conform to the multiplatform mewsic codebase.
 class MP4InputStream {
-    private val `in`: java.io.InputStream?
-    private val fin: java.io.RandomAccessFile?
-    private val peeked: java.util.LinkedList<Byte> = java.util.LinkedList<Byte>()
+    private val `in`: InputStream?
+    private val fin: FileInputStream?
+    private var peeked: MutableList<Byte> = mutableListOf()
     private var offset: Long = 0 //only used with InputStream
 
     /**
@@ -13,7 +20,7 @@ class MP4InputStream {
      *
      * @param in an `InputStream` to read from
      */
-    internal constructor(`in`: java.io.InputStream?) {
+    internal constructor(`in`: InputStream) {
         this.`in` = `in`
         fin = null
         offset = 0
@@ -26,7 +33,7 @@ class MP4InputStream {
      *
      * @param in a `RandomAccessFile` to read from
      */
-    internal constructor(fin: java.io.RandomAccessFile?) {
+    internal constructor(fin: FileInputStream?) {
         this.fin = fin
         `in` = null
     }
@@ -41,25 +48,25 @@ class MP4InputStream {
      * @return the next byte of data
      * @throws IOException If the end of the stream is detected or any I/O error occurs.
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun peek(): Int {
         var i = 0
         if (!peeked.isEmpty()) {
-            i = peeked.remove().toInt() and MASK8
+            i = peeked.removeFirst().toInt() and MASK8
         } else if (`in` != null) {
-            i = `in`.read()
+            i = `in`.read().toInt()
         } else if (fin != null) {
-            val currentFilePointer: Long = fin.getFilePointer()
+            val currentFilePointer: Long = fin.position()
             i = try {
-                fin.read()
+                fin.read().toInt()
             } finally {
                 fin.seek(currentFilePointer)
             }
         }
         if (i == -1) {
-            throw java.io.EOFException()
+            throw Exception("EOF")
         }
-        peeked.addFirst(i.toByte())
+        peeked = (listOf(i.toByte()) + peeked).toMutableList()
         return i
     }
 
@@ -73,18 +80,18 @@ class MP4InputStream {
      * @return the next byte of data
      * @throws IOException If the end of the stream is detected or any I/O error occurs.
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun read(): Int {
         var i = 0
         if (!peeked.isEmpty()) {
-            i = peeked.remove().toInt() and MASK8
+            i = peeked.removeFirst().toInt() and MASK8
         } else if (`in` != null) {
-            i = `in`.read()
+            i = `in`.read().toInt()
         } else if (fin != null) {
-            i = fin.read()
+            i = fin.read().toInt()
         }
         if (i == -1) {
-            throw java.io.EOFException()
+            throw Exception("EOF")
         } else if (`in` != null) {
             offset++
         }
@@ -107,7 +114,7 @@ class MP4InputStream {
      * @throws IOException If the end of the stream is detected, the input
      * stream has been closed, or if some other I/O error occurs.
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun peek(b: ByteArray, off: Int, len: Int) {
         var read = 0
         var i = 0
@@ -117,7 +124,7 @@ class MP4InputStream {
         }
         var currentFilePointer: Long = -1
         if (fin != null) {
-            currentFilePointer = fin.getFilePointer()
+            currentFilePointer = fin.position()
         }
         try {
             while (read < len) {
@@ -127,7 +134,7 @@ class MP4InputStream {
                     i = fin.read(b, off + read, len - read)
                 }
                 read += if (i < 0) {
-                    throw java.io.EOFException()
+                    throw Exception("EOF")
                 } else {
                     for (j in 0 until i) {
                         peeked.add(b[off + j])
@@ -136,9 +143,7 @@ class MP4InputStream {
                 }
             }
         } finally {
-            if (fin != null) {
-                fin.seek(currentFilePointer)
-            }
+            fin?.seek(currentFilePointer)
         }
     }
 
@@ -158,18 +163,18 @@ class MP4InputStream {
      * @throws IOException If the end of the stream is detected, the input
      * stream has been closed, or if some other I/O error occurs.
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun read(b: ByteArray, off: Int, len: Int) {
         var read = 0
         var i = 0
         while (read < len && !peeked.isEmpty()) {
-            b[off + read] = peeked.remove()
+            b[off + read] = peeked.removeFirst()
             read++
         }
         while (read < len) {
             if (`in` != null) i = `in`.read(b, off + read, len - read) else if (fin != null) i =
                 fin.read(b, off + read, len - read)
-            read += if (i < 0) throw java.io.EOFException() else i
+            read += if (i < 0) throw Exception("EOF") else i
         }
         offset += read.toLong()
     }
@@ -186,9 +191,9 @@ class MP4InputStream {
      * @throws IndexOutOfBoundsException if `n` is not in the range
      * [1...8] inclusive.
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun peekBytes(n: Int): Long {
-        if (n < 1 || n > 8) throw java.lang.IndexOutOfBoundsException("invalid number of bytes to read: $n")
+        if (n < 1 || n > 8) throw IndexOutOfBoundsException("invalid number of bytes to read: $n")
         val b = ByteArray(n)
         peek(b, 0, n)
         var result: Long = 0
@@ -210,9 +215,9 @@ class MP4InputStream {
      * @throws IndexOutOfBoundsException if `n` is not in the range
      * [1...8] inclusive.
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun readBytes(n: Int): Long {
-        if (n < 1 || n > 8) throw java.lang.IndexOutOfBoundsException("invalid number of bytes to read: $n")
+        if (n < 1 || n > 8) throw IndexOutOfBoundsException("invalid number of bytes to read: $n")
         val b = ByteArray(n)
         read(b, 0, n)
         var result: Long = 0
@@ -232,7 +237,7 @@ class MP4InputStream {
      * @throws IOException If the end of the stream is detected, the input
      * stream has been closed, or if some other I/O error occurs.
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun peekBytes(b: ByteArray) {
         peek(b, 0, b.size)
     }
@@ -247,7 +252,7 @@ class MP4InputStream {
      * @throws IOException If the end of the stream is detected, the input
      * stream has been closed, or if some other I/O error occurs.
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun readBytes(b: ByteArray) {
         read(b, 0, b.size)
     }
@@ -264,7 +269,7 @@ class MP4InputStream {
      * @throws IOException If the end of the stream is detected, the input
      * stream has been closed, or if some other I/O error occurs.
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun readString(n: Int): String {
         var i = -1
         var pos = 0
@@ -274,7 +279,7 @@ class MP4InputStream {
             c[pos] = i.toChar()
             pos++
         }
-        return kotlin.String(c, 0, pos)
+        return c.contentToString()
     }
 
     /**
@@ -294,9 +299,9 @@ class MP4InputStream {
      * @throws IOException If the end of the stream is detected, the input
      * stream has been closed, or if some other I/O error occurs.
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun readUTFString(max: Int, encoding: String?): String {
-        return String(readTerminated(max, 0), java.nio.charset.Charset.forName(encoding))
+        return readTerminated(max, 0).decodeToString() // FIXME: encoding
     }
 
     /**
@@ -315,7 +320,7 @@ class MP4InputStream {
      * @throws IOException If the end of the stream is detected, the input
      * stream has been closed, or if some other I/O error occurs.
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun readUTFString(max: Int): String {
         //read byte order mask
         val bom = ByteArray(2)
@@ -327,9 +332,11 @@ class MP4InputStream {
         val b = readTerminated(max - 2, 0)
         //copy bom
         val b2 = ByteArray(b.size + bom.size)
-        java.lang.System.arraycopy(bom, 0, b2, 0, bom.size)
-        java.lang.System.arraycopy(b, 0, b2, bom.size, b.size)
-        return String(b2, java.nio.charset.Charset.forName(if (i == BYTE_ORDER_MASK) UTF16 else UTF8))
+        Arrays.arraycopy(bom, 0, b2, 0, bom.size)
+        Arrays.arraycopy(b, 0, b2, bom.size, b.size)
+        // String(b2, java.nio.charset.Charset.forName(if (i == BYTE_ORDER_MASK) UTF16 else UTF8))
+        // FIXME: encoding
+        return b2.decodeToString()
     }
 
     /**
@@ -349,7 +356,7 @@ class MP4InputStream {
      * @throws IOException If the end of the stream is detected, the input
      * stream has been closed, or if some other I/O error occurs.
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun readTerminated(max: Int, terminator: Int): ByteArray {
         val b = ByteArray(max)
         var pos = 0
@@ -358,7 +365,7 @@ class MP4InputStream {
             i = read()
             if (i != -1) b[pos++] = i.toByte()
         }
-        return java.util.Arrays.copyOf(b, pos)
+        return Arrays.copyOf(b, pos)
     }
 
     /**
@@ -374,12 +381,12 @@ class MP4InputStream {
      * @throws IllegalArgumentException if the total number of bits (m+n) is not
      * a multiple of eight
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun readFixedPoint(m: Int, n: Int): Double {
         val bits = m + n
-        if (bits % 8 != 0) throw java.lang.IllegalArgumentException("number of bits is not a multiple of 8: " + (m + n))
+        if (bits % 8 != 0) throw IllegalArgumentException("number of bits is not a multiple of 8: " + (m + n))
         val l = readBytes(bits / 8)
-        val x: Double = java.lang.Math.pow(2.0, n.toDouble())
+        val x: Double = 2.0.pow(n.toDouble())
         return l.toDouble() / x
     }
 
@@ -392,15 +399,15 @@ class MP4InputStream {
      * @throws IOException If the end of the stream is detected, the input
      * stream has been closed, or if some other I/O error occurs.
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun skipBytes(n: Long) {
         var l: Long = 0
         while (l < n && !peeked.isEmpty()) {
-            peeked.remove()
+            peeked.removeFirst()
             l++
         }
         while (l < n) {
-            if (`in` != null) l += `in`.skip(n - l) else if (fin != null) l += fin.skipBytes((n - l).toInt()).toLong()
+            if (`in` != null) l += `in`.skip(n - l) else if (fin != null) l += fin.skip((n - l)).toLong()
         }
         offset += l
     }
@@ -411,10 +418,10 @@ class MP4InputStream {
      * @return the current offset
      * @throws IOException if an I/O error occurs (only when using a RandomAccessFile)
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun getOffset(): Long {
         var l: Long = -1
-        if (`in` != null) l = offset else if (fin != null) l = fin.getFilePointer()
+        if (`in` != null) l = offset else if (fin != null) l = fin.position()
         return l
     }
 
@@ -428,10 +435,10 @@ class MP4InputStream {
      * @throws IOException if an InputStream is used, pos is less than 0 or an
      * I/O error occurs
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun seek(pos: Long) {
         peeked.clear()
-        if (fin != null) fin.seek(pos) else throw java.io.IOException("could not seek: no random access")
+        if (fin != null) fin.seek(pos) else throw Exception("could not seek: no random access")
     }
 
     /**
@@ -451,17 +458,19 @@ class MP4InputStream {
      * @return true if there is at least one byte left
      * @throws IOException if an I/O error occurs
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun hasLeft(): Boolean {
         val b: Boolean
         if (!peeked.isEmpty()) {
             b = true
         } else if (fin != null) {
-            b = fin.getFilePointer() < fin.length() - 1
-        } else {
-            val i: Int = `in`.read()
+            b = fin.position() < fin.length() - 1
+        } else if (`in` != null) {
+            val i: Int = `in`.read().toInt()
             b = i != -1
             if (b) peeked.add(i.toByte())
+        } else {
+            b = false
         }
         return b
     }
@@ -473,10 +482,11 @@ class MP4InputStream {
      *
      * @throws IOException if an I/O error occurs
      */
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun close() {
         peeked.clear()
-        if (`in` != null) `in`.close() else if (fin != null) fin.close()
+//        if (`in` != null) `in`.gc() else if (fin != null) fin.close()
+
     }
 
     companion object {

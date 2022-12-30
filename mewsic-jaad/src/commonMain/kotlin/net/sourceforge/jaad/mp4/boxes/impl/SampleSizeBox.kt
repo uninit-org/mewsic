@@ -1,4 +1,5 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.boxes.FullBox
 
@@ -7,8 +8,8 @@ class SampleSizeBox : FullBox("Sample Size Box") {
     var sampleSizes: LongArray
         private set
 
-    @Throws(java.io.IOException::class)
-    override fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         val compact = type === BoxTypes.COMPACT_SAMPLE_SIZE_BOX
         val sampleSize: Int
@@ -33,7 +34,7 @@ class SampleSizeBox : FullBox("Sample Size Box") {
         } else if (sampleSize == 0) readSizes(`in`, 4) else java.util.Arrays.fill(sampleSizes, sampleSize.toLong())
     }
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     private fun readSizes(`in`: MP4InputStream, len: Int) {
         for (i in 0 until sampleCount) {
             sampleSizes[i.toInt()] = `in`.readBytes(len)

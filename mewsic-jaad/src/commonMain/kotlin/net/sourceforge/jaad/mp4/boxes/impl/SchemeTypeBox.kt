@@ -1,6 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
+import net.sourceforge.jaad.mp4.boxes.FullBox
 
 /**
  * The Scheme Type Box identifies the protection scheme.
@@ -36,12 +38,12 @@ class SchemeTypeBox : FullBox("Scheme Type Box") {
     var schemeURI: String? = null
         private set
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         schemeType = `in`.readBytes(4)
         schemeVersion = `in`.readBytes(4)
-        schemeURI = if (flags and 1 === 1) `in`.readUTFString(getLeft(`in`) as Int, MP4InputStream.UTF8) else null
+        schemeURI = if (flags and 1 == 1) `in`.readUTFString(getLeft(`in`).toInt(), MP4InputStream.UTF8) else null
     }
 
     companion object {

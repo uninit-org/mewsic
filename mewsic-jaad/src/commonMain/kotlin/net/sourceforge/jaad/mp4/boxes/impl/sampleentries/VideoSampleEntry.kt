@@ -18,6 +18,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -70,8 +72,8 @@ class VideoSampleEntry(name: String?) : net.sourceforge.jaad.mp4.boxes.impl.samp
     var compressorName: String? = null
         private set
 
-    @Throws(java.io.IOException::class)
-    override fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         `in`.skipBytes(2) //pre-defined: 0
         `in`.skipBytes(2) //reserved

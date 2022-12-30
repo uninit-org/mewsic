@@ -1,4 +1,5 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.boxes.FullBox
 
@@ -97,8 +98,8 @@ class MovieHeaderBox : FullBox("Movie Header Box") {
         transformationMatrix = DoubleArray(9)
     }
 
-    @Throws(java.io.IOException::class)
-    override fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         val len = if (version === 1) 8 else 4
         creationTime = `in`.readBytes(len)

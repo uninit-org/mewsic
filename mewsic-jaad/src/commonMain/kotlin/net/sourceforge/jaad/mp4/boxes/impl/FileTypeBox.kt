@@ -1,4 +1,5 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.FullBox
 
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -11,7 +12,7 @@ class FileTypeBox : BoxImpl("File Type Box") {
     var compatibleBrands: Array<String?>
         protected set
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         majorBrand = `in`.readString(4)
         minorVersion = `in`.readString(4)

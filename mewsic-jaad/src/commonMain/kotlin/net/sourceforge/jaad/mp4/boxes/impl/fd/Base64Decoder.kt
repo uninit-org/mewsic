@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl.fd
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 /**
  * A BASE64 character decoder.
@@ -35,8 +37,9 @@ internal object Base64Decoder {
     )
 
     fun decode(b: ByteArray?): ByteArray {
-        val `in`: java.io.ByteArrayInputStream = java.io.ByteArrayInputStream(b)
-        val out: java.io.ByteArrayOutputStream = java.io.ByteArrayOutputStream()
+
+        val `in`: ByteArrayInputStream = ByteArrayInputStream(b)
+        val out: ByteArrayOutputStream = ByteArrayOutputStream()
         var i: Int
         val ps: java.io.PushbackInputStream = java.io.PushbackInputStream(`in`)
         try {
@@ -48,24 +51,24 @@ internal object Base64Decoder {
                 }
                 if (i + 4 == 72) decodeAtom(ps, out, 4) else decodeAtom(ps, out, 72 - i)
             }
-        } catch (e: java.io.IOException) {
+        } catch (e: Exception) {
         }
         return out.toByteArray()
     }
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     private fun decodeAtom(`in`: java.io.InputStream, out: java.io.OutputStream, rem: Int) {
         var rem = rem
-        if (rem < 2) throw java.io.IOException()
+        if (rem < 2) throw Exception()
         var i: Int
         do {
             i = `in`.read()
-            if (i == -1) throw java.io.IOException()
+            if (i == -1) throw Exception()
         } while (i == '\n'.code || i == '\r'.code)
         val buf = ByteArray(4)
         buf[0] = i.toByte()
         i = readFully(`in`, buf, 1, rem - 1)
-        if (i == -1) throw java.io.IOException()
+        if (i == -1) throw Exception()
         if (rem > 3 && buf[3] == '='.code.toByte()) rem = 3
         if (rem > 2 && buf[2] == '='.code.toByte()) rem = 2
         var a: Byte = -1
@@ -107,7 +110,7 @@ internal object Base64Decoder {
         return
     }
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     private fun readFully(`in`: java.io.InputStream, b: ByteArray, off: Int, len: Int): Int {
         for (i in 0 until len) {
             val q: Int = `in`.read()

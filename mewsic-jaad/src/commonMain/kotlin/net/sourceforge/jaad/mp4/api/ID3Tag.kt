@@ -1,25 +1,27 @@
 package net.sourceforge.jaad.mp4.api
 
-internal class ID3Tag(`in`: java.io.DataInputStream) {
+import org.mewsic.commons.streams.DataInputStream
+
+internal class ID3Tag(`in`: DataInputStream) {
     private val frames: MutableList<net.sourceforge.jaad.mp4.api.ID3Frame>
     private val tag: Int
     private val flags: Int
     private val len: Int
 
     init {
-        frames = java.util.ArrayList<net.sourceforge.jaad.mp4.api.ID3Frame>()
+        frames = ArrayList<net.sourceforge.jaad.mp4.api.ID3Frame>()
 
         //id3v2 header
-        tag = `in`.read() shl 16 or (`in`.read() shl 8) or `in`.read() //'ID3'
-        val majorVersion: Int = `in`.read()
+        tag = `in`.read().toInt() shl 16 or (`in`.read().toInt() shl 8) or `in`.read().toInt() //'ID3'
+        val majorVersion: Byte = `in`.read()
         `in`.read() //revision
-        flags = `in`.read()
+        flags = `in`.read().toInt()
         len = readSynch(`in`)
         if (tag == ID3_TAG && majorVersion <= SUPPORTED_VERSION) {
             if (flags and 0x40 == 0x40) {
                 //extended header; TODO: parse
                 val extSize = readSynch(`in`)
-                `in`.skipBytes(extSize - 6)
+                `in`.skip((extSize - 6).toLong())
             }
 
             //read all id3 frames
@@ -28,23 +30,23 @@ internal class ID3Tag(`in`: java.io.DataInputStream) {
             while (left > 0) {
                 frame = net.sourceforge.jaad.mp4.api.ID3Frame(`in`)
                 frames.add(frame)
-                left -= frame.getSize().toInt()
+                left -= frame.size.toInt()
             }
         }
     }
 
     fun getFrames(): List<net.sourceforge.jaad.mp4.api.ID3Frame> {
-        return java.util.Collections.unmodifiableList<net.sourceforge.jaad.mp4.api.ID3Frame>(frames)
+        return frames.toList()
     }
 
     companion object {
         private const val ID3_TAG = 4801587 //'ID3'
         private const val SUPPORTED_VERSION = 4 //id3v2.4
-        @Throws(java.io.IOException::class)
-        fun readSynch(`in`: java.io.DataInputStream): Int {
+        @Throws(Exception::class)
+        fun readSynch(`in`: DataInputStream): Int {
             var x = 0
             for (i in 0..3) {
-                x = x or (`in`.read() and 0x7F)
+                x = x or (`in`.read().toInt() and 0x7F)
             }
             return x
         }

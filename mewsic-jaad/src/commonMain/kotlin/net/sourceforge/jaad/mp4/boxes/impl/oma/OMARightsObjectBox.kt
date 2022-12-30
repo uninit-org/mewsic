@@ -1,4 +1,6 @@
 package net.sourceforge.jaad.mp4.boxes.impl.oma
+import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
@@ -15,11 +17,11 @@ class OMARightsObjectBox : FullBox("OMA DRM Rights Object Box") {
      *
      * @return a rights object
      */
-    var data: ByteArray
+    lateinit var data: ByteArray
         private set
 
-    @Throws(java.io.IOException::class)
-    fun decode(`in`: MP4InputStream) {
+    @Throws(Exception::class)
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         data = ByteArray(getLeft(`in`) as Int)
         `in`.readBytes(data)
