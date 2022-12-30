@@ -1,4 +1,9 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.BoxTypes
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -17,7 +22,7 @@ class DegradationPriorityBox : FullBox("Degradation Priority Box") {
      * sample.
      * @return the list of priorities
      */
-    var priorities: IntArray
+    lateinit var priorities: IntArray
         private set
 
     @Throws(Exception::class)
@@ -26,10 +31,10 @@ class DegradationPriorityBox : FullBox("Degradation Priority Box") {
 
         //get number of samples from SampleSizeBox
         val sampleCount: Int =
-            (parent.getChild(BoxTypes.SAMPLE_SIZE_BOX) as net.sourceforge.jaad.mp4.boxes.impl.SampleSizeBox).getSampleCount()
+            (parent!!.getChild(BoxTypes.SAMPLE_SIZE_BOX) as net.sourceforge.jaad.mp4.boxes.impl.SampleSizeBox).getSampleCount()
         priorities = IntArray(sampleCount)
         for (i in 0 until sampleCount) {
-            priorities[i] = `in`.readBytes(2) as Int
+            priorities[i] = `in`.readBytes(2).toInt()
         }
     }
 }

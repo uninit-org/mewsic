@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
@@ -14,6 +18,6 @@ class DataEntryUrlBox : FullBox("Data Entry Url Box") {
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         isInFile = flags and 1 === 1
-        if (!isInFile) location = `in`.readUTFString(getLeft(`in`) as Int, MP4InputStream.UTF8)
+        if (!isInFile) location = `in`.readUTFString(getLeft(`in`).toInt(), MP4InputStream.UTF8)
     }
 }

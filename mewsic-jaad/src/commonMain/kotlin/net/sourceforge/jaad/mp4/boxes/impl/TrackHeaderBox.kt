@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
@@ -144,7 +148,7 @@ class TrackHeaderBox : FullBox("Track Header Box") {
     }
 
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         isTrackEnabled = flags and 1 === 1
         isTrackInMovie = flags and 2 === 2
@@ -152,12 +156,12 @@ class TrackHeaderBox : FullBox("Track Header Box") {
         val len = if (version === 1) 8 else 4
         creationTime = `in`.readBytes(len)
         modificationTime = `in`.readBytes(len)
-        trackID = `in`.readBytes(4) as Int
+        trackID = `in`.readBytes(4).toInt()
         `in`.skipBytes(4) //reserved
         duration = Utils.detectUndetermined(`in`.readBytes(len))
         `in`.skipBytes(8) //reserved
-        layer = `in`.readBytes(2) as Int
-        alternateGroup = `in`.readBytes(2) as Int
+        layer = `in`.readBytes(2).toInt()
+        alternateGroup = `in`.readBytes(2).toInt()
         volume = `in`.readFixedPoint(8, 8)
         `in`.skipBytes(2) //reserved
         for (i in 0..8) {

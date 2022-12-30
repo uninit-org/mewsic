@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -33,11 +37,11 @@ class TrackReferenceBox : BoxImpl("Track Reference Box") {
     private val trackIDs: MutableList<Long>
 
     init {
-        trackIDs = java.util.ArrayList<Long>()
+        trackIDs = ArrayList<Long>()
     }
 
     @Throws(Exception::class)
-    fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         referenceType = `in`.readString(4)
         while (getLeft(`in`) > 3) {
             trackIDs.add(`in`.readBytes(4))
@@ -51,6 +55,6 @@ class TrackReferenceBox : BoxImpl("Track Reference Box") {
      * @return the track IDs this box refers to
      */
     fun getTrackIDs(): List<Long> {
-        return java.util.Collections.unmodifiableList<Long>(trackIDs)
+        return trackIDs
     }
 }

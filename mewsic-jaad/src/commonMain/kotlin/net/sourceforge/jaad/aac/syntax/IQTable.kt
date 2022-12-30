@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.syntax
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 /**
  * Inverse quantization lookup table for all possible values
  * from 0<sup>4/3</sup> to 8191<sup>4/3</sup>.

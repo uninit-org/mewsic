@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.mp4.api
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 class Frame internal constructor(type: net.sourceforge.jaad.mp4.api.Type, offset: Long, size: Long, time: Double) :
     Comparable<Frame> {
     private val type: net.sourceforge.jaad.mp4.api.Type

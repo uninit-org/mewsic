@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -77,14 +81,14 @@ class ItemInformationEntry : FullBox("Item Information Entry") {
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        if (version === 0 || version === 1) {
-            itemID = `in`.readBytes(2) as Int
-            itemProtectionIndex = `in`.readBytes(2) as Int
-            itemName = `in`.readUTFString(getLeft(`in`) as Int, MP4InputStream.UTF8)
-            contentType = `in`.readUTFString(getLeft(`in`) as Int, MP4InputStream.UTF8)
-            contentEncoding = `in`.readUTFString(getLeft(`in`) as Int, MP4InputStream.UTF8) //optional
+        if (version == 0 || version == 1) {
+            itemID = `in`.readBytes(2).toInt()
+            itemProtectionIndex = `in`.readBytes(2).toInt()
+            itemName = `in`.readUTFString(getLeft(`in`).toInt(), MP4InputStream.UTF8)
+            contentType = `in`.readUTFString(getLeft(`in`).toInt(), MP4InputStream.UTF8)
+            contentEncoding = `in`.readUTFString(getLeft(`in`).toInt(), MP4InputStream.UTF8) //optional
         }
-        if (version === 1 && getLeft(`in`) > 0) {
+        if (version == 1 && getLeft(`in`) > 0) {
             //optional
             extensionType = `in`.readBytes(4)
             if (getLeft(`in`) > 0) {
@@ -96,7 +100,7 @@ class ItemInformationEntry : FullBox("Item Information Entry") {
 
     abstract class Extension {
         @Throws(Exception::class)
-        abstract override fun decode(`in`: MP4InputStream?)
+        abstract fun decode(`in`: MP4InputStream)
 
         companion object {
             private const val TYPE_FDEL = 1717855596 //fdel
@@ -154,11 +158,11 @@ class ItemInformationEntry : FullBox("Item Information Entry") {
          *
          * @return the group IDs
          */
-        var groupID: LongArray
+        lateinit var groupID: LongArray
             private set
 
         @Throws(Exception::class)
-        override override fun decode(`in`: MP4InputStream) {
+        override fun decode(`in`: MP4InputStream) {
             contentLocation = `in`.readUTFString(100, MP4InputStream.UTF8)
             contentMD5 = `in`.readUTFString(100, MP4InputStream.UTF8)
             contentLength = `in`.readBytes(8)

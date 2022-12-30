@@ -18,6 +18,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -45,9 +49,9 @@ class XMLMetadataSampleEntry :
         private set
 
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        namespace = `in`.readUTFString(getLeft(`in`) as Int, MP4InputStream.UTF8)
-        schemaLocation = `in`.readUTFString(getLeft(`in`) as Int, MP4InputStream.UTF8)
+        namespace = `in`.readUTFString(getLeft(`in`).toInt(), MP4InputStream.UTF8)
+        schemaLocation = `in`.readUTFString(getLeft(`in`).toInt(), MP4InputStream.UTF8)
     }
 }

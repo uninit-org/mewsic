@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -30,7 +34,7 @@ class SubSampleInformationBox : FullBox("Sub Sample Information Box") {
      *
      * @return the sample deltas for all entries
      */
-    var sampleDelta: LongArray
+    lateinit var sampleDelta: LongArray
         private set
 
     /**
@@ -39,7 +43,7 @@ class SubSampleInformationBox : FullBox("Sub Sample Information Box") {
      *
      * @return the sizes of all subsamples
      */
-    var subsampleSize: Array<LongArray?>
+    lateinit var subsampleSize: Array<LongArray?>
         private set
 
     /**
@@ -50,7 +54,7 @@ class SubSampleInformationBox : FullBox("Sub Sample Information Box") {
      *
      * @return all subsample priorities
      */
-    var subsamplePriority: Array<IntArray?>
+    lateinit var subsamplePriority: Array<IntArray?>
         private set
 
     /**
@@ -61,14 +65,14 @@ class SubSampleInformationBox : FullBox("Sub Sample Information Box") {
      *
      * @return a list of flags indicating if a specific subsample is discardable
      */
-    var discardable: Array<BooleanArray?>
+    lateinit var discardable: Array<BooleanArray?>
         private set
 
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        val len = if (version === 1) 4 else 2
-        val entryCount = `in`.readBytes(4) as Int
+        val len = if (version == 1) 4 else 2
+        val entryCount = `in`.readBytes(4).toInt()
         sampleDelta = LongArray(entryCount)
         subsampleSize = arrayOfNulls(entryCount)
         subsamplePriority = arrayOfNulls(entryCount)
@@ -77,7 +81,7 @@ class SubSampleInformationBox : FullBox("Sub Sample Information Box") {
         var subsampleCount: Int
         for (i in 0 until entryCount) {
             sampleDelta[i] = `in`.readBytes(4)
-            subsampleCount = `in`.readBytes(2) as Int
+            subsampleCount = `in`.readBytes(2).toInt()
             subsampleSize[i] = LongArray(subsampleCount)
             subsamplePriority[i] = IntArray(subsampleCount)
             discardable[i] = BooleanArray(subsampleCount)
@@ -85,7 +89,7 @@ class SubSampleInformationBox : FullBox("Sub Sample Information Box") {
             while (j < subsampleCount) {
                 subsampleSize[i]!![j] = `in`.readBytes(len)
                 subsamplePriority[i]!![j] = `in`.read()
-                discardable[i]!![j] = `in`.read() and 1 === 1
+                discardable[i]!![j] = `in`.read() and 1 == 1
                 `in`.skipBytes(4) //reserved
                 j++
             }

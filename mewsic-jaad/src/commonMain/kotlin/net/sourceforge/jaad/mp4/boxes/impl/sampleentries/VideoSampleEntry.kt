@@ -18,12 +18,16 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
-class VideoSampleEntry(name: String?) : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.SampleEntry(name) {
+class VideoSampleEntry(name: String) : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.SampleEntry(name) {
     /**
      * The width is the maximum visual width of the stream described by this
      * sample description, in pixels.
@@ -73,7 +77,7 @@ class VideoSampleEntry(name: String?) : net.sourceforge.jaad.mp4.boxes.impl.samp
         private set
 
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         `in`.skipBytes(2) //pre-defined: 0
         `in`.skipBytes(2) //reserved
@@ -81,16 +85,16 @@ class VideoSampleEntry(name: String?) : net.sourceforge.jaad.mp4.boxes.impl.samp
         `in`.skipBytes(4) //pre-defined: 0
         `in`.skipBytes(4) //pre-defined: 0
         `in`.skipBytes(4) //pre-defined: 0
-        width = `in`.readBytes(2) as Int
-        height = `in`.readBytes(2) as Int
+        width = `in`.readBytes(2).toInt()
+        height = `in`.readBytes(2).toInt()
         horizontalResolution = `in`.readFixedPoint(16, 16)
         verticalResolution = `in`.readFixedPoint(16, 16)
         `in`.skipBytes(4) //reserved
-        frameCount = `in`.readBytes(2) as Int
+        frameCount = `in`.readBytes(2).toInt()
         val len: Int = `in`.read()
         compressorName = `in`.readString(len)
         `in`.skipBytes((31 - len).toLong())
-        depth = `in`.readBytes(2) as Int
+        depth = `in`.readBytes(2).toInt()
         `in`.skipBytes(2) //pre-defined: -1
         readChildren(`in`)
     }

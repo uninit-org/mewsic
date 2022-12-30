@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.error
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.AACException
 import net.sourceforge.jaad.aac.huffman.HCB
 import net.sourceforge.jaad.aac.syntax.BitStream
@@ -12,7 +15,7 @@ import net.sourceforge.jaad.aac.syntax.ICStream
  */
 class RVLC : RVLCTables {
     @Throws(AACException::class)
-    fun decode(`in`: BitStream, ics: ICStream, scaleFactors: Array<IntArray>) {
+    override fun decode(`in`: BitStream, ics: ICStream, scaleFactors: Array<IntArray>) {
         val bits = if (ics.info.isEightShortFrame) 11 else 9
         val sfConcealment = `in`.readBool()
         val revGlobalGain = `in`.readBits(8)

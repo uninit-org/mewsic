@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl.meta
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -15,7 +19,7 @@ class ThreeGPPAlbumBox : net.sourceforge.jaad.mp4.boxes.impl.meta.ThreeGPPMetada
         private set
 
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         trackNumber = if (getLeft(`in`) > 0) `in`.read() else -1
     }

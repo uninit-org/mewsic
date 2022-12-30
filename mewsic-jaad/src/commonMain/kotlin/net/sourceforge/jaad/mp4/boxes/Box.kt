@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 interface Box {
     val parent: Box?
 

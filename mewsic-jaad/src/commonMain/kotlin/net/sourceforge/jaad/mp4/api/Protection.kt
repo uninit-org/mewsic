@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.mp4.api
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.api.Track.Codec
 import net.sourceforge.jaad.mp4.api.drm.ITunesProtection
 import net.sourceforge.jaad.mp4.boxes.Box

@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.sbr
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 internal interface Constants {
     companion object {
         val startMinTable = intArrayOf(

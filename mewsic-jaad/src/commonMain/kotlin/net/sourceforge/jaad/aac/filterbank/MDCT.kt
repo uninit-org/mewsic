@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.filterbank
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.AACException
 import net.sourceforge.jaad.aac.filterbank.MDCTTables.Companion.MDCT_TABLE_128
 import net.sourceforge.jaad.aac.filterbank.MDCTTables.Companion.MDCT_TABLE_1920

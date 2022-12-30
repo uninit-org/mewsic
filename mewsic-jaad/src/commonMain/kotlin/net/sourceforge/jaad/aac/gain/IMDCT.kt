@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.gain
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.AACException
 import net.sourceforge.jaad.aac.gain.GCConstants.Companion.BANDS
 import net.sourceforge.jaad.aac.gain.IMDCTTables.Companion.IMDCT_POST_TABLE_256

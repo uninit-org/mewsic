@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -89,7 +93,7 @@ class SampleScaleBox : FullBox("Sample Scale Box") {
         //7 bits reserved, 1 bit flag
         isConstrained = `in`.read() and 1 === 1
         scaleMethod = `in`.read()
-        displayCenterX = `in`.readBytes(2) as Int
-        displayCenterY = `in`.readBytes(2) as Int
+        displayCenterX = `in`.readBytes(2).toInt()
+        displayCenterY = `in`.readBytes(2).toInt()
     }
 }

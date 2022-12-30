@@ -1,9 +1,12 @@
 package net.sourceforge.jaad.spi.javasound
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.Decoder
 import net.sourceforge.jaad.adts.ADTSDemultiplexer
 
-internal class AACAudioInputStream(`in`: java.io.InputStream?, format: javax.sound.sampled.AudioFormat?, length: Long) :
+internal class AACAudioInputStream(`in`: org.mewsic.commons.streams.api.InputStream?, format: javax.sound.sampled.AudioFormat?, length: Long) :
     net.sourceforge.jaad.spi.javasound.AsynchronousAudioInputStream(`in`, format, length) {
     private val adts: ADTSDemultiplexer
     private val decoder: Decoder
@@ -31,7 +34,7 @@ internal class AACAudioInputStream(`in`: java.io.InputStream?, format: javax.sou
                         true
                     )
                     saved = sampleBuffer.data
-                } catch (e: java.io.IOException) {
+                } catch (e: Exception) {
                     return null
                 }
             }
@@ -47,7 +50,7 @@ internal class AACAudioInputStream(`in`: java.io.InputStream?, format: javax.sou
                 buffer.write(saved!!)
                 saved = null
             }
-        } catch (e: java.io.IOException) {
+        } catch (e: Exception) {
             buffer.close()
             return
         }

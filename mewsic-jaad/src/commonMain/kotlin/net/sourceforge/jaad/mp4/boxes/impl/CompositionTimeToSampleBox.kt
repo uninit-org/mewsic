@@ -1,4 +1,9 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.MP4InputStream
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.boxes.FullBox
@@ -18,15 +23,15 @@ import net.sourceforge.jaad.mp4.boxes.FullBox
  * @author in-somnia
  */
 class CompositionTimeToSampleBox : FullBox("Time To Sample Box") {
-    var sampleCounts: LongArray
+    lateinit var sampleCounts: LongArray
         private set
-    var sampleOffsets: LongArray
+    lateinit var sampleOffsets: LongArray
         private set
 
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        val entryCount = `in`.readBytes(4) as Int
+        val entryCount = `in`.readBytes(4).toInt()
         sampleCounts = LongArray(entryCount)
         sampleOffsets = LongArray(entryCount)
         for (i in 0 until entryCount) {

@@ -1,12 +1,15 @@
 package net.sourceforge.jaad.spi.javasound
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.syntax.BitStream
 import net.sourceforge.jaad.adts.ADTSDemultiplexer
 
-class AACAudioFileReader : AudioFileReader() {
-    @Throws(UnsupportedAudioFileException::class, java.io.IOException::class)
-    override fun getAudioFileFormat(`in`: java.io.InputStream): AudioFileFormat {
-        var `in`: java.io.InputStream = `in`
+class AACAudioFileReader {
+    @Throws(Exception::class)
+    fun getAudioFileFormat(`in`: org.mewsic.commons.streams.api.InputStream): AudioFileFormat {
+        var `in`: org.mewsic.commons.streams.api.InputStream = `in`
         return try {
             if (!`in`.markSupported()) `in` = java.io.BufferedInputStream(`in`)
             `in`.mark(4)
@@ -16,9 +19,9 @@ class AACAudioFileReader : AudioFileReader() {
         }
     }
 
-    @Throws(UnsupportedAudioFileException::class, java.io.IOException::class)
+    @Throws(Exception::class)
     override fun getAudioFileFormat(url: java.net.URL): AudioFileFormat {
-        val `in`: java.io.InputStream = url.openStream()
+        val `in`: org.mewsic.commons.streams.api.InputStream = url.openStream()
         return try {
             getAudioFileFormat(`in`)
         } finally {
@@ -26,11 +29,11 @@ class AACAudioFileReader : AudioFileReader() {
         }
     }
 
-    @Throws(UnsupportedAudioFileException::class, java.io.IOException::class)
+    @Throws(UnsupportedAudioFileException::class, Exception::class)
     override fun getAudioFileFormat(file: java.io.File): AudioFileFormat {
-        var `in`: java.io.InputStream? = null
+        var `in`: org.mewsic.commons.streams.api.InputStream? = null
         return try {
-            `in` = java.io.BufferedInputStream(java.io.FileInputStream(file))
+            `in` = java.io.BufferedInputStream(org.mewsic.commons.streams.ileInputStream(file))
             `in`.mark(1000)
             val aff: AudioFileFormat = getAudioFileFormat(`in`, file.length().toInt())
             `in`.reset()
@@ -40,8 +43,8 @@ class AACAudioFileReader : AudioFileReader() {
         }
     }
 
-    @Throws(UnsupportedAudioFileException::class, java.io.IOException::class)
-    private fun getAudioFileFormat(`in`: java.io.InputStream?, mediaLength: Int): AudioFileFormat {
+    @Throws(UnsupportedAudioFileException::class, Exception::class)
+    private fun getAudioFileFormat(`in`: org.mewsic.commons.streams.api.InputStream?, mediaLength: Int): AudioFileFormat {
         val head = ByteArray(12)
         `in`.read(head)
         var canHandle = false
@@ -88,9 +91,9 @@ class AACAudioFileReader : AudioFileReader() {
     }
 
     //================================================
-    @Throws(UnsupportedAudioFileException::class, java.io.IOException::class)
-    override fun getAudioInputStream(`in`: java.io.InputStream): AudioInputStream {
-        var `in`: java.io.InputStream = `in`
+    @Throws(UnsupportedAudioFileException::class, Exception::class)
+    override fun getAudioInputStream(`in`: org.mewsic.commons.streams.api.InputStream): AudioInputStream {
+        var `in`: org.mewsic.commons.streams.api.InputStream = `in`
         return try {
             if (!`in`.markSupported()) `in` = java.io.BufferedInputStream(`in`)
             `in`.mark(1000)
@@ -100,7 +103,7 @@ class AACAudioFileReader : AudioFileReader() {
         } catch (e: UnsupportedAudioFileException) {
             `in`.reset()
             throw e
-        } catch (e: java.io.IOException) {
+        } catch (e: Exception) {
             if (e.message == net.sourceforge.jaad.spi.javasound.MP4AudioInputStream.Companion.ERROR_MESSAGE_AAC_TRACK_NOT_FOUND) {
                 throw UnsupportedAudioFileException(net.sourceforge.jaad.spi.javasound.MP4AudioInputStream.Companion.ERROR_MESSAGE_AAC_TRACK_NOT_FOUND)
             } else {
@@ -110,29 +113,29 @@ class AACAudioFileReader : AudioFileReader() {
         }
     }
 
-    @Throws(UnsupportedAudioFileException::class, java.io.IOException::class)
+    @Throws(UnsupportedAudioFileException::class, Exception::class)
     override fun getAudioInputStream(url: java.net.URL): AudioInputStream {
-        val `in`: java.io.InputStream = url.openStream()
+        val `in`: org.mewsic.commons.streams.api.InputStream = url.openStream()
         return try {
             getAudioInputStream(`in`)
         } catch (e: UnsupportedAudioFileException) {
             if (`in` != null) `in`.close()
             throw e
-        } catch (e: java.io.IOException) {
+        } catch (e: Exception) {
             if (`in` != null) `in`.close()
             throw e
         }
     }
 
-    @Throws(UnsupportedAudioFileException::class, java.io.IOException::class)
+    @Throws(UnsupportedAudioFileException::class, Exception::class)
     override fun getAudioInputStream(file: java.io.File): AudioInputStream {
-        val `in`: java.io.InputStream = java.io.FileInputStream(file)
+        val `in`: org.mewsic.commons.streams.api.InputStream = org.mewsic.commons.streams.ileInputStream(file)
         return try {
             getAudioInputStream(`in`)
         } catch (e: UnsupportedAudioFileException) {
             if (`in` != null) `in`.close()
             throw e
-        } catch (e: java.io.IOException) {
+        } catch (e: Exception) {
             if (`in` != null) `in`.close()
             throw e
         }

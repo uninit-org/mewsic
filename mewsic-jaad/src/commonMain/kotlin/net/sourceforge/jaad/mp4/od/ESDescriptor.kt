@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.mp4.od
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.MP4InputStream
 
 /**
@@ -76,16 +79,16 @@ class ESDescriptor : net.sourceforge.jaad.mp4.od.Descriptor() {
     var uRL: String? = null
         private set
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
-        eS_ID = `in`.readBytes(2) as Int
+        eS_ID = `in`.readBytes(2).toInt()
 
         //1 bit stream dependence flag, 1 it url flag, 1 reserved, 5 bits stream priority
         val flags: Int = `in`.read()
         streamDependency = flags shr 7 and 1 == 1
         isURLPresent = flags shr 6 and 1 == 1
         streamPriority = flags and 31
-        dependingOnES_ID = if (streamDependency) `in`.readBytes(2) as Int else -1
+        dependingOnES_ID = if (streamDependency) `in`.readBytes(2).toInt() else -1
         if (isURLPresent) {
             val len: Int = `in`.read()
             uRL = `in`.readString(len)

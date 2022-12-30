@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl.oma
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -17,7 +21,7 @@ class OMAAccessUnitFormatBox : FullBox("OMA DRM Access Unit Format Box") {
         super.decode(`in`)
 
         //1 bit selective encryption, 7 bits reserved
-        isSelectiveEncrypted = `in`.read() shr 7 and 1 === 1
+        isSelectiveEncrypted = `in`.read() shr 7 and 1 == 1
         keyIndicatorLength = `in`.read() //always zero?
         initialVectorLength = `in`.read()
     }

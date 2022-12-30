@@ -18,6 +18,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -32,14 +36,14 @@ class AudioSampleEntry(name: String) : net.sourceforge.jaad.mp4.boxes.impl.sampl
         private set
 
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         `in`.skipBytes(8) //reserved
-        channelCount = `in`.readBytes(2) as Int
-        sampleSize = `in`.readBytes(2) as Int
+        channelCount = `in`.readBytes(2).toInt()
+        sampleSize = `in`.readBytes(2).toInt()
         `in`.skipBytes(2) //pre-defined: 0
         `in`.skipBytes(2) //reserved
-        sampleRate = `in`.readBytes(2) as Int
+        sampleRate = `in`.readBytes(2).toInt()
         `in`.skipBytes(2) //not used by samplerate
         readChildren(`in`)
     }

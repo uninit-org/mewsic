@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.syntax
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.*
 import net.sourceforge.jaad.aac.filterbank.FilterBank
 import net.sourceforge.jaad.aac.sbr.SBR
@@ -49,7 +52,7 @@ class SyntacticElements(config: DecoderConfig) : Constants {
     }
 
     @Throws(AACException::class)
-    fun decode(`in`: BitStream) {
+    override fun decode(`in`: BitStream) {
         val start = `in`.position //should be 0
         var type: Int
         var prev: Element? = null

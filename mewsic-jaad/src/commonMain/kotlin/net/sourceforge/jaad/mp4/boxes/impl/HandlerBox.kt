@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
@@ -50,14 +54,14 @@ class HandlerBox : FullBox("Handler Box") {
         private set
 
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         `in`.skipBytes(4) //pre-defined: 0
         handlerType = `in`.readBytes(4)
         `in`.readBytes(4) //reserved
         `in`.readBytes(4) //reserved
         `in`.readBytes(4) //reserved
-        handlerName = `in`.readUTFString(getLeft(`in`) as Int, MP4InputStream.UTF8)
+        handlerName = `in`.readUTFString(getLeft(`in`).toInt(), MP4InputStream.UTF8)
     }
 
     companion object {

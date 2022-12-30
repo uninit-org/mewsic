@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.filterbank
-/// why is this
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream/// why is this
 internal interface MDCTTables {
     companion object {
         val MDCT_TABLE_2048 = arrayOf(

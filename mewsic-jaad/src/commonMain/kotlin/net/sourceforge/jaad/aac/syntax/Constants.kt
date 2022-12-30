@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.syntax
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 interface Constants {
     companion object {
         const val MAX_ELEMENTS = 16

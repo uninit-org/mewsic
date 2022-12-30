@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -21,7 +25,7 @@ class TrackFragmentRandomAccessBox : FullBox("Track Fragment Random Access Box")
      *
      * @return the times of all entries
      */
-    val times: LongArray
+    lateinit var times: LongArray
 
     /**
      * The moof-Offset is an integer that gives the offset of the 'moof' used in
@@ -30,7 +34,7 @@ class TrackFragmentRandomAccessBox : FullBox("Track Fragment Random Access Box")
      *
      * @return the offsets for all entries
      */
-    val moofOffsets: LongArray
+    lateinit var moofOffsets: LongArray
 
     /**
      * The 'traf' number that contains the random accessible sample. The number
@@ -38,7 +42,7 @@ class TrackFragmentRandomAccessBox : FullBox("Track Fragment Random Access Box")
      *
      * @return the 'traf' numbers for all entries
      */
-    val trafNumbers: LongArray
+    lateinit var trafNumbers: LongArray
 
     /**
      * The 'trun' number that contains the random accessible sample. The number
@@ -46,7 +50,7 @@ class TrackFragmentRandomAccessBox : FullBox("Track Fragment Random Access Box")
      *
      * @return the 'trun' numbers for all entries
      */
-    val trunNumbers: LongArray
+    lateinit var trunNumbers: LongArray
 
     /**
      * The sample number that contains the random accessible sample. The number
@@ -54,7 +58,7 @@ class TrackFragmentRandomAccessBox : FullBox("Track Fragment Random Access Box")
      *
      * @return the sample numbers for all entries
      */
-    val sampleNumbers: LongArray
+    lateinit var sampleNumbers: LongArray
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
@@ -64,8 +68,8 @@ class TrackFragmentRandomAccessBox : FullBox("Track Fragment Random Access Box")
         val trafNumberLen = (l shr 4 and 0x3L).toInt() + 1
         val trunNumberLen = (l shr 2 and 0x3L).toInt() + 1
         val sampleNumberLen = (l and 0x3L).toInt() + 1
-        entryCount = `in`.readBytes(4) as Int
-        val len = if (version === 1) 8 else 4
+        entryCount = `in`.readBytes(4).toInt()
+        val len = if (version == 1) 8 else 4
         for (i in 0 until entryCount) {
             times[i] = `in`.readBytes(len)
             moofOffsets[i] = `in`.readBytes(len)

@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl.oma
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -10,7 +14,7 @@ import net.sourceforge.jaad.mp4.MP4InputStream
  *
  * @author in-somnia
  */
-class OMAURLBox(name: String?) : FullBox(name) {
+class OMAURLBox(name: String) : FullBox(name) {
     /**
      * Returns the String that this box contains. Its meaning depends on the
      * type of this box.
@@ -23,8 +27,8 @@ class OMAURLBox(name: String?) : FullBox(name) {
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        val b = ByteArray(getLeft(`in`) as Int)
+        val b = ByteArray(getLeft(`in`).toInt())
         `in`.readBytes(b)
-        content = String(b, MP4InputStream.UTF8)
+        content = b.decodeToString()
     }
 }

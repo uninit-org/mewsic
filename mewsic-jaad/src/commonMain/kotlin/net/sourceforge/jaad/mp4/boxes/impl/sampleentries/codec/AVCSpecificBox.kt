@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -45,7 +49,7 @@ class AVCSpecificBox : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.C
      *
      * @return all SPS NAL units
      */
-    var sequenceParameterSetNALUnits: Array<ByteArray>
+    lateinit var sequenceParameterSetNALUnits: Array<ByteArray>
         private set
 
     /**
@@ -54,7 +58,7 @@ class AVCSpecificBox : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.C
      *
      * @return all PPS NAL units
      */
-    var pictureParameterSetNALUnits: Array<ByteArray>
+    lateinit var pictureParameterSetNALUnits: Array<ByteArray>
         private set
 
     @Throws(Exception::class)
@@ -68,18 +72,18 @@ class AVCSpecificBox : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.C
         var len: Int
         //3 bits reserved, 5 bits number of sequence parameter sets
         val sequenceParameterSets: Int = `in`.read() and 31
-        sequenceParameterSetNALUnits = arrayOfNulls(sequenceParameterSets)
+        sequenceParameterSetNALUnits = arrayOf()
         for (i in 0 until sequenceParameterSets) {
-            len = `in`.readBytes(2) as Int
+            len = `in`.readBytes(2).toInt()
             sequenceParameterSetNALUnits[i] = ByteArray(len)
-            `in`.readBytes(sequenceParameterSetNALUnits[i]!!)
+            `in`.readBytes(sequenceParameterSetNALUnits[i])
         }
         val pictureParameterSets: Int = `in`.read()
-        pictureParameterSetNALUnits = arrayOfNulls(pictureParameterSets)
+        pictureParameterSetNALUnits = arrayOf()
         for (i in 0 until pictureParameterSets) {
-            len = `in`.readBytes(2) as Int
+            len = `in`.readBytes(2).toInt()
             pictureParameterSetNALUnits[i] = ByteArray(len)
-            `in`.readBytes(pictureParameterSetNALUnits[i]!!)
+            `in`.readBytes(pictureParameterSetNALUnits[i])
         }
     }
 }

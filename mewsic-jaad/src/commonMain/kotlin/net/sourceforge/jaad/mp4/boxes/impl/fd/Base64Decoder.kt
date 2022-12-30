@@ -1,6 +1,12 @@
 package net.sourceforge.jaad.mp4.boxes.impl.fd
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
+import org.mewsic.commons.streams.ByteArrayInputStream
+import org.mewsic.commons.streams.ByteArrayOutputStream
+import org.mewsic.commons.streams.api.InputStream
 
 /**
  * A BASE64 character decoder.
@@ -38,10 +44,10 @@ internal object Base64Decoder {
 
     fun decode(b: ByteArray?): ByteArray {
 
-        val `in`: ByteArrayInputStream = ByteArrayInputStream(b)
+        val `in`: ByteArrayInputStream = ByteArrayInputStream(b!!)
         val out: ByteArrayOutputStream = ByteArrayOutputStream()
         var i: Int
-        val ps: java.io.PushbackInputStream = java.io.PushbackInputStream(`in`)
+        val ps: InputStream = `in`
         try {
             while (true) {
                 i = 0
@@ -57,12 +63,12 @@ internal object Base64Decoder {
     }
 
     @Throws(Exception::class)
-    private fun decodeAtom(`in`: java.io.InputStream, out: java.io.OutputStream, rem: Int) {
+    private fun decodeAtom(`in`: org.mewsic.commons.streams.api.InputStream, out: org.mewsic.commons.streams.api.OutputStream, rem: Int) {
         var rem = rem
         if (rem < 2) throw Exception()
         var i: Int
         do {
-            i = `in`.read()
+            i = `in`.read().toInt()
             if (i == -1) throw Exception()
         } while (i == '\n'.code || i == '\r'.code)
         val buf = ByteArray(4)
@@ -95,25 +101,25 @@ internal object Base64Decoder {
             }
         }
         when (rem) {
-            2 -> out.write((a.toInt() shl 2 and 0xfc or (b.toInt() ushr 4 and 3)).toByte().toInt())
+            2 -> out.write((a.toInt() shl 2 and 0xfc or (b.toInt() ushr 4 and 3)).toByte())
             3 -> {
-                out.write((a.toInt() shl 2 and 0xfc or (b.toInt() ushr 4 and 3)).toByte().toInt())
-                out.write((b.toInt() shl 4 and 0xf0 or (c.toInt() ushr 2 and 0xf)).toByte().toInt())
+                out.write((a.toInt() shl 2 and 0xfc or (b.toInt() ushr 4 and 3)).toByte())
+                out.write((b.toInt() shl 4 and 0xf0 or (c.toInt() ushr 2 and 0xf)).toByte())
             }
 
             4 -> {
-                out.write((a.toInt() shl 2 and 0xfc or (b.toInt() ushr 4 and 3)).toByte().toInt())
-                out.write((b.toInt() shl 4 and 0xf0 or (c.toInt() ushr 2 and 0xf)).toByte().toInt())
-                out.write((c.toInt() shl 6 and 0xc0 or (d.toInt() and 0x3f)).toByte().toInt())
+                out.write((a.toInt() shl 2 and 0xfc or (b.toInt() ushr 4 and 3)).toByte())
+                out.write((b.toInt() shl 4 and 0xf0 or (c.toInt() ushr 2 and 0xf)).toByte())
+                out.write((c.toInt() shl 6 and 0xc0 or (d.toInt() and 0x3f)).toByte())
             }
         }
         return
     }
 
     @Throws(Exception::class)
-    private fun readFully(`in`: java.io.InputStream, b: ByteArray, off: Int, len: Int): Int {
+    private fun readFully(`in`: org.mewsic.commons.streams.api.InputStream, b: ByteArray, off: Int, len: Int): Int {
         for (i in 0 until len) {
-            val q: Int = `in`.read()
+            val q: Int = `in`.read().toInt()
             if (q == -1) return if (i == 0) -1 else i
             b[i + off] = q.toByte()
         }

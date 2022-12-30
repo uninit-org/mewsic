@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.spi.javasound
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import kotlin.jvm.JvmOverloads
 
 /**
@@ -62,7 +65,7 @@ internal class CircularBuffer(private val trigger: Trigger?) {
                 var toRead: Int
                 while (available > 0) {
                     toRead = java.lang.Math.min(available, BUFFER_SIZE - getReadPos())
-                    java.lang.System.arraycopy(data, getReadPos(), b, off, toRead)
+                    Arrays.arraycopy(data, getReadPos(), b, off, toRead)
                     readPos += toRead.toLong()
                     off += toRead
                     available -= toRead
@@ -90,7 +93,7 @@ internal class CircularBuffer(private val trigger: Trigger?) {
                 var toWrite: Int
                 while (available > 0) {
                     toWrite = java.lang.Math.min(available, BUFFER_SIZE - getWritePos())
-                    java.lang.System.arraycopy(b, off, data, getWritePos(), toWrite)
+                    Arrays.arraycopy(b, off, data, getWritePos(), toWrite)
                     writePos += toWrite.toLong()
                     off += toWrite
                     available -= toWrite

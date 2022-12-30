@@ -77,4 +77,47 @@ object Arrays {
             dest[destPos + i] = src[srcPos + i]
         }
     }
+
+    fun <T> fill(arr: Array<T>, valu: T) {
+        for (i in arr.indices) {
+            arr[i] = valu
+        }
+    }
+    fun fill(arr: BooleanArray, valu: Boolean) {
+        for (i in arr.indices) {
+            arr[i] = valu
+        }
+    }
+    fun fill(arr: ByteArray, valu: Byte) {
+        for (i in arr.indices) {
+            arr[i] = valu
+        }
+    }
+    fun fill(arr: ShortArray, valu: Short) {
+        for (i in arr.indices) {
+            arr[i] = valu
+        }
+    }
+    fun fill(arr: IntArray, valu: Int) {
+        for (i in arr.indices) {
+            arr[i] = valu
+        }
+    }
+    fun fill(arr: LongArray, valu: Long) {
+        for (i in arr.indices) {
+            arr[i] = valu
+        }
+    }
+    fun fill(arr: FloatArray, valu: Float) {
+        for (i in arr.indices) {
+            arr[i] = valu
+        }
+    }
+    fun fill(arr: DoubleArray, valu: Double) {
+        for (i in arr.indices) {
+            arr[i] = valu
+        }
+    }
+
+
 }

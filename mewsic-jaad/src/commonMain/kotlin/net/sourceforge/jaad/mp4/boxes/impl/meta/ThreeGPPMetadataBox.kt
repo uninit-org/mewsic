@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl.meta
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
@@ -16,9 +20,9 @@ open class ThreeGPPMetadataBox(name: String) : FullBox(name) {
         private set
 
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         decodeCommon(`in`)
-        data = `in`.readUTFString(getLeft(`in`) as Int)
+        data = `in`.readUTFString(getLeft(`in`).toInt())
     }
 
     //called directly by subboxes that don't contain the 'data' string

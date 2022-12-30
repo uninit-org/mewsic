@@ -1,6 +1,16 @@
 package net.sourceforge.jaad.mp4
+import net.sourceforge.jaad.mp4.boxes.BoxTypes
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.api.Brand
+import net.sourceforge.jaad.mp4.api.Movie
+import net.sourceforge.jaad.mp4.boxes.Box
+import net.sourceforge.jaad.mp4.boxes.BoxFactory
+import net.sourceforge.jaad.mp4.boxes.impl.FileTypeBox
+import net.sourceforge.jaad.mp4.boxes.impl.ProgressiveDownloadInformationBox
+import org.mewsic.commons.streams.FileInputStream
 
 /**
  * The MP4Container is the central class for the MP4 demultiplexer. It reads the
@@ -34,25 +44,25 @@ class MP4Container {
     private val boxes: MutableList<Box?>
     private var major: Brand? = null
     private var minor: Brand? = null
-    private var compatible: Array<Brand?>?
+    private var compatible: Array<Brand?>? = null
     private var ftyp: FileTypeBox? = null
     private var pdin: ProgressiveDownloadInformationBox? = null
     private var moov: Box? = null
     private var movie: Movie? = null
 
-    constructor(`in`: java.io.InputStream?) {
+    constructor(`in`: org.mewsic.commons.streams.api.InputStream) {
         this.`in` = net.sourceforge.jaad.mp4.MP4InputStream(`in`)
-        boxes = java.util.ArrayList<Box>()
+        boxes = mutableListOf()
         readContent()
     }
 
-    constructor(`in`: java.io.RandomAccessFile?) {
+    constructor(`in`: FileInputStream?) {
         this.`in` = net.sourceforge.jaad.mp4.MP4InputStream(`in`)
-        boxes = java.util.ArrayList<Box>()
+        boxes = mutableListOf()
         readContent()
     }
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     private fun readContent() {
         //read all boxes
         var box: Box? = null
@@ -60,11 +70,11 @@ class MP4Container {
         var moovFound = false
         while (`in`.hasLeft()) {
             box = BoxFactory.parseBox(null, `in`)
-            if (boxes.isEmpty() && box.getType() !== BoxTypes.FILE_TYPE_BOX) throw net.sourceforge.jaad.mp4.MP4Exception(
+            if (boxes.isEmpty() && box.type != BoxTypes.FILE_TYPE_BOX) throw net.sourceforge.jaad.mp4.MP4Exception(
                 "no MP4 signature found"
             )
             boxes.add(box)
-            type = box.getType()
+            type = box.type
             if (type == BoxTypes.FILE_TYPE_BOX) {
                 if (ftyp == null) ftyp = box as FileTypeBox?
             } else if (type == BoxTypes.MOVIE_BOX) {
@@ -80,18 +90,18 @@ class MP4Container {
 
     val majorBrand: net.sourceforge.jaad.mp4.api.Brand?
         get() {
-            if (major == null) major = Brand.forID(ftyp.getMajorBrand())
+            if (major == null) major = Brand.forID(ftyp!!.majorBrand!!)
             return major
         }
     val minorBrand: net.sourceforge.jaad.mp4.api.Brand?
         get() {
-            if (minor == null) minor = Brand.forID(ftyp.getMajorBrand())
+            if (minor == null) minor = Brand.forID(ftyp!!.majorBrand!!)
             return minor
         }
     val compatibleBrands: Array<net.sourceforge.jaad.mp4.api.Brand?>?
         get() {
             if (compatible == null) {
-                val s: Array<String> = ftyp.getCompatibleBrands()
+                val s: Array<String> = ftyp!!.compatibleBrands.map { it!! }.toTypedArray()
                 compatible = arrayOfNulls<Brand>(s.size)
                 for (i in s.indices) {
                     compatible!![i] = Brand.forID(s[i])
@@ -102,24 +112,24 @@ class MP4Container {
 
     //TODO: pdin, movie fragments??
     fun getMovie(): Movie? {
-        if (moov == null) return null else if (movie == null) movie = Movie(moov, `in`)
+        if (moov == null) return null else if (movie == null) movie = Movie(moov!!, `in`)
         return movie
     }
 
     fun getBoxes(): List<Box> {
-        return java.util.Collections.unmodifiableList(boxes)
+        return boxes.map { it!! }
     }
 
     companion object {
         init {
-            val log: java.util.logging.Logger = java.util.logging.Logger.getLogger("MP4 API")
-            for (h in log.getHandlers()) {
-                log.removeHandler(h)
-            }
-            log.setLevel(java.util.logging.Level.WARNING)
-            val h: java.util.logging.ConsoleHandler = java.util.logging.ConsoleHandler()
-            h.setLevel(java.util.logging.Level.ALL)
-            log.addHandler(h)
+//            val log: java.util.logging.Logger = java.util.logging.Logger.getLogger("MP4 API")
+//            for (h in log.getHandlers()) {
+//                log.removeHandler(h)
+//            }
+//            log.setLevel(java.util.logging.Level.WARNING)
+//            val h: java.util.logging.ConsoleHandler = java.util.logging.ConsoleHandler()
+//            h.setLevel(java.util.logging.Level.ALL)
+//            log.addHandler(h)
         }
     }
 }

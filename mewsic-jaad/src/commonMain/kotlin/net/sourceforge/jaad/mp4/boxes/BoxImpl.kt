@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.MP4InputStream
 
 open class BoxImpl(override val name: String) : net.sourceforge.jaad.mp4.boxes.Box {
@@ -36,7 +39,7 @@ open class BoxImpl(override val name: String) : net.sourceforge.jaad.mp4.boxes.B
      * @throws IOException if an error occurs while reading
      */
     @Throws(Exception::class)
-    fun decode(`in`: MP4InputStream?) {
+    open fun decode(`in`: MP4InputStream) {
     }
 
     fun getParent(): net.sourceforge.jaad.mp4.boxes.Box? {
@@ -88,7 +91,7 @@ open class BoxImpl(override val name: String) : net.sourceforge.jaad.mp4.boxes.B
         return l
     }
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun readChildren(`in`: MP4InputStream) {
         var box: net.sourceforge.jaad.mp4.boxes.Box
         while (`in`.getOffset() < offset + size) {
@@ -97,7 +100,7 @@ open class BoxImpl(override val name: String) : net.sourceforge.jaad.mp4.boxes.B
         }
     }
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     protected fun readChildren(`in`: MP4InputStream?, len: Int) {
         var box: net.sourceforge.jaad.mp4.boxes.Box
         for (i in 0 until len) {

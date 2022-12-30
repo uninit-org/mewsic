@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl.meta
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
@@ -17,7 +21,7 @@ class ID3TagBox : FullBox("ID3 Tag Box") {
         private set
 
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         language = Utils.getLanguageCode(`in`.readBytes(2))
         iD3Data = ByteArray(getLeft(`in`).toInt())

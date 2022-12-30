@@ -1,4 +1,9 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.MP4InputStream
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
@@ -9,14 +14,14 @@ class FileTypeBox : BoxImpl("File Type Box") {
         protected set
     var minorVersion: String? = null
         protected set
-    var compatibleBrands: Array<String?>
+    lateinit var compatibleBrands: Array<String?>
         protected set
 
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         majorBrand = `in`.readString(4)
         minorVersion = `in`.readString(4)
-        compatibleBrands = arrayOfNulls(getLeft(`in`) as Int / 4)
+        compatibleBrands = arrayOfNulls(getLeft(`in`).toInt() / 4)
         for (i in compatibleBrands.indices) {
             compatibleBrands[i] = `in`.readString(4)
         }

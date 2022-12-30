@@ -1,5 +1,9 @@
 package net.sourceforge.jaad.mp4.boxes
+import net.sourceforge.jaad.mp4.boxes.BoxTypes
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.MP4InputStream
 
 object BoxFactory : net.sourceforge.jaad.mp4.boxes.BoxTypes {
@@ -16,10 +20,10 @@ object BoxFactory : net.sourceforge.jaad.mp4.boxes.BoxTypes {
     }
 
     private val BOX_CLASSES: Map<Long, java.lang.Class<out net.sourceforge.jaad.mp4.boxes.BoxImpl>> =
-        java.util.HashMap<Long, java.lang.Class<out net.sourceforge.jaad.mp4.boxes.BoxImpl>>()
+        HashMap<Long, java.lang.Class<out net.sourceforge.jaad.mp4.boxes.BoxImpl>>()
     private val BOX_MULTIPLE_CLASSES: Map<Long, Array<java.lang.Class<out net.sourceforge.jaad.mp4.boxes.BoxImpl>>> =
-        java.util.HashMap<Long, Array<java.lang.Class<out net.sourceforge.jaad.mp4.boxes.BoxImpl>>>()
-    private val PARAMETER: MutableMap<Long, Array<String>> = java.util.HashMap<Long, Array<String>>()
+        HashMap<Long, Array<java.lang.Class<out net.sourceforge.jaad.mp4.boxes.BoxImpl>>>()
+    private val PARAMETER: MutableMap<Long, Array<String>> = HashMap<Long, Array<String>>()
 
     init {
         //classes
@@ -498,7 +502,7 @@ object BoxFactory : net.sourceforge.jaad.mp4.boxes.BoxTypes {
             arrayOf("OMA DRM Mutable DRM Information Box")
     }
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun parseBox(
         parent: net.sourceforge.jaad.mp4.boxes.Box?,
         `in`: MP4InputStream
@@ -512,7 +516,7 @@ object BoxFactory : net.sourceforge.jaad.mp4.boxes.BoxTypes {
         //error protection
         if (parent != null) {
             val parentLeft: Long = parent.getOffset() + parent.getSize() - offset
-            if (size > parentLeft) throw java.io.IOException("error while decoding box '" + typeToString(type) + "' at offset " + offset + ": box too large for parent")
+            if (size > parentLeft) throw Exception("error while decoding box '" + typeToString(type) + "' at offset " + offset + ": box too large for parent")
         }
         java.util.logging.Logger.getLogger("MP4 Boxes").finest(typeToString(type))
         val box: net.sourceforge.jaad.mp4.boxes.BoxImpl = forType(type, `in`.getOffset())
@@ -541,12 +545,12 @@ object BoxFactory : net.sourceforge.jaad.mp4.boxes.BoxTypes {
         )
 
         //if mdat found and no random access, don't skip
-        if (box.getType() != MEDIA_DATA_BOX || `in`.hasRandomAccess()) `in`.skipBytes(left)
+        if (box.type != MEDIA_DATA_BOX || `in`.hasRandomAccess()) `in`.skipBytes(left)
         return box
     }
 
     //TODO: remove usages
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     fun parseBox(
         `in`: MP4InputStream,
         boxClass: java.lang.Class<out net.sourceforge.jaad.mp4.boxes.BoxImpl?>

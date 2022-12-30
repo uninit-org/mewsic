@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -29,7 +33,7 @@ class EditListBox : FullBox("Edit List Box") {
      * The segment duration is an integer that specifies the duration of this
      * edit segment in units of the timescale in the Movie Header Box.
      */
-    var segmentDuration: LongArray
+    lateinit var segmentDuration: LongArray
         private set
 
     /**
@@ -40,7 +44,7 @@ class EditListBox : FullBox("Edit List Box") {
      * the duration in the Movie Header Box, and the track's duration is
      * expressed as an implicit empty edit at the end.
      */
-    var mediaTime: LongArray
+    lateinit var mediaTime: LongArray
         private set
 
     /**
@@ -49,14 +53,14 @@ class EditListBox : FullBox("Edit List Box") {
      * edit is specifying a ‘dwell’: the media at media-time is presented for the
      * segment-duration. Otherwise this field shall contain the value 1.
      */
-    var mediaRate: DoubleArray
+    lateinit var mediaRate: DoubleArray
         private set
 
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        val entryCount = `in`.readBytes(4) as Int
-        val len = if (version === 1) 8 else 4
+        val entryCount = `in`.readBytes(4).toInt()
+        val len = if (version == 1) 8 else 4
         segmentDuration = LongArray(entryCount)
         mediaTime = LongArray(entryCount)
         mediaRate = DoubleArray(entryCount)

@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -15,7 +19,7 @@ class ChapterBox : FullBox("Chapter Box") {
     private val chapters: MutableMap<Long, String>
 
     init {
-        chapters = java.util.HashMap<Long, String>()
+        chapters = HashMap<Long, String>()
     }
 
     @Throws(Exception::class)

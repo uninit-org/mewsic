@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -37,34 +41,34 @@ class TrackFragmentRunBox : FullBox("Track Fragment Run Box") {
         private set
     var isSampleCompositionTimeOffsetPresent = false
         private set
-    var sampleDuration: LongArray
+    lateinit var sampleDuration: LongArray
         private set
-    var sampleSize: LongArray
+    lateinit var sampleSize: LongArray
         private set
-    var sampleFlags: LongArray
+    lateinit var sampleFlags: LongArray
         private set
-    var sampleCompositionTimeOffset: LongArray
+    lateinit var sampleCompositionTimeOffset: LongArray
         private set
 
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        sampleCount = `in`.readBytes(4) as Int
+        sampleCount = `in`.readBytes(4).toInt()
 
         //optional fields
-        isDataOffsetPresent = flags and 1 === 1
+        isDataOffsetPresent = flags and 1 == 1
         if (isDataOffsetPresent) dataOffset = `in`.readBytes(4)
-        isFirstSampleFlagsPresent = flags and 4 === 4
+        isFirstSampleFlagsPresent = flags and 4 == 4
         if (isFirstSampleFlagsPresent) firstSampleFlags = `in`.readBytes(4)
 
         //all fields are optional
-        isSampleDurationPresent = flags and 0x100 === 0x100
+        isSampleDurationPresent = flags and 0x100 == 0x100
         if (isSampleDurationPresent) sampleDuration = LongArray(sampleCount)
-        isSampleSizePresent = flags and 0x200 === 0x200
+        isSampleSizePresent = flags and 0x200 == 0x200
         if (isSampleSizePresent) sampleSize = LongArray(sampleCount)
-        isSampleFlagsPresent = flags and 0x400 === 0x400
+        isSampleFlagsPresent = flags and 0x400 == 0x400
         if (isSampleFlagsPresent) sampleFlags = LongArray(sampleCount)
-        isSampleCompositionTimeOffsetPresent = flags and 0x800 === 0x800
+        isSampleCompositionTimeOffsetPresent = flags and 0x800 == 0x800
         if (isSampleCompositionTimeOffsetPresent) sampleCompositionTimeOffset = LongArray(sampleCount)
         var i = 0
         while (i < sampleCount && getLeft(`in`) > 0) {

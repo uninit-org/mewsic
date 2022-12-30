@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -38,7 +42,7 @@ class EAC3SpecificBox : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.
      *
      * @return the 'fscod' values for all independent substreams
      */
-    val fscods: IntArray
+    lateinit var fscods: IntArray
 
     /**
      * This field has the same meaning and is set to the same value as the bsid
@@ -46,7 +50,7 @@ class EAC3SpecificBox : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.
      *
      * @return the 'bsid' values for all independent substreams
      */
-    val bsids: IntArray
+    lateinit var bsids: IntArray
 
     /**
      * This field has the same meaning and is set to the same value as the bsmod
@@ -55,7 +59,7 @@ class EAC3SpecificBox : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.
      *
      * @return the 'bsmod' values for all independent substreams
      */
-    val bsmods: IntArray
+    lateinit var bsmods: IntArray
 
     /**
      * This field has the same meaning and is set to the same value as the acmod
@@ -63,7 +67,7 @@ class EAC3SpecificBox : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.
      *
      * @return the 'acmod' values for all independent substreams
      */
-    val acmods: IntArray
+    lateinit var acmods: IntArray
 
     /**
      * This field indicates the number of dependent substreams that are
@@ -71,7 +75,7 @@ class EAC3SpecificBox : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.
      *
      * @return the number of dependent substreams for all independent substreams
      */
-    val dependentSubstreamCount: IntArray
+    lateinit var dependentSubstreamCount: IntArray
 
     /**
      * If there are one or more dependent substreams associated with an
@@ -96,7 +100,7 @@ class EAC3SpecificBox : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.
      *
      * @return the dependent substream locations for all independent substreams
      */
-    val dependentSubstreamLocation: IntArray
+    lateinit var dependentSubstreamLocation: IntArray
 
     /**
      * This field has the same meaning and is set to the same value as the lfeon
@@ -104,7 +108,7 @@ class EAC3SpecificBox : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.
      *
      * @return the 'lfeon' values for all independent substreams
      */
-    val lfeons: BooleanArray
+    lateinit var lfeons: BooleanArray
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         var l: Long = `in`.readBytes(2)

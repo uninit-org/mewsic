@@ -3,6 +3,8 @@ package org.mewsic.commons.streams
 import org.mewsic.commons.streams.api.SeekableOutputStream
 
 class ByteArrayOutputStream(private val array: ByteArray) : SeekableOutputStream {
+    constructor() : this(ByteArray(0))
+
     private var offset = 0
 
     override fun write(b: Byte) {
@@ -36,5 +38,9 @@ class ByteArrayOutputStream(private val array: ByteArray) : SeekableOutputStream
         val skipped = if (n > remaining) remaining else n
         offset += skipped.toInt()
         return skipped
+    }
+
+    fun toByteArray(): ByteArray {
+        return array.copyOfRange(0, offset)
     }
 }

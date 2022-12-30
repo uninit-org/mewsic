@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -19,7 +23,7 @@ class ProgressiveDownloadInformationBox : FullBox("Progressive Download Informat
     private val pairs: MutableMap<Long, Long>
 
     init {
-        pairs = java.util.HashMap<Long, Long>()
+        pairs = HashMap<Long, Long>()
     }
 
     @Throws(Exception::class)

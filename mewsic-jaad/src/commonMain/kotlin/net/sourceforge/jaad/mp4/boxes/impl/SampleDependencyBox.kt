@@ -1,4 +1,9 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.BoxTypes
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -19,7 +24,7 @@ class SampleDependencyBox : FullBox("Sample Dependency Box") {
      *
      * @return all dependency counts
      */
-    val dependencyCount: IntArray
+    lateinit var dependencyCount: IntArray
 
     /**
      * The relative sample number is an integer that identifies a sample in
@@ -35,18 +40,18 @@ class SampleDependencyBox : FullBox("Sample Dependency Box") {
      *
      * @return all relative sample numbers
      */
-    val relativeSampleNumber: Array<IntArray>
+    lateinit var relativeSampleNumber: Array<IntArray>
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         val sampleCount: Int =
-            (parent.getChild(BoxTypes.SAMPLE_SIZE_BOX) as net.sourceforge.jaad.mp4.boxes.impl.SampleSizeBox).getSampleCount()
+            (parent!!.getChild(BoxTypes.SAMPLE_SIZE_BOX) as net.sourceforge.jaad.mp4.boxes.impl.SampleSizeBox).getSampleCount()
         var j: Int
         for (i in 0 until sampleCount) {
-            dependencyCount[i] = `in`.readBytes(2) as Int
+            dependencyCount[i] = `in`.readBytes(2).toInt()
             j = 0
             while (j < dependencyCount[i]) {
-                relativeSampleNumber[i][j] = `in`.readBytes(2) as Int
+                relativeSampleNumber[i][j] = `in`.readBytes(2).toInt()
                 j++
             }
         }

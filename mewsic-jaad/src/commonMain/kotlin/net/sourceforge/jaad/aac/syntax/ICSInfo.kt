@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.syntax
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.AACException
 import net.sourceforge.jaad.aac.DecoderConfig
 import net.sourceforge.jaad.aac.Profile
@@ -34,7 +37,7 @@ class ICSInfo(private val frameLength: Int) : Constants, net.sourceforge.jaad.aa
         }
     }
 
-    var windowSequence: WindowSequence
+    lateinit var windowSequence: WindowSequence
         private set
     private val windowShape: IntArray = IntArray(2)
     /* =========== gets ============ */  var maxSFB = 0
@@ -67,7 +70,7 @@ class ICSInfo(private val frameLength: Int) : Constants, net.sourceforge.jaad.aa
 
     /* ========== decoding ========== */
     @Throws(AACException::class)
-    fun decode(`in`: BitStream, conf: DecoderConfig, commonWindow: Boolean) {
+    override fun decode(`in`: BitStream, conf: DecoderConfig, commonWindow: Boolean) {
         val sf: SampleFrequency = conf.getSampleFrequency()
         if (sf == SampleFrequency.SAMPLE_FREQUENCY_NONE) throw AACException("invalid sample frequency")
         `in`.skipBit() //reserved

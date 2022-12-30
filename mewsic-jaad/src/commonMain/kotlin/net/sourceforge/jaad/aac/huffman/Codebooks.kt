@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.huffman
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 //codebooks: {bit length, codeword, values...}
 internal interface Codebooks {
     companion object {

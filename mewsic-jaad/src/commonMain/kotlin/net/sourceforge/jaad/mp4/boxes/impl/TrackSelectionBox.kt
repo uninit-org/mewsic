@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -53,7 +57,7 @@ class TrackSelectionBox : FullBox("Track Selection Box") {
     private val attributes: MutableList<Long>
 
     init {
-        attributes = java.util.ArrayList<Long>()
+        attributes = ArrayList<Long>()
     }
 
     @Throws(Exception::class)
@@ -115,6 +119,6 @@ class TrackSelectionBox : FullBox("Track Selection Box") {
      * the track from other tracks with the same attribute.
      */
     fun getAttributes(): List<Long> {
-        return java.util.Collections.unmodifiableList<Long>(attributes)
+        return attributes
     }
 }

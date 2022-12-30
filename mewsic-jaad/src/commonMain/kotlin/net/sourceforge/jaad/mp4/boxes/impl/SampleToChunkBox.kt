@@ -1,20 +1,24 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.boxes.FullBox
 
 class SampleToChunkBox : FullBox("Sample To Chunk Box") {
-    var firstChunks: LongArray
+    lateinit var firstChunks: LongArray
         private set
-    var samplesPerChunk: LongArray
+    lateinit var samplesPerChunk: LongArray
         private set
-    var sampleDescriptionIndex: LongArray
+    lateinit var sampleDescriptionIndex: LongArray
         private set
 
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        val entryCount = `in`.readBytes(4) as Int
+        val entryCount = `in`.readBytes(4).toInt()
         firstChunks = LongArray(entryCount)
         samplesPerChunk = LongArray(entryCount)
         sampleDescriptionIndex = LongArray(entryCount)

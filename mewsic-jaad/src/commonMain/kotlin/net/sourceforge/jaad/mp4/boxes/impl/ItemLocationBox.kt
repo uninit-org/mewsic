@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -49,7 +53,7 @@ class ItemLocationBox : FullBox("Item Location Box") {
      *
      * @return the item ID
      */
-    val itemID: IntArray
+    lateinit var itemID: IntArray
 
     /**
      * The data reference index is either zero ('this file') or a 1-based index
@@ -57,7 +61,7 @@ class ItemLocationBox : FullBox("Item Location Box") {
      *
      * @return the data reference index
      */
-    var dataReferenceIndex: IntArray
+    lateinit var dataReferenceIndex: IntArray
         private set
 
     /**
@@ -66,7 +70,7 @@ class ItemLocationBox : FullBox("Item Location Box") {
      *
      * @return the base offsets for all items
      */
-    var baseOffset: LongArray
+    lateinit var baseOffset: LongArray
         private set
 
     /**
@@ -75,7 +79,7 @@ class ItemLocationBox : FullBox("Item Location Box") {
      *
      * @return the offsets for all extents in all items
      */
-    var extentOffset: Array<LongArray?>
+    lateinit var extentOffset: Array<LongArray?>
         private set
 
     /**
@@ -85,7 +89,7 @@ class ItemLocationBox : FullBox("Item Location Box") {
      *
      * @return the lengths for all extends in all items
      */
-    var extentLength: Array<LongArray?>
+    lateinit var extentLength: Array<LongArray?>
         private set
 
     @Throws(Exception::class)
@@ -101,7 +105,7 @@ class ItemLocationBox : FullBox("Item Location Box") {
         val offsetSize = (l shr 12).toInt() and 0xF
         val lengthSize = (l shr 8).toInt() and 0xF
         val baseOffsetSize = (l shr 4).toInt() and 0xF
-        val itemCount = `in`.readBytes(2) as Int
+        val itemCount = `in`.readBytes(2).toInt()
         dataReferenceIndex = IntArray(itemCount)
         baseOffset = LongArray(itemCount)
         extentOffset = arrayOfNulls(itemCount)
@@ -109,10 +113,10 @@ class ItemLocationBox : FullBox("Item Location Box") {
         var j: Int
         var extentCount: Int
         for (i in 0 until itemCount) {
-            itemID[i] = `in`.readBytes(2) as Int
-            dataReferenceIndex[i] = `in`.readBytes(2) as Int
+            itemID[i] = `in`.readBytes(2).toInt()
+            dataReferenceIndex[i] = `in`.readBytes(2).toInt()
             baseOffset[i] = `in`.readBytes(baseOffsetSize)
-            extentCount = `in`.readBytes(2) as Int
+            extentCount = `in`.readBytes(2).toInt()
             extentOffset[i] = LongArray(extentCount)
             extentLength[i] = LongArray(extentCount)
             j = 0

@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.syntax
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.AACException
 import net.sourceforge.jaad.aac.ChannelConfiguration
 import net.sourceforge.jaad.aac.DecoderConfig
@@ -71,7 +74,7 @@ class ICStream(private val frameLength: Int) : Constants, HCB, net.sourceforge.j
 
     /* ========= decoding ========== */
     @Throws(AACException::class)
-    fun decode(`in`: BitStream, commonWindow: Boolean, conf: DecoderConfig) {
+    override fun decode(`in`: BitStream, commonWindow: Boolean, conf: DecoderConfig) {
         if (conf.isScalefactorResilienceUsed && rvlc == null) rvlc = RVLC()
         val er: Boolean = conf.getProfile()!!.isErrorResilientProfile
         globalGain = `in`.readBits(8)

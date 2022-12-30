@@ -1,4 +1,9 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.MP4InputStream
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
@@ -15,7 +20,7 @@ import net.sourceforge.jaad.mp4.boxes.BoxImpl
  */
 class MediaDataBox : BoxImpl("Media Data Box") {
     @Throws(Exception::class)
-    override fun decode(`in`: MP4InputStream?) {
+    override fun decode(`in`: MP4InputStream) {
         //if random access: skip, else: do nothing
     }
 }

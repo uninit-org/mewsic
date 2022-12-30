@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.ps
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.ps.PSTables.Companion.p12_13_34
 import net.sourceforge.jaad.aac.ps.PSTables.Companion.p2_13_20
 import net.sourceforge.jaad.aac.ps.PSTables.Companion.p4_13_34

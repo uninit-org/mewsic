@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.ps
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 internal interface HuffmanTables {
     companion object {
         /* binary lookup huffman tables */

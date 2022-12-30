@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.tools
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.AACException
 import net.sourceforge.jaad.aac.SampleFrequency
 import net.sourceforge.jaad.aac.syntax.*
@@ -26,7 +29,7 @@ class TNS : Constants, net.sourceforge.jaad.aac.tools.TNSTables {
     }
 
     @Throws(AACException::class)
-    fun decode(`in`: BitStream, info: ICSInfo) {
+    override fun decode(`in`: BitStream, info: ICSInfo) {
         val windowCount = info.windowCount
         val bits = if (info.isEightShortFrame) SHORT_BITS else LONG_BITS
         var w: Int

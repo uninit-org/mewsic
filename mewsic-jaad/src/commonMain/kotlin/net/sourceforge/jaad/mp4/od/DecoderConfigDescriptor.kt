@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.mp4.od
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.MP4InputStream
 
 /**
@@ -131,14 +134,14 @@ class DecoderConfigDescriptor : net.sourceforge.jaad.mp4.od.Descriptor() {
     var averageBitRate: Long = 0
         private set
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         objectProfile = `in`.read()
         //6 bits stream type, 1 bit upstream flag, 1 bit reserved
         val x: Int = `in`.read()
         streamType = x shr 2 and 0x3F
         isUpstream = x shr 1 and 1 == 1
-        decodingBufferSize = `in`.readBytes(3) as Int
+        decodingBufferSize = `in`.readBytes(3).toInt()
         maxBitRate = `in`.readBytes(4)
         averageBitRate = `in`.readBytes(4)
         readChildren(`in`)

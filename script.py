@@ -1,21 +1,7 @@
 import os
 import re
 
-d="/home/aenri/codes/mewsic/mewsic-jaad/src/commonMain/kotlin/"
-p=r'(?:java|javax)\.(\w+(?:\.\w+)*)'
-s_ = set()
-def r(f):
-    for file in f[2]:
-        if file.endswith(".kt"):
-            # print("Processing "+file)
-            with open(f[0]+"/"+file,"r") as k:
-                c=k.read()
-            c = transform_text(c, file)
-            with open(f[0]+"/"+file,"w") as k:
-                k.write(c)
 
-# for f in os.walk(d):
-#     r(f)
 # for cls in sorted(set(s_)):
 #     print(cls)
 """
@@ -82,7 +68,8 @@ def transform_text(text: str, filename: str):
             'java.io.File',
             'java.io.RandomAccessFile',
             'java.lang.Class',
-            'java.lang.reflect.Constructor'
+            'java.lang.reflect.Constructor',
+            'javax.sound'
         ]
         
         found = []
@@ -115,9 +102,60 @@ def transform_text(text: str, filename: str):
         text = "\n".join(lines)
         
         return text
+    def _e(text: str):
+        # replace all instances of the text " as Int" with ".toInt()"
+        text = re.sub(r' as Int', ".toInt()", text)
+        # replace all instances of "var variablename: type\n(whitespace)private set" with "lateinit var variablename: type\n(whitespace)private set" as long as the lateinit keyword is not already present and the variable is not already initialized
+        text = re.sub(r'(?<!lateinit )var ([a-zA-Z0-9_]+): ([a-zA-Z0-9_]+)\n(\s+)private set', r'lateinit var \1: \2\n\3private set', text)
+        return text
+    def _f(text: str):
+        # replace all instances of .getType() with .type and if BoxTypes is referenced but not imported, import net.sourceforge.jaad.mp4.boxes.BoxTypes
+        text = re.sub(r'\.getType\(\)', ".type", text)
+        lines = text.split("\n")
+        if "import net.sourceforge.jaad.mp4.boxes.BoxTypes" not in lines and "BoxTypes" in text:
+            for i, line in enumerate(lines):
+                if line.startswith("package"):
+                    lines.insert(i + 1, "import net.sourceforge.jaad.mp4.boxes.BoxTypes")
+                    break
+        text = "\n".join(lines)
+        return text
+
+    def _g(text: str):
+        # remedy all instances of double keywords for keywords lateinit and override
+        text = re.sub(r'lateinit lateinit', "lateinit", text)
+        text = re.sub(r'override override', "override", text)
+        if "lateinit lateinit" in text or "override override" in text:
+            return _g(text)
+        return text
+    def _h(text: str):
+        # assure all "fun decode(`in`:" have a type of Mp4InputStream and not Mp4InputStream?
+        text = re.sub(r'fun decode\(`in`: Mp4InputStream\?', r'fun decode(`in`: Mp4InputStream', text)
+        # assure there is an override keyword before all "fun decode
+        text = re.sub(r'fun decode\(', r'override fun decode(', text)
+        return text
+    # text = _a(text)
+    # text = _b(text, filename)
+    # text = _c(text)
+    # text = _e(text)
+    # print(type(text))
+    # assert type(text) == str
+    # text = _f(text)
+    # text = _h(text)
+
+    # text = _g(text)
+    # text = _d(text)
     
-    text = _a(text)
-    text = _b(text, filename)
-    text = _c(text)
-    text = _d(text)
     return text
+d="/home/aenri/codes/mewsic/mewsic-jaad/src/commonMain/kotlin/"
+def r(f):
+    for file in f[2]:
+        if file.endswith(".kt"):
+            # print("Processing "+file)
+            with open(f[0]+"/"+file,"r") as k:
+                c=k.read()
+            c = transform_text(c, file)
+            with open(f[0]+"/"+file,"w") as k:
+                k.write(c)
+
+for f in os.walk(d):
+    r(f)

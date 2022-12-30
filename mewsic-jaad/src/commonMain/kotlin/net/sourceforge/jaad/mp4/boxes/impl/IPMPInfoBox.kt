@@ -1,8 +1,14 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
+import net.sourceforge.jaad.mp4.od.Descriptor
+import net.sourceforge.jaad.mp4.od.ObjectDescriptor
 
 /**
  * The IPMPInfoBox contains IPMP Descriptors which document the protection
@@ -33,9 +39,9 @@ import net.sourceforge.jaad.mp4.MP4InputStream
 class IPMPInfoBox : FullBox("IPMP Info Box") {
     private var ipmpDescriptors: MutableList<Descriptor?>? = null
     @Throws(Exception::class)
-    override fun decode(`in`: MP4InputStream?) {
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        ipmpDescriptors = java.util.ArrayList<Descriptor>()
+        ipmpDescriptors = mutableListOf()
         /*IPMP*/
         var desc: Descriptor
         while (getLeft(`in`) > 0) {
@@ -44,11 +50,11 @@ class IPMPInfoBox : FullBox("IPMP Info Box") {
         }
     }
 
-    val iPMPDescriptors: List<Any>
+    val iPMPDescriptors: List<Descriptor?>
         /**
          * The contained list of IPMP descriptors.
          *
          * @return the IPMP descriptors
          */
-        get() = java.util.Collections.unmodifiableList(ipmpDescriptors)
+        get() = ipmpDescriptors!!.toList()
 }

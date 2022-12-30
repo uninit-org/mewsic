@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.filterbank.FilterBank
 import net.sourceforge.jaad.aac.syntax.BitStream
 import net.sourceforge.jaad.aac.syntax.Constants
@@ -54,7 +57,7 @@ class Decoder(decoderSpecificInfo: ByteArray?) : Constants {
     }
 
     @Throws(AACException::class)
-    private fun decode(buffer: SampleBuffer) {
+    private override fun decode(buffer: SampleBuffer) {
         if (ADIFHeader.isPresent(`in`)) {
             adifHeader = ADIFHeader.readHeader(`in`)
             val pce: PCE = adifHeader!!.firstPCE!!

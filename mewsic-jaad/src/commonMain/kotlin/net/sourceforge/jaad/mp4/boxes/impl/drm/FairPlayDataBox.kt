@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl.drm
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 
 import net.sourceforge.jaad.mp4.MP4InputStream
@@ -9,7 +13,7 @@ class FairPlayDataBox : BoxImpl("iTunes FairPlay Data Box") {
         private set
 
     @Throws(Exception::class)
-    fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         data = ByteArray(getLeft(`in`).toInt())
         `in`.readBytes(data)

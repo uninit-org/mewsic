@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.adts
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.ChannelConfiguration
 import net.sourceforge.jaad.aac.SampleFrequency.Companion.forInt
 import org.mewsic.commons.streams.DataInputStream

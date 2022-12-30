@@ -1,7 +1,13 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.MP4InputStream
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.boxes.FullBox
+import net.sourceforge.jaad.mp4.boxes.Utils
 
 /**
  * The movie header box defines overall information which is media-independent,
@@ -99,7 +105,7 @@ class MovieHeaderBox : FullBox("Movie Header Box") {
     }
 
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         val len = if (version === 1) 8 else 4
         creationTime = `in`.readBytes(len)

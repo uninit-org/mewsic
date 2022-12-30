@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.transport
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.AACException
 import net.sourceforge.jaad.aac.syntax.*
 
@@ -20,7 +23,7 @@ class ADIFHeader private constructor() {
     }
 
     @Throws(AACException::class)
-    private fun decode(`in`: BitStream) {
+    private override fun decode(`in`: BitStream) {
         var i: Int
         id = `in`.readBits(32).toLong() //'ADIF'
         copyrightIDPresent = `in`.readBool()

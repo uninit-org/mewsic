@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.syntax
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.AACException
 import net.sourceforge.jaad.aac.DecoderConfig
 import net.sourceforge.jaad.aac.huffman.HCB
@@ -43,7 +46,7 @@ internal class CCE(frameLength: Int) : net.sourceforge.jaad.aac.syntax.Element()
     }
 
     @Throws(AACException::class)
-    fun decode(`in`: BitStream, conf: DecoderConfig?) {
+    override fun decode(`in`: BitStream, conf: DecoderConfig?) {
         couplingPoint = 2 * `in`.readBit()
         coupledCount = `in`.readBits(3)
         var gainCount = 0

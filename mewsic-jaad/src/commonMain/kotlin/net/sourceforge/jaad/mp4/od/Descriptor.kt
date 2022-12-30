@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.mp4.od
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.MP4InputStream
 
 /**
@@ -11,10 +14,8 @@ import net.sourceforge.jaad.mp4.MP4InputStream
 abstract class Descriptor protected constructor() {
     //getter
     var type = 0
-        protected set
     var size = 0
-        protected set
-    protected var start: Long = 0
+    var start: Long = 0
     private val children: MutableList<Descriptor>
 
     init {

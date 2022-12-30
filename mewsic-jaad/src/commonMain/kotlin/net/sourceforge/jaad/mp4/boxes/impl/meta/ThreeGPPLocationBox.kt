@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl.meta
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -91,14 +95,14 @@ class ThreeGPPLocationBox :
         private set
 
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         decodeCommon(`in`)
-        placeName = `in`.readUTFString(getLeft(`in`) as Int)
+        placeName = `in`.readUTFString(getLeft(`in`).toInt())
         role = `in`.read()
         longitude = `in`.readFixedPoint(16, 16)
         latitude = `in`.readFixedPoint(16, 16)
         altitude = `in`.readFixedPoint(16, 16)
-        astronomicalBody = `in`.readUTFString(getLeft(`in`) as Int)
-        additionalNotes = `in`.readUTFString(getLeft(`in`) as Int)
+        astronomicalBody = `in`.readUTFString(getLeft(`in`).toInt())
+        additionalNotes = `in`.readUTFString(getLeft(`in`).toInt())
     }
 }

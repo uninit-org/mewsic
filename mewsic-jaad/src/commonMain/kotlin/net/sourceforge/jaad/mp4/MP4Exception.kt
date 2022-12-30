@@ -1,3 +1,6 @@
 package net.sourceforge.jaad.mp4
+import org.mewsic.commons.lang.Arrays
 
-class MP4Exception(message: String?) : java.io.IOException(message)
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
+class MP4Exception(message: String?) : Exception(message)

@@ -1,8 +1,9 @@
 package net.sourceforge.jaad.mp4
-
 import org.mewsic.commons.lang.Arrays
-import org.mewsic.commons.streams.FileInputStream
+
+import org.mewsic.commons.streams.api.OutputStream
 import org.mewsic.commons.streams.api.InputStream
+import org.mewsic.commons.streams.FileInputStream
 import kotlin.math.*
 
 // TODO: This needs to be somewhat completely rewritten

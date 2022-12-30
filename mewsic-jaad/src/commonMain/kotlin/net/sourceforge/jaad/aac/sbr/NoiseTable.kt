@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.sbr
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 internal interface NoiseTable {
     companion object {
         /* Table 1.A.13 Noise table V */

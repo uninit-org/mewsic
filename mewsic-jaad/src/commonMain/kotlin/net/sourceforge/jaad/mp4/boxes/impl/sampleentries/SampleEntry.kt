@@ -18,6 +18,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 
 import net.sourceforge.jaad.mp4.MP4InputStream
@@ -34,7 +38,7 @@ abstract class SampleEntry protected constructor(name: String) : BoxImpl(name) {
         private set
 
     @Throws(Exception::class)
-    open fun decode(`in`: MP4InputStream) {
+    open override fun decode(`in`: MP4InputStream) {
         `in`.skipBytes(6) //reserved
         dataReferenceIndex = `in`.readBytes(2)
     }

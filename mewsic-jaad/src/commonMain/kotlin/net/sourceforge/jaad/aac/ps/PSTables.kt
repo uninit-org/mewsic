@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.ps
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.ps.PSConstants.Companion.NEGATE_IPD_MASK
 
 internal interface PSTables : net.sourceforge.jaad.aac.ps.PSConstants {

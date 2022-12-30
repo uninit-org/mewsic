@@ -1,12 +1,14 @@
 package net.sourceforge.jaad.aac.tools
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.AACException
 import net.sourceforge.jaad.aac.Profile
 import net.sourceforge.jaad.aac.SampleFrequency
 import net.sourceforge.jaad.aac.filterbank.FilterBank
 import net.sourceforge.jaad.aac.syntax.*
 import kotlin.math.*
-import org.mewsic.commons.lang.Arrays
 
 /**
  * Long-term prediction
@@ -27,7 +29,7 @@ class LTPrediction(private val frameLength: Int) : Constants {
     }
 
     @Throws(AACException::class)
-    fun decode(`in`: BitStream, info: ICSInfo, profile: Profile) {
+    override fun decode(`in`: BitStream, info: ICSInfo, profile: Profile) {
         lag = 0
         if (profile == Profile.AAC_LD) {
             lagUpdate = `in`.readBool()

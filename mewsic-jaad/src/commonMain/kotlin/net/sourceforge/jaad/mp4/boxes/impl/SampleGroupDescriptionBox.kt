@@ -1,4 +1,9 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.BoxTypes
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -44,13 +49,13 @@ class SampleGroupDescriptionBox : FullBox("Sample Group Description Box") {
      * in the case it varies from entry to entry and default length is therefore 0.
      */
     val descriptionLength: Long = 0
-    private val entries: Array<net.sourceforge.jaad.mp4.boxes.impl.samplegroupentries.SampleGroupDescriptionEntry>
+    private lateinit var entries: Array<net.sourceforge.jaad.mp4.boxes.impl.samplegroupentries.SampleGroupDescriptionEntry>
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         groupingType = `in`.readBytes(4)
         defaultLength = if (version === 1) `in`.readBytes(4) else 0
-        val entryCount = `in`.readBytes(4) as Int
+        val entryCount = `in`.readBytes(4).toInt()
 
         //TODO!
         /*final HandlerBox hdlr = (HandlerBox) parent.getParent().getParent().getChild(BoxTypes.HANDLER_BOX);

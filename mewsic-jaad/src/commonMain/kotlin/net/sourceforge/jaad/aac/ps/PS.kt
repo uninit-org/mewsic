@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.ps
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.AACException
 import net.sourceforge.jaad.aac.SampleFrequency
 import net.sourceforge.jaad.aac.ps.HuffmanTables.Companion.f_huff_icc
@@ -196,7 +199,7 @@ class PS(sr: SampleFrequency?, numTimeSlotsRate: Int) : PSConstants,
     }
 
     @Throws(AACException::class)
-    fun decode(ld: BitStream): Int {
+    override fun decode(ld: BitStream): Int {
         val tmp: Int
         var n: Int
         val bits = ld.position.toLong()

@@ -1,5 +1,7 @@
 package net.sourceforge.jaad.aac
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.InputStream
 /**
  * Standard exception, thrown when decoding of an AAC frame fails.
  * The message gives more detailed information about the error.

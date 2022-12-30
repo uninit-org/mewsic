@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.mp4.api.codec
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.api.DecoderInfo
 import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.AMRSpecificBox
 import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.CodecSpecificBox

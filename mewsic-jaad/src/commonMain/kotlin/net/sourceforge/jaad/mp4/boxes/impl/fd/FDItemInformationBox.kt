@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl.fd
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -20,7 +24,7 @@ class FDItemInformationBox : FullBox("FD Item Information Box") {
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        val entryCount = `in`.readBytes(2) as Int
+        val entryCount = `in`.readBytes(2).toInt()
         readChildren(`in`, entryCount) //partition entries
         readChildren(`in`) //FDSessionGroupBox and GroupIDToNameBox
     }

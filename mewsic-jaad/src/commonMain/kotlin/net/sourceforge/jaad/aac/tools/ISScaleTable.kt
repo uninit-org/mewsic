@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.tools
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 /**
  * Intensity stereo lookup table for all possible values for
  * 0.5<sup>0.25*scaleFactor</sup>.

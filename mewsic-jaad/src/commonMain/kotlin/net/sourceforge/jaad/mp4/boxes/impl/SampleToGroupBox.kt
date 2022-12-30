@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -40,7 +44,7 @@ class SampleToGroupBox : FullBox("Sample To Group Box") {
      * count documented elsewhere, and the reader behaviour would then be
      * undefined.
      */
-    var sampleCount: LongArray
+    lateinit var sampleCount: LongArray
         private set
 
     /**
@@ -50,14 +54,14 @@ class SampleToGroupBox : FullBox("Sample To Group Box") {
      * entries in the SampleGroupDescriptionBox, or takes the value 0 to
      * indicate that this sample is a member of no group of this type.
      */
-    var groupDescriptionIndex: LongArray
+    lateinit var groupDescriptionIndex: LongArray
         private set
 
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         groupingType = `in`.readBytes(4)
-        val entryCount = `in`.readBytes(4) as Int
+        val entryCount = `in`.readBytes(4).toInt()
         sampleCount = LongArray(entryCount)
         groupDescriptionIndex = LongArray(entryCount)
         for (i in 0 until entryCount) {

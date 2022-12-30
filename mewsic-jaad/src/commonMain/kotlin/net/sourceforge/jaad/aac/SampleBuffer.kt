@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 /**
  * The SampleBuffer holds the decoded AAC frame. It contains the raw PCM data
  * and its format.
@@ -55,7 +58,7 @@ class SampleBuffer {
      * Returns the buffer's PCM data.
      * @return the audio data
      */
-    var data: ByteArray
+    lateinit var data: ByteArray
         private set
     private var bigEndian = true
 

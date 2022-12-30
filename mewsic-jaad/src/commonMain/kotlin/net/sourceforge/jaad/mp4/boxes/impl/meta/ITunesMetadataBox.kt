@@ -1,9 +1,12 @@
 package net.sourceforge.jaad.mp4.boxes.impl.meta
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
-import org.mewsic.commons.lang.Arrays
 
 /**
  * This box contains the data for a metadata tag. It is right below an
@@ -63,7 +66,7 @@ class ITunesMetadataBox : FullBox("iTunes Metadata Box") {
         private set
     private lateinit var data: ByteArray
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
         dataType = DataType.forInt(flags)
         `in`.skipBytes(4) //padding?

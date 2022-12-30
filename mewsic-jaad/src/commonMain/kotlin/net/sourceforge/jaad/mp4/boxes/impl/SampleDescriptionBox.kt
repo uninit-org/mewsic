@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
@@ -11,9 +15,9 @@ import net.sourceforge.jaad.mp4.boxes.FullBox
  */
 class SampleDescriptionBox : FullBox("Sample Description Box") {
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        val entryCount = `in`.readBytes(4) as Int
+        val entryCount = `in`.readBytes(4).toInt()
         readChildren(`in`, entryCount)
     }
 }

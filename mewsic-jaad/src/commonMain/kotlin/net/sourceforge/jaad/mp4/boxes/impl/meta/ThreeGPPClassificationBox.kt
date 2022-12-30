@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl.meta
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -12,9 +16,9 @@ class ThreeGPPClassificationBox :
         private set
 
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         decodeCommon(`in`)
         entity = `in`.readBytes(4)
-        table = `in`.readBytes(2) as Int
+        table = `in`.readBytes(2).toInt()
     }
 }

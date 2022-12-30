@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.mp4.od
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.MP4InputStream
 
 /**
@@ -9,8 +12,8 @@ import net.sourceforge.jaad.mp4.MP4InputStream
  * @author in-somnia
  */
 class UnknownDescriptor : net.sourceforge.jaad.mp4.od.Descriptor() {
-    @Throws(java.io.IOException::class)
-    override fun decode(`in`: MP4InputStream?) {
+    @Throws(Exception::class)
+    override fun decode(`in`: MP4InputStream) {
         //content will be skipped
     }
 }

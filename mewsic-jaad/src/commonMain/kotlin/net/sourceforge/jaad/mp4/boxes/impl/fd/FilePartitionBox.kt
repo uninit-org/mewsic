@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl.fd
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -99,7 +103,7 @@ class FilePartitionBox : FullBox("File Partition Box") {
      *
      * @return all block counts
      */
-    var blockCounts: IntArray
+    lateinit var blockCounts: IntArray
         private set
 
     /**
@@ -112,34 +116,32 @@ class FilePartitionBox : FullBox("File Partition Box") {
      *
      * @return all block sizes
      */
-    var blockSizes: LongArray
+    lateinit var blockSizes: LongArray
         private set
 
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        itemID = `in`.readBytes(2) as Int
-        packetPayloadSize = `in`.readBytes(2) as Int
+        itemID = `in`.readBytes(2).toInt()
+        packetPayloadSize = `in`.readBytes(2).toInt()
         `in`.skipBytes(1) //reserved
         fECEncodingID = `in`.read()
-        fECInstanceID = `in`.readBytes(2) as Int
-        maxSourceBlockLength = `in`.readBytes(2) as Int
-        encodingSymbolLength = `in`.readBytes(2) as Int
-        maxNumberOfEncodingSymbols = `in`.readBytes(2) as Int
-        schemeSpecificInfo = kotlin.String(
-            net.sourceforge.jaad.mp4.boxes.impl.fd.Base64Decoder.decode(
-                `in`.readTerminated(
-                    getLeft(`in`) as Int,
-                    0
-                )
+        fECInstanceID = `in`.readBytes(2).toInt()
+        maxSourceBlockLength = `in`.readBytes(2).toInt()
+        encodingSymbolLength = `in`.readBytes(2).toInt()
+        maxNumberOfEncodingSymbols = `in`.readBytes(2).toInt()
+        schemeSpecificInfo = net.sourceforge.jaad.mp4.boxes.impl.fd.Base64Decoder.decode(
+            `in`.readTerminated(
+                getLeft(`in`).toInt(),
+                0
             )
-        )
-        val entryCount = `in`.readBytes(2) as Int
+        ).decodeToString()
+        val entryCount = `in`.readBytes(2).toInt()
         blockCounts = IntArray(entryCount)
         blockSizes = LongArray(entryCount)
         for (i in 0 until entryCount) {
-            blockCounts[i] = `in`.readBytes(2) as Int
-            blockSizes[i] = (`in`.readBytes(4) as Int).toLong()
+            blockCounts[i] = `in`.readBytes(2).toInt()
+            blockSizes[i] = (`in`.readBytes(4).toInt()).toLong()
         }
     }
 }

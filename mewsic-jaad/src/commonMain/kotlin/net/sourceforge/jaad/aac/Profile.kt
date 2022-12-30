@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import kotlin.jvm.JvmStatic
 
 /**

@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.syntax
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.AACException
 import net.sourceforge.jaad.aac.DecoderConfig
 import net.sourceforge.jaad.aac.Profile
@@ -21,7 +24,7 @@ class CPE internal constructor(frameLength: Int) : net.sourceforge.jaad.aac.synt
     }
 
     @Throws(AACException::class)
-    fun decode(`in`: BitStream, conf: DecoderConfig) {
+    override fun decode(`in`: BitStream, conf: DecoderConfig) {
         val profile: Profile = conf.getProfile()!!
         val sf: SampleFrequency = conf.getSampleFrequency()
         if (sf == SampleFrequency.SAMPLE_FREQUENCY_NONE) throw AACException("invalid sample frequency")

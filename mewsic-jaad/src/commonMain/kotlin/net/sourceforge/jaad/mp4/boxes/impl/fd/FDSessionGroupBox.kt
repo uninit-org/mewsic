@@ -1,4 +1,7 @@
 package net.sourceforge.jaad.mp4.boxes.impl.fd
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -27,7 +30,7 @@ class FDSessionGroupBox : FullBox("FD Session Group Box") {
      *
      * @return all group IDs for all session groups
      */
-    var groupIDs: Array<LongArray?>
+    lateinit var groupIDs: Array<LongArray?>
         private set
 
     /**
@@ -37,13 +40,13 @@ class FDSessionGroupBox : FullBox("FD Session Group Box") {
      *
      * @return all hint track IDs for all session groups
      */
-    var hintTrackIDs: Array<LongArray?>
+    lateinit var hintTrackIDs: Array<LongArray?>
         private set
 
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        val sessionGroups = `in`.readBytes(2) as Int
+        val sessionGroups = `in`.readBytes(2).toInt()
         groupIDs = arrayOfNulls(sessionGroups)
         hintTrackIDs = arrayOfNulls(sessionGroups)
         var j: Int
@@ -57,7 +60,7 @@ class FDSessionGroupBox : FullBox("FD Session Group Box") {
                 groupIDs[i]!![j] = `in`.readBytes(4)
                 j++
             }
-            channelsInSessionGroup = `in`.readBytes(2) as Int
+            channelsInSessionGroup = `in`.readBytes(2).toInt()
             hintTrackIDs[i] = LongArray(channelsInSessionGroup)
             j = 0
             while (j < channelsInSessionGroup) {

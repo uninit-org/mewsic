@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.syntax
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.AACException
 import net.sourceforge.jaad.aac.SampleFrequency
 
@@ -33,7 +36,7 @@ internal class FIL(private val downSampledSBR: Boolean) : Element(), Constants {
 
     private var dri: DynamicRangeInfo? = null
     @Throws(AACException::class)
-    fun decode(`in`: BitStream, prev: Element, sf: SampleFrequency, sbrEnabled: Boolean, smallFrames: Boolean) {
+    override fun decode(`in`: BitStream, prev: Element, sf: SampleFrequency, sbrEnabled: Boolean, smallFrames: Boolean) {
         var count = `in`.readBits(4)
         if (count == 15) count += `in`.readBits(8) - 1
         count *= 8 //convert to bits

@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.filterbank
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 internal interface SineWindows {
     companion object {
         val SINE_1024 = floatArrayOf(

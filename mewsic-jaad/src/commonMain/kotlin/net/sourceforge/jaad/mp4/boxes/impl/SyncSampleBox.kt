@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -19,13 +23,13 @@ class SyncSampleBox : FullBox("Sync Sample Box") {
      *
      * @return a list of sample numbers
      */
-    var sampleNumbers: LongArray
+    lateinit var sampleNumbers: LongArray
         private set
 
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        val entryCount = `in`.readBytes(4) as Int
+        val entryCount = `in`.readBytes(4).toInt()
         sampleNumbers = LongArray(entryCount)
         for (i in 0 until entryCount) {
             sampleNumbers[i] = `in`.readBytes(4)

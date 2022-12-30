@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.gain
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.gain.GCConstants.Companion.BANDS
 import net.sourceforge.jaad.aac.gain.GCConstants.Companion.NPQFTAPS
 import net.sourceforge.jaad.aac.gain.PQFTables.Companion.COEFS_Q0

@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl.oma
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -51,9 +55,9 @@ class OMACommonHeadersBox : FullBox("OMA DRM Common Header Box") {
         private set
     var plaintextLength: Long = 0
         private set
-    var contentID: ByteArray
+    lateinit var contentID: ByteArray
         private set
-    var rightsIssuerURL: ByteArray
+    lateinit var rightsIssuerURL: ByteArray
         private set
     private var textualHeaders: MutableMap<String, String>? = null
     @Throws(Exception::class)
@@ -62,19 +66,19 @@ class OMACommonHeadersBox : FullBox("OMA DRM Common Header Box") {
         encryptionMethod = `in`.read()
         paddingScheme = `in`.read()
         plaintextLength = `in`.readBytes(8)
-        val contentIDLength = `in`.readBytes(2) as Int
-        val rightsIssuerURLLength = `in`.readBytes(2) as Int
-        var textualHeadersLength = `in`.readBytes(2) as Int
+        val contentIDLength = `in`.readBytes(2).toInt()
+        val rightsIssuerURLLength = `in`.readBytes(2).toInt()
+        var textualHeadersLength = `in`.readBytes(2).toInt()
         contentID = ByteArray(contentIDLength)
         `in`.readBytes(contentID)
         rightsIssuerURL = ByteArray(rightsIssuerURLLength)
         `in`.readBytes(rightsIssuerURL)
-        textualHeaders = java.util.HashMap<String, String>()
+        textualHeaders = HashMap<String, String>()
         var key: String
         var value: String
         while (textualHeadersLength > 0) {
-            key = kotlin.String(`in`.readTerminated(getLeft(`in`) as Int, ':'))
-            value = kotlin.String(`in`.readTerminated(getLeft(`in`) as Int, 0))
+            key = `in`.readTerminated(getLeft(`in`).toInt(), ':'.code).decodeToString()
+            value = `in`.readTerminated(getLeft(`in`).toInt(), 0).decodeToString()
             textualHeaders!![key] = value
             textualHeadersLength -= key.length + value.length + 2
         }

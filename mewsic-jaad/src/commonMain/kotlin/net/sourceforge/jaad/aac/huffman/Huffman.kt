@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.huffman
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.AACException
 import net.sourceforge.jaad.aac.huffman.Codebooks.Companion.CODEBOOKS
 import net.sourceforge.jaad.aac.huffman.Codebooks.Companion.HCB_SF

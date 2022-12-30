@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.gain
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.AACException
 import net.sourceforge.jaad.aac.gain.GCConstants.Companion.BANDS
 import net.sourceforge.jaad.aac.gain.GCConstants.Companion.ID_GAIN
@@ -38,7 +41,7 @@ class GainControl(private val frameLen: Int) : net.sourceforge.jaad.aac.gain.GCC
     }
 
     @Throws(AACException::class)
-    fun decode(`in`: BitStream, winSeq: WindowSequence?) {
+    override fun decode(`in`: BitStream, winSeq: WindowSequence?) {
         maxBand = `in`.readBits(2) + 1
         val wdLen: Int
         val locBits: Int

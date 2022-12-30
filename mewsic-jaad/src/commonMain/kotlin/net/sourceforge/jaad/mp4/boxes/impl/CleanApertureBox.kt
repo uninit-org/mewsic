@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -23,7 +27,7 @@ class CleanApertureBox : BoxImpl("Clean Aperture Box") {
         private set
 
     @Throws(Exception::class)
-    fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         cleanApertureWidthN = `in`.readBytes(4)
         cleanApertureWidthD = `in`.readBytes(4)
         cleanApertureHeightN = `in`.readBytes(4)

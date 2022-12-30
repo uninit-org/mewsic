@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.gain
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 internal interface IMDCTTables {
     companion object {
         //pre-twiddling tables

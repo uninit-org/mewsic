@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.filterbank
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.filterbank.KBDWindows.Companion.KBD_1024
 import net.sourceforge.jaad.aac.filterbank.KBDWindows.Companion.KBD_120
 import net.sourceforge.jaad.aac.filterbank.KBDWindows.Companion.KBD_128

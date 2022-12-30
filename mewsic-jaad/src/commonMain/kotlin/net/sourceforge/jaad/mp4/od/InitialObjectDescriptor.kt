@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.mp4.od
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.MP4InputStream
 
 /**
@@ -108,11 +111,11 @@ class InitialObjectDescriptor : net.sourceforge.jaad.mp4.od.Descriptor() {
     var graphicsProfile = 0
         private set
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         //10 bits objectDescriptorID, 1 bit url flag, 1 bit
         //includeInlineProfiles flag, 4 bits reserved
-        val x = `in`.readBytes(2) as Int
+        val x = `in`.readBytes(2).toInt()
         objectDescriptorID = x shr 6 and 0x3FF
         isURLPresent = x shr 5 and 1 == 1
         includeInlineProfiles = x shr 4 and 1 == 1

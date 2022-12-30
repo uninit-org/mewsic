@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.tools
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 /**
  * Tables of coefficients used for TNS.
  * The suffix indicates the values of coefCompress and coefRes.

@@ -18,12 +18,16 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
 
-abstract class MetadataSampleEntry(name: String?) :
+abstract class MetadataSampleEntry(name: String) :
     net.sourceforge.jaad.mp4.boxes.impl.sampleentries.SampleEntry(name) {
     /**
      * A string providing a MIME type which identifies the content encoding of
@@ -36,8 +40,8 @@ abstract class MetadataSampleEntry(name: String?) :
         private set
 
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        contentEncoding = `in`.readUTFString(getLeft(`in`) as Int, MP4InputStream.UTF8)
+        contentEncoding = `in`.readUTFString(getLeft(`in`).toInt(), MP4InputStream.UTF8)
     }
 }

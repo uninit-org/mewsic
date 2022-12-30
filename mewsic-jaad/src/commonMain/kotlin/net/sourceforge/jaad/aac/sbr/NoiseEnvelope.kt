@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.sbr
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.sbr.Constants.Companion.HI_RES
 import net.sourceforge.jaad.aac.sbr.Constants.Companion.LO_RES
 

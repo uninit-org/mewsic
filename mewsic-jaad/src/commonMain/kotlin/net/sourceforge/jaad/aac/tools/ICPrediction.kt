@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.tools
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.AACException
 import net.sourceforge.jaad.aac.SampleFrequency
 import net.sourceforge.jaad.aac.syntax.*
@@ -29,7 +32,7 @@ class ICPrediction {
     }
 
     @Throws(AACException::class)
-    fun decode(`in`: BitStream, maxSFB: Int, sf: SampleFrequency) {
+    override fun decode(`in`: BitStream, maxSFB: Int, sf: SampleFrequency) {
         val predictorCount = sf.predictorCount
         if (`in`.readBool().also { predictorReset = it }) predictorResetGroup = `in`.readBits(5)
         val maxPredSFB = sf.maximalPredictionSFB

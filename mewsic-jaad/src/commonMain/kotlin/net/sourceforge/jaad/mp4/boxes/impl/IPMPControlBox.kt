@@ -1,8 +1,13 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
+import net.sourceforge.jaad.mp4.od.Descriptor
 
 /**
  * The IPMP Control Box may contain IPMP descriptors which may be referenced by
@@ -22,7 +27,7 @@ import net.sourceforge.jaad.mp4.MP4InputStream
  */
 class IPMPControlBox : FullBox("IPMP Control Box") {
     private /*IPMPToolList*/  var toolList: Descriptor? = null
-    private /*IPMP*/  var ipmpDescriptors: Array<Descriptor?>
+    private lateinit /*IPMP*/  var ipmpDescriptors: Array<Descriptor?>
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
@@ -43,7 +48,7 @@ class IPMPControlBox : FullBox("IPMP Control Box") {
         return toolList
     }
 
-    val iPMPDescriptors: Array<Any?>
+    val iPMPDescriptors: Array<Descriptor?>
         /**
          * The list of contained IPMP Descriptors.
          *

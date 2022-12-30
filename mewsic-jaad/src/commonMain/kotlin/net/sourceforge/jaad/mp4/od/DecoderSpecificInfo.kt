@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.mp4.od
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.MP4InputStream
 
 /**
@@ -18,10 +21,10 @@ class DecoderSpecificInfo : net.sourceforge.jaad.mp4.od.Descriptor() {
      *
      * @return the decoder specific information
      */
-    var data: ByteArray
+    lateinit var data: ByteArray
         private set
 
-    @Throws(java.io.IOException::class)
+    @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         data = ByteArray(size)
         `in`.readBytes(data)

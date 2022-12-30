@@ -18,6 +18,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sourceforge.jaad.mp4.boxes.impl.sampleentries
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -54,11 +58,11 @@ class FDHintSampleEntry : net.sourceforge.jaad.mp4.boxes.impl.sampleentries.Samp
         private set
 
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        hintTrackVersion = `in`.readBytes(2) as Int
-        highestCompatibleVersion = `in`.readBytes(2) as Int
-        partitionEntryID = `in`.readBytes(2) as Int
+        hintTrackVersion = `in`.readBytes(2).toInt()
+        highestCompatibleVersion = `in`.readBytes(2).toInt()
+        partitionEntryID = `in`.readBytes(2).toInt()
         fECOverhead = `in`.readFixedPoint(8, 8)
         readChildren(`in`)
     }

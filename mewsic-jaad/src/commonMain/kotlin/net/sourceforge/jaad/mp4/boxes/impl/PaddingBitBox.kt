@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -17,20 +21,20 @@ class PaddingBitBox : FullBox("Padding Bit Box") {
      * Integer values from 0 to 7, indicating the number of bits at the end of
      * sample (i*2)+1.
      */
-    var pad1: IntArray
+    lateinit var pad1: IntArray
         private set
 
     /**
      * Integer values from 0 to 7, indicating the number of bits at the end of
      * sample (i*2)+2.
      */
-    var pad2: IntArray
+    lateinit var pad2: IntArray
         private set
 
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        val sampleCount = (`in`.readBytes(4) + 1) as Int / 2
+        val sampleCount = (`in`.readBytes(4) + 1).toInt() / 2
         pad1 = IntArray(sampleCount)
         pad2 = IntArray(sampleCount)
         var b: Byte

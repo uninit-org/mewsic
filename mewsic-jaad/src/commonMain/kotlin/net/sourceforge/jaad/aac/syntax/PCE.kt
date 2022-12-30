@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.syntax
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.AACException
 import net.sourceforge.jaad.aac.Profile
 import net.sourceforge.jaad.aac.SampleFrequency
@@ -10,7 +13,7 @@ class PCE : Element() {
 
     var profile: Profile? = null
         private set
-    var sampleFrequency: SampleFrequency
+    lateinit var sampleFrequency: SampleFrequency
         private set
     private var frontChannelElementsCount = 0
     private var sideChannelElementsCount = 0
@@ -44,7 +47,7 @@ class PCE : Element() {
     }
 
     @Throws(AACException::class)
-    fun decode(`in`: BitStream) {
+    override fun decode(`in`: BitStream) {
         readElementInstanceTag(`in`)
         profile = Profile.forInt(`in`.readBits(2))
         sampleFrequency = SampleFrequency.forInt(`in`.readBits(4))

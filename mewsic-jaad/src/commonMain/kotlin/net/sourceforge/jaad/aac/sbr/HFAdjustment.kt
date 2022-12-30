@@ -1,5 +1,8 @@
 package net.sourceforge.jaad.aac.sbr
+import org.mewsic.commons.lang.Arrays
 
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.aac.sbr.Constants.Companion.FIXFIX
 import net.sourceforge.jaad.aac.sbr.Constants.Companion.HI_RES
 import net.sourceforge.jaad.aac.sbr.Constants.Companion.MAX_L_E
@@ -183,8 +186,8 @@ internal class HFAdjustment : net.sourceforge.jaad.aac.sbr.Constants, net.source
                 if (assembly_reset) {
                     n = 0
                     while (n < 4) {
-//                        java.lang.System.arraycopy(adj.G_lim_boost[l], 0, sbr.G_temp_prev.get(ch).get(n), 0, sbr.M)
-//                        java.lang.System.arraycopy(adj.Q_M_lim_boost[l], 0, sbr.Q_temp_prev.get(ch).get(n), 0, sbr.M)
+//                        Arrays.arraycopy(adj.G_lim_boost[l], 0, sbr.G_temp_prev.get(ch).get(n), 0, sbr.M)
+//                        Arrays.arraycopy(adj.Q_M_lim_boost[l], 0, sbr.Q_temp_prev.get(ch).get(n), 0, sbr.M)
                         // now using purely kotlin
                         adj.G_lim_boost[l].copyInto(sbr.G_temp_prev[ch][n]!!, 0, 0, sbr.M)
                         adj.Q_M_lim_boost[l].copyInto(sbr.Q_temp_prev[ch][n]!!, 0, 0, sbr.M)
@@ -196,13 +199,13 @@ internal class HFAdjustment : net.sourceforge.jaad.aac.sbr.Constants, net.source
                 i = sbr.t_E.get(ch).get(l)
                 while (i < sbr.t_E.get(ch).get(l + 1)) {
 
-                    /* load new values into ringbuffer java.lang.System.arraycopy(
+                    /* load new values into ringbuffer Arrays.arraycopy(
                         adj.G_lim_boost[l],
                         0,
                         sbr.G_temp_prev.get(ch).get(sbr.GQ_ringbuf_index.get(ch)),
                         0,
                         sbr.M
-                    java.lang.System.arraycopy(
+                    Arrays.arraycopy(
                         adj.Q_M_lim_boost[l],
                         0,
                         sbr.Q_temp_prev.get(ch).get(sbr.GQ_ringbuf_index.get(ch)),

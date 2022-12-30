@@ -1,4 +1,9 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import net.sourceforge.jaad.mp4.boxes.BoxTypes
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -47,7 +52,7 @@ class SampleDependencyTypeBox : FullBox("Sample Dependency Type Box") {
      *
      * @return a list of 'sample depends on' values for all samples
      */
-    var sampleDependsOn: IntArray
+    lateinit var sampleDependsOn: IntArray
         private set
 
     /**
@@ -59,7 +64,7 @@ class SampleDependencyTypeBox : FullBox("Sample Dependency Type Box") {
      *
      * @return a list of 'sample is depended on' values for all samples
      */
-    var sampleIsDependedOn: IntArray
+    lateinit var sampleIsDependedOn: IntArray
         private set
 
     /**
@@ -71,7 +76,7 @@ class SampleDependencyTypeBox : FullBox("Sample Dependency Type Box") {
      *
      * @return a list of 'sample has redundancy' values for all samples
      */
-    var sampleHasRedundancy: IntArray
+    lateinit var sampleHasRedundancy: IntArray
         private set
 
     @Throws(Exception::class)
@@ -80,8 +85,8 @@ class SampleDependencyTypeBox : FullBox("Sample Dependency Type Box") {
 
         //get number of samples from SampleSizeBox
         var sampleCount: Long = -1
-        if (parent.hasChild(BoxTypes.SAMPLE_SIZE_BOX)) sampleCount =
-            (parent.getChild(BoxTypes.SAMPLE_SIZE_BOX) as net.sourceforge.jaad.mp4.boxes.impl.SampleSizeBox).getSampleCount()
+        if (parent!!.hasChild(BoxTypes.SAMPLE_SIZE_BOX)) sampleCount =
+            (parent!!.getChild(BoxTypes.SAMPLE_SIZE_BOX) as net.sourceforge.jaad.mp4.boxes.impl.SampleSizeBox).getSampleCount()
                 .toLong()
         //TODO: uncomment when CompactSampleSizeBox is implemented
         //else if(parent.containsChild(BoxTypes.COMPACT_SAMPLE_SIZE_BOX)) sampleCount = ((CompactSampleSizeBox)parent.getChild(BoxTypes.SAMPLE_SIZE_BOX)).getSampleSize();

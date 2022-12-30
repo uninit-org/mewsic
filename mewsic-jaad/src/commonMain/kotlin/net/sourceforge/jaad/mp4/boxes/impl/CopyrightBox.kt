@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
 import net.sourceforge.jaad.mp4.MP4InputStream
@@ -27,7 +31,7 @@ class CopyrightBox : FullBox("Copyright Box") {
         private set
 
     @Throws(Exception::class)
-    override override fun decode(`in`: MP4InputStream) {
+    override fun decode(`in`: MP4InputStream) {
         if (parent?.type == BoxTypes.USER_DATA_BOX) {
             super.decode(`in`)
             //1 bit padding, 5*3 bits language code (ISO-639-2/T)

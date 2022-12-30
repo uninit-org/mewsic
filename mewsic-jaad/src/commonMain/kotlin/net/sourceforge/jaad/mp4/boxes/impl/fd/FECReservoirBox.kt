@@ -1,4 +1,8 @@
 package net.sourceforge.jaad.mp4.boxes.impl.fd
+import org.mewsic.commons.lang.Arrays
+
+import org.mewsic.commons.streams.api.OutputStream
+import org.mewsic.commons.streams.api.InputStream
 import net.sourceforge.jaad.mp4.boxes.FullBox
 import net.sourceforge.jaad.mp4.boxes.BoxImpl
 
@@ -20,7 +24,7 @@ class FECReservoirBox : FullBox("FEC Reservoir Box") {
      *
      * @return all item IDs
      */
-    var itemIDs: IntArray
+    lateinit var itemIDs: IntArray
         private set
 
     /**
@@ -29,17 +33,17 @@ class FECReservoirBox : FullBox("FEC Reservoir Box") {
      *
      * @return all symbol counts
      */
-    var symbolCounts: LongArray
+    lateinit var symbolCounts: LongArray
         private set
 
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
         super.decode(`in`)
-        val entryCount = `in`.readBytes(2) as Int
+        val entryCount = `in`.readBytes(2).toInt()
         itemIDs = IntArray(entryCount)
         symbolCounts = LongArray(entryCount)
         for (i in 0 until entryCount) {
-            itemIDs[i] = `in`.readBytes(2) as Int
+            itemIDs[i] = `in`.readBytes(2).toInt()
             symbolCounts[i] = `in`.readBytes(4)
         }
     }
