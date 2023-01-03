@@ -3,9 +3,16 @@ package org.mewsic.commons.binary
 import org.mewsic.commons.streams.api.OutputStream
 
 open class BinaryWriter(protected val stream: OutputStream, private val littleEndian: Boolean = true) {
-    fun write(arr: ByteArray) {
-        stream.write(arr)
+    fun write(b: Byte) {
+        stream.write(b)
     }
+    fun write(bytes: ByteArray) {
+        stream.write(bytes)
+    }
+    fun write(bytes: ByteArray, offset: Int, length: Int)  {
+        stream.write(bytes, offset, length)
+    }
+
 
     fun writeEndian(size: Int, value: Long) {
         val arr = ByteArray(size)

@@ -16,7 +16,7 @@ import net.sourceforge.jaad.mp4.boxes.Utils
  * in a track, to that entire track. There may be multiple copyright boxes using
  * different language codes.
  */
-class CopyrightBox : FullBox("Copyright Box") {
+class CopyrightBox : FullBox(name = "Copyright Box") {
     /**
      * The language code for the following text. See ISO 639-2/T for the set of
      * three character codes.

@@ -32,7 +32,7 @@ import net.sourceforge.jaad.mp4.MP4InputStream
  *
  * @author in-somnia
  */
-class SampleScaleBox : FullBox("Sample Scale Box") {
+class  SampleScaleBox : FullBox("Sample Scale Box") {
     /**
      * If this flag is set, all samples described by this sample entry shall be
      * scaled according to the method specified by the field 'scale_method'.
@@ -91,7 +91,7 @@ class SampleScaleBox : FullBox("Sample Scale Box") {
         super.decode(`in`)
 
         //7 bits reserved, 1 bit flag
-        isConstrained = `in`.read() and 1 === 1
+        isConstrained = `in`.read() and 1 == 1
         scaleMethod = `in`.read()
         displayCenterX = `in`.readBytes(2).toInt()
         displayCenterY = `in`.readBytes(2).toInt()
