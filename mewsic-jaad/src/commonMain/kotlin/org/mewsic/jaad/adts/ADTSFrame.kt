@@ -1,7 +1,7 @@
-package net.sourceforge.jaad.adts
+package org.mewsic.jaad.adts
 
-import net.sourceforge.jaad.aac.ChannelConfiguration
-import net.sourceforge.jaad.aac.SampleFrequency.Companion.forInt
+import org.mewsic.jaad.aac.ChannelConfiguration
+import org.mewsic.jaad.aac.SampleFrequency.Companion.forInt
 import org.mewsic.commons.streams.DataInputStream
 
 internal class ADTSFrame(`in`: DataInputStream) {

@@ -1,35 +1,35 @@
-package net.sourceforge.jaad.aac.sbr
+package org.mewsic.jaad.aac.sbr
 
-import net.sourceforge.jaad.aac.AACException
-import net.sourceforge.jaad.aac.SampleFrequency
-import net.sourceforge.jaad.aac.ps.PS
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.EXTENSION_ID_PS
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.EXT_SBR_DATA_CRC
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.FIXFIX
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.FIXVAR
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.MAX_L_E
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.MAX_M
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.MAX_NTSR
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.MAX_NTSRHFG
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.NO_TIME_SLOTS
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.NO_TIME_SLOTS_960
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.RATE
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.T_HFADJ
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.T_HFGEN
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.VARFIX
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.VARVAR
-import net.sourceforge.jaad.aac.sbr.HuffmanTables.Companion.F_HUFFMAN_ENV_1_5DB
-import net.sourceforge.jaad.aac.sbr.HuffmanTables.Companion.F_HUFFMAN_ENV_3_0DB
-import net.sourceforge.jaad.aac.sbr.HuffmanTables.Companion.F_HUFFMAN_ENV_BAL_1_5DB
-import net.sourceforge.jaad.aac.sbr.HuffmanTables.Companion.F_HUFFMAN_ENV_BAL_3_0DB
-import net.sourceforge.jaad.aac.sbr.HuffmanTables.Companion.T_HUFFMAN_ENV_1_5DB
-import net.sourceforge.jaad.aac.sbr.HuffmanTables.Companion.T_HUFFMAN_ENV_3_0DB
-import net.sourceforge.jaad.aac.sbr.HuffmanTables.Companion.T_HUFFMAN_ENV_BAL_1_5DB
-import net.sourceforge.jaad.aac.sbr.HuffmanTables.Companion.T_HUFFMAN_ENV_BAL_3_0DB
-import net.sourceforge.jaad.aac.sbr.HuffmanTables.Companion.T_HUFFMAN_NOISE_3_0DB
-import net.sourceforge.jaad.aac.sbr.HuffmanTables.Companion.T_HUFFMAN_NOISE_BAL_3_0DB
-import net.sourceforge.jaad.aac.syntax.BitStream
-import net.sourceforge.jaad.aac.syntax.Constants
+import org.mewsic.jaad.aac.AACException
+import org.mewsic.jaad.aac.SampleFrequency
+import org.mewsic.jaad.aac.ps.PS
+import org.mewsic.jaad.aac.sbr.Constants.Companion.EXTENSION_ID_PS
+import org.mewsic.jaad.aac.sbr.Constants.Companion.EXT_SBR_DATA_CRC
+import org.mewsic.jaad.aac.sbr.Constants.Companion.FIXFIX
+import org.mewsic.jaad.aac.sbr.Constants.Companion.FIXVAR
+import org.mewsic.jaad.aac.sbr.Constants.Companion.MAX_L_E
+import org.mewsic.jaad.aac.sbr.Constants.Companion.MAX_M
+import org.mewsic.jaad.aac.sbr.Constants.Companion.MAX_NTSR
+import org.mewsic.jaad.aac.sbr.Constants.Companion.MAX_NTSRHFG
+import org.mewsic.jaad.aac.sbr.Constants.Companion.NO_TIME_SLOTS
+import org.mewsic.jaad.aac.sbr.Constants.Companion.NO_TIME_SLOTS_960
+import org.mewsic.jaad.aac.sbr.Constants.Companion.RATE
+import org.mewsic.jaad.aac.sbr.Constants.Companion.T_HFADJ
+import org.mewsic.jaad.aac.sbr.Constants.Companion.T_HFGEN
+import org.mewsic.jaad.aac.sbr.Constants.Companion.VARFIX
+import org.mewsic.jaad.aac.sbr.Constants.Companion.VARVAR
+import org.mewsic.jaad.aac.sbr.HuffmanTables.Companion.F_HUFFMAN_ENV_1_5DB
+import org.mewsic.jaad.aac.sbr.HuffmanTables.Companion.F_HUFFMAN_ENV_3_0DB
+import org.mewsic.jaad.aac.sbr.HuffmanTables.Companion.F_HUFFMAN_ENV_BAL_1_5DB
+import org.mewsic.jaad.aac.sbr.HuffmanTables.Companion.F_HUFFMAN_ENV_BAL_3_0DB
+import org.mewsic.jaad.aac.sbr.HuffmanTables.Companion.T_HUFFMAN_ENV_1_5DB
+import org.mewsic.jaad.aac.sbr.HuffmanTables.Companion.T_HUFFMAN_ENV_3_0DB
+import org.mewsic.jaad.aac.sbr.HuffmanTables.Companion.T_HUFFMAN_ENV_BAL_1_5DB
+import org.mewsic.jaad.aac.sbr.HuffmanTables.Companion.T_HUFFMAN_ENV_BAL_3_0DB
+import org.mewsic.jaad.aac.sbr.HuffmanTables.Companion.T_HUFFMAN_NOISE_3_0DB
+import org.mewsic.jaad.aac.sbr.HuffmanTables.Companion.T_HUFFMAN_NOISE_BAL_3_0DB
+import org.mewsic.jaad.aac.syntax.BitStream
+import org.mewsic.jaad.aac.syntax.Constants
 import kotlin.math.max
 import kotlin.math.min
 
@@ -38,7 +38,7 @@ class SBR(
     var stereo: Boolean,
     val sample_rate: SampleFrequency,
     private val downSampledSBR: Boolean
-) : net.sourceforge.jaad.aac.sbr.Constants, Constants, HuffmanTables {
+) : org.mewsic.jaad.aac.sbr.Constants, Constants, HuffmanTables {
     var maxAACLine = 0
     var rate = 0
     var just_seeked = false

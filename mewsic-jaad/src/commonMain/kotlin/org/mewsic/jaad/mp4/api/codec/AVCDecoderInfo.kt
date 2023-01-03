@@ -1,8 +1,8 @@
-package net.sourceforge.jaad.mp4.api.codec
+package org.mewsic.jaad.mp4.api.codec
 
-import net.sourceforge.jaad.mp4.api.DecoderInfo
-import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.AVCSpecificBox
-import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.CodecSpecificBox
+import org.mewsic.jaad.mp4.api.DecoderInfo
+import org.mewsic.jaad.mp4.boxes.impl.sampleentries.codec.AVCSpecificBox
+import org.mewsic.jaad.mp4.boxes.impl.sampleentries.codec.CodecSpecificBox
 
 class AVCDecoderInfo(box: CodecSpecificBox) : DecoderInfo() {
     private val box: AVCSpecificBox

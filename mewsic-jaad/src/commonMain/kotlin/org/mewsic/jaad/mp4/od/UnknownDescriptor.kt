@@ -1,6 +1,6 @@
-package net.sourceforge.jaad.mp4.od
+package org.mewsic.jaad.mp4.od
 
-import net.sourceforge.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.MP4InputStream
 
 /**
  * This class is used if any unknown Descriptor is found in a stream. All

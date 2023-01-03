@@ -1,11 +1,11 @@
-package net.sourceforge.jaad.mp4.api
+package org.mewsic.jaad.mp4.api
 
-import net.sourceforge.jaad.mp4.MP4InputStream
-import net.sourceforge.jaad.mp4.boxes.Box
-import net.sourceforge.jaad.mp4.boxes.BoxTypes
-import net.sourceforge.jaad.mp4.boxes.impl.HandlerBox
-import net.sourceforge.jaad.mp4.boxes.impl.ItemProtectionBox
-import net.sourceforge.jaad.mp4.boxes.impl.MovieHeaderBox
+import org.mewsic.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.boxes.Box
+import org.mewsic.jaad.mp4.boxes.BoxTypes
+import org.mewsic.jaad.mp4.boxes.impl.HandlerBox
+import org.mewsic.jaad.mp4.boxes.impl.ItemProtectionBox
+import org.mewsic.jaad.mp4.boxes.impl.MovieHeaderBox
 
 class Movie(moov: Box, `in`: MP4InputStream) {
     private val `in`: MP4InputStream

@@ -1,6 +1,6 @@
-package net.sourceforge.jaad.aac.sbr
+package org.mewsic.jaad.aac.sbr
 
-import net.sourceforge.jaad.aac.sbr.FilterbankTable.Companion.qmf_c
+import org.mewsic.jaad.aac.sbr.FilterbankTable.Companion.qmf_c
 
 class AnalysisFilterbank(private val channels: Int) : FilterbankTable {
     private val x //x is implemented as double ringbuffer

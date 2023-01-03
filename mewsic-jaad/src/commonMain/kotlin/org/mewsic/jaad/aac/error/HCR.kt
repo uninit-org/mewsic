@@ -1,8 +1,8 @@
-package net.sourceforge.jaad.aac.error
+package org.mewsic.jaad.aac.error
 
-import net.sourceforge.jaad.aac.huffman.HCB
-import net.sourceforge.jaad.aac.syntax.BitStream
-import net.sourceforge.jaad.aac.syntax.Constants
+import org.mewsic.jaad.aac.huffman.HCB
+import org.mewsic.jaad.aac.syntax.BitStream
+import org.mewsic.jaad.aac.syntax.Constants
 
 /**
  * Huffman Codeword Reordering

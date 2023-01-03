@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.aac
+package org.mewsic.jaad.aac
 
 /**
  * Standard exception, thrown when decoding of an AAC frame fails.

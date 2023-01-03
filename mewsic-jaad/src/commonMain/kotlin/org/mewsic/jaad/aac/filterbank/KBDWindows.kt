@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.aac.filterbank
+package org.mewsic.jaad.aac.filterbank
 
 internal interface KBDWindows {
     companion object {

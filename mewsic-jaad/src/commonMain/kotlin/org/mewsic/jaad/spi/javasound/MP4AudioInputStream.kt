@@ -1,12 +1,12 @@
-package net.sourceforge.jaad.spi.javasound
+package org.mewsic.jaad.spi.javasound
 
-import net.sourceforge.jaad.aac.Decoder
-import net.sourceforge.jaad.aac.SampleBuffer
-import net.sourceforge.jaad.mp4.MP4Container
-import net.sourceforge.jaad.mp4.api.AudioTrack
-import net.sourceforge.jaad.mp4.api.Frame
-import net.sourceforge.jaad.mp4.api.Movie
-import net.sourceforge.jaad.mp4.api.Track
+import org.mewsic.jaad.aac.Decoder
+import org.mewsic.jaad.aac.SampleBuffer
+import org.mewsic.jaad.mp4.MP4Container
+import org.mewsic.jaad.mp4.api.AudioTrack
+import org.mewsic.jaad.mp4.api.Frame
+import org.mewsic.jaad.mp4.api.Movie
+import org.mewsic.jaad.mp4.api.Track
 
 internal class MP4AudioInputStream(`in`: org.mewsic.commons.streams.api.InputStream, length: Long) :
     AsynchronousAudioInputStream(`in`, length) {

@@ -1,6 +1,6 @@
-package net.sourceforge.jaad.mp4.boxes.impl.meta
+package org.mewsic.jaad.mp4.boxes.impl.meta
 
-import net.sourceforge.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.MP4InputStream
 
 class ThreeGPPClassificationBox :
     ThreeGPPMetadataBox("3GPP Classification Box") {

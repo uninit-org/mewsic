@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.aac
+package org.mewsic.jaad.aac
 
 /**
  * The SampleBuffer holds the decoded AAC frame. It contains the raw PCM data

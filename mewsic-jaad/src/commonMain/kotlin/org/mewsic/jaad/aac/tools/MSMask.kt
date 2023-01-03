@@ -1,6 +1,6 @@
-package net.sourceforge.jaad.aac.tools
+package org.mewsic.jaad.aac.tools
 
-import net.sourceforge.jaad.aac.AACException
+import org.mewsic.jaad.aac.AACException
 
 /**
  * The MSMask indicates, if MS is applied to a specific ICStream.

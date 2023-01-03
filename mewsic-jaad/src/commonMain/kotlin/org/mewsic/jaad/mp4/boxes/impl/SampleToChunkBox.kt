@@ -1,6 +1,6 @@
-package net.sourceforge.jaad.mp4.boxes.impl
+package org.mewsic.jaad.mp4.boxes.impl
 
-import net.sourceforge.jaad.mp4.boxes.FullBox
+import org.mewsic.jaad.mp4.boxes.FullBox
 
 class SampleToChunkBox : FullBox("Sample To Chunk Box") {
     lateinit var firstChunks: LongArray

@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.aac.filterbank
+package org.mewsic.jaad.aac.filterbank
 
 internal interface SineWindows {
     companion object {

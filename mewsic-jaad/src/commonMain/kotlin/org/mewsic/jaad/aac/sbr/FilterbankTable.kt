@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.aac.sbr
+package org.mewsic.jaad.aac.sbr
 
 internal interface FilterbankTable {
     companion object {

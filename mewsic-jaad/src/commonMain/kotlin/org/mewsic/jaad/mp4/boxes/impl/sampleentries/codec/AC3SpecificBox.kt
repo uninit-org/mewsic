@@ -1,6 +1,6 @@
-package net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec
+package org.mewsic.jaad.mp4.boxes.impl.sampleentries.codec
 
-import net.sourceforge.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.MP4InputStream
 
 /**
  * This box contains parameters for AC-3 decoders. For more information see the

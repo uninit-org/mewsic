@@ -1,15 +1,15 @@
-package net.sourceforge.jaad.aac.filterbank
+package org.mewsic.jaad.aac.filterbank
 
-import net.sourceforge.jaad.aac.filterbank.KBDWindows.Companion.KBD_1024
-import net.sourceforge.jaad.aac.filterbank.KBDWindows.Companion.KBD_120
-import net.sourceforge.jaad.aac.filterbank.KBDWindows.Companion.KBD_128
-import net.sourceforge.jaad.aac.filterbank.KBDWindows.Companion.KBD_960
-import net.sourceforge.jaad.aac.filterbank.SineWindows.Companion.SINE_1024
-import net.sourceforge.jaad.aac.filterbank.SineWindows.Companion.SINE_120
-import net.sourceforge.jaad.aac.filterbank.SineWindows.Companion.SINE_128
-import net.sourceforge.jaad.aac.filterbank.SineWindows.Companion.SINE_960
-import net.sourceforge.jaad.aac.syntax.Constants
-import net.sourceforge.jaad.aac.syntax.ICSInfo.WindowSequence
+import org.mewsic.jaad.aac.filterbank.KBDWindows.Companion.KBD_1024
+import org.mewsic.jaad.aac.filterbank.KBDWindows.Companion.KBD_120
+import org.mewsic.jaad.aac.filterbank.KBDWindows.Companion.KBD_128
+import org.mewsic.jaad.aac.filterbank.KBDWindows.Companion.KBD_960
+import org.mewsic.jaad.aac.filterbank.SineWindows.Companion.SINE_1024
+import org.mewsic.jaad.aac.filterbank.SineWindows.Companion.SINE_120
+import org.mewsic.jaad.aac.filterbank.SineWindows.Companion.SINE_128
+import org.mewsic.jaad.aac.filterbank.SineWindows.Companion.SINE_960
+import org.mewsic.jaad.aac.syntax.Constants
+import org.mewsic.jaad.aac.syntax.ICSInfo.WindowSequence
 
 class FilterBank(smallFrames: Boolean, channels: Int) : Constants, SineWindows,
     KBDWindows {

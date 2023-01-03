@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.util.wav
+package org.mewsic.jaad.util.wav
 
 import org.mewsic.commons.binary.SeekableBinaryWriter
 import org.mewsic.commons.lang.Log

@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.aac.gain
+package org.mewsic.jaad.aac.gain
 
 import kotlin.math.log2
 import kotlin.math.round

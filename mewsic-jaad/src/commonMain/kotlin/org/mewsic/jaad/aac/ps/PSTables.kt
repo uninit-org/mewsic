@@ -1,6 +1,6 @@
-package net.sourceforge.jaad.aac.ps
+package org.mewsic.jaad.aac.ps
 
-import net.sourceforge.jaad.aac.ps.PSConstants.Companion.NEGATE_IPD_MASK
+import org.mewsic.jaad.aac.ps.PSConstants.Companion.NEGATE_IPD_MASK
 
 internal interface PSTables : PSConstants {
     companion object {

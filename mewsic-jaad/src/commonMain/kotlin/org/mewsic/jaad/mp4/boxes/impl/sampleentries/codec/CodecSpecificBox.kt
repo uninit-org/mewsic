@@ -1,7 +1,7 @@
-package net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec
+package org.mewsic.jaad.mp4.boxes.impl.sampleentries.codec
 
-import net.sourceforge.jaad.mp4.MP4InputStream
-import net.sourceforge.jaad.mp4.boxes.BoxImpl
+import org.mewsic.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.boxes.BoxImpl
 
 /**
  * The `CodecSpecificBox` can be used instead of an `ESDBox`

@@ -1,11 +1,11 @@
-package net.sourceforge.jaad.aac.gain
+package org.mewsic.jaad.aac.gain
 
-import net.sourceforge.jaad.aac.gain.GCConstants.Companion.BANDS
-import net.sourceforge.jaad.aac.gain.GCConstants.Companion.NPQFTAPS
-import net.sourceforge.jaad.aac.gain.PQFTables.Companion.COEFS_Q0
-import net.sourceforge.jaad.aac.gain.PQFTables.Companion.COEFS_Q1
-import net.sourceforge.jaad.aac.gain.PQFTables.Companion.COEFS_T0
-import net.sourceforge.jaad.aac.gain.PQFTables.Companion.COEFS_T1
+import org.mewsic.jaad.aac.gain.GCConstants.Companion.BANDS
+import org.mewsic.jaad.aac.gain.GCConstants.Companion.NPQFTAPS
+import org.mewsic.jaad.aac.gain.PQFTables.Companion.COEFS_Q0
+import org.mewsic.jaad.aac.gain.PQFTables.Companion.COEFS_Q1
+import org.mewsic.jaad.aac.gain.PQFTables.Companion.COEFS_T0
+import org.mewsic.jaad.aac.gain.PQFTables.Companion.COEFS_T1
 
 //inverse polyphase quadrature filter
 internal class IPQF : GCConstants, PQFTables {

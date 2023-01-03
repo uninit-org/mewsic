@@ -1,6 +1,6 @@
-package net.sourceforge.jaad.mp4.od
+package org.mewsic.jaad.mp4.od
 
-import net.sourceforge.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.MP4InputStream
 import kotlin.math.ceil
 
 //ISO 14496-1 - 10.2.3

@@ -1,6 +1,6 @@
-package net.sourceforge.jaad.mp4.boxes
+package org.mewsic.jaad.mp4.boxes
 
-import net.sourceforge.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.MP4InputStream
 
 open class FullBox(name: String) : BoxImpl(name) {
     protected var version = 0

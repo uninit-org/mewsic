@@ -1,9 +1,9 @@
-package net.sourceforge.jaad.aac.syntax
+package org.mewsic.jaad.aac.syntax
 
-import net.sourceforge.jaad.aac.AACException
-import net.sourceforge.jaad.aac.DecoderConfig
-import net.sourceforge.jaad.aac.huffman.HCB
-import net.sourceforge.jaad.aac.huffman.Huffman
+import org.mewsic.jaad.aac.AACException
+import org.mewsic.jaad.aac.DecoderConfig
+import org.mewsic.jaad.aac.huffman.HCB
+import org.mewsic.jaad.aac.huffman.Huffman
 import kotlin.math.pow
 
 internal class CCE(frameLength: Int) : Element(),

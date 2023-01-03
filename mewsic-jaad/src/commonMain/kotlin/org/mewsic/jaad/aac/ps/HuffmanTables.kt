@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.aac.ps
+package org.mewsic.jaad.aac.ps
 
 internal interface HuffmanTables {
     companion object {

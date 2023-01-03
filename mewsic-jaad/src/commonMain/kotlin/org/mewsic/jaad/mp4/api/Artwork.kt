@@ -1,7 +1,7 @@
-package net.sourceforge.jaad.mp4.api
+package org.mewsic.jaad.mp4.api
 
-import net.sourceforge.jaad.mp4.api.Artwork.Type
-import net.sourceforge.jaad.mp4.boxes.impl.meta.ITunesMetadataBox
+import org.mewsic.jaad.mp4.api.Artwork.Type
+import org.mewsic.jaad.mp4.boxes.impl.meta.ITunesMetadataBox
 import org.mewsic.commons.streams.ByteArrayInputStream
 
 class Artwork internal constructor(

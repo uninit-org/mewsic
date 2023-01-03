@@ -1,9 +1,9 @@
-package net.sourceforge.jaad.mp4.boxes.impl
+package org.mewsic.jaad.mp4.boxes.impl
 
-import net.sourceforge.jaad.mp4.MP4InputStream
-import net.sourceforge.jaad.mp4.boxes.FullBox
-import net.sourceforge.jaad.mp4.od.ESDescriptor
-import net.sourceforge.jaad.mp4.od.ObjectDescriptor
+import org.mewsic.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.boxes.FullBox
+import org.mewsic.jaad.mp4.od.ESDescriptor
+import org.mewsic.jaad.mp4.od.ObjectDescriptor
 
 /**
  * The entry sample descriptor (ESD) box is a container for entry descriptors.

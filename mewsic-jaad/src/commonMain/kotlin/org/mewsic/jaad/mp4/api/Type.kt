@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.mp4.api
+package org.mewsic.jaad.mp4.api
 
 /**
  * Represents the data type of a `Frame` or `Track`.

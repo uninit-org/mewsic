@@ -1,11 +1,11 @@
-package net.sourceforge.jaad.aac.gain
+package org.mewsic.jaad.aac.gain
 
-import net.sourceforge.jaad.aac.AACException
-import net.sourceforge.jaad.aac.gain.GCConstants.Companion.BANDS
-import net.sourceforge.jaad.aac.gain.GCConstants.Companion.ID_GAIN
-import net.sourceforge.jaad.aac.gain.GCConstants.Companion.LN_GAIN
-import net.sourceforge.jaad.aac.syntax.BitStream
-import net.sourceforge.jaad.aac.syntax.ICSInfo.WindowSequence
+import org.mewsic.jaad.aac.AACException
+import org.mewsic.jaad.aac.gain.GCConstants.Companion.BANDS
+import org.mewsic.jaad.aac.gain.GCConstants.Companion.ID_GAIN
+import org.mewsic.jaad.aac.gain.GCConstants.Companion.LN_GAIN
+import org.mewsic.jaad.aac.syntax.BitStream
+import org.mewsic.jaad.aac.syntax.ICSInfo.WindowSequence
 import kotlin.math.log2
 import kotlin.math.pow
 

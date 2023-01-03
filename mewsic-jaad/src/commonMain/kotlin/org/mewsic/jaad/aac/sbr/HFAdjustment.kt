@@ -1,11 +1,11 @@
-package net.sourceforge.jaad.aac.sbr
+package org.mewsic.jaad.aac.sbr
 
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.FIXFIX
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.HI_RES
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.MAX_L_E
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.MAX_M
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.VARFIX
-import net.sourceforge.jaad.aac.sbr.NoiseTable.Companion.NOISE_TABLE
+import org.mewsic.jaad.aac.sbr.Constants.Companion.FIXFIX
+import org.mewsic.jaad.aac.sbr.Constants.Companion.HI_RES
+import org.mewsic.jaad.aac.sbr.Constants.Companion.MAX_L_E
+import org.mewsic.jaad.aac.sbr.Constants.Companion.MAX_M
+import org.mewsic.jaad.aac.sbr.Constants.Companion.VARFIX
+import org.mewsic.jaad.aac.sbr.NoiseTable.Companion.NOISE_TABLE
 import kotlin.math.min
 import kotlin.math.sqrt
 

@@ -1,16 +1,16 @@
-package net.sourceforge.jaad.aac.gain
+package org.mewsic.jaad.aac.gain
 
-import net.sourceforge.jaad.aac.AACException
-import net.sourceforge.jaad.aac.gain.GCConstants.Companion.BANDS
-import net.sourceforge.jaad.aac.gain.IMDCTTables.Companion.IMDCT_POST_TABLE_256
-import net.sourceforge.jaad.aac.gain.IMDCTTables.Companion.IMDCT_POST_TABLE_32
-import net.sourceforge.jaad.aac.gain.IMDCTTables.Companion.IMDCT_TABLE_256
-import net.sourceforge.jaad.aac.gain.IMDCTTables.Companion.IMDCT_TABLE_32
-import net.sourceforge.jaad.aac.gain.Windows.Companion.KBD_256
-import net.sourceforge.jaad.aac.gain.Windows.Companion.KBD_32
-import net.sourceforge.jaad.aac.gain.Windows.Companion.SINE_256
-import net.sourceforge.jaad.aac.gain.Windows.Companion.SINE_32
-import net.sourceforge.jaad.aac.syntax.ICSInfo.WindowSequence
+import org.mewsic.jaad.aac.AACException
+import org.mewsic.jaad.aac.gain.GCConstants.Companion.BANDS
+import org.mewsic.jaad.aac.gain.IMDCTTables.Companion.IMDCT_POST_TABLE_256
+import org.mewsic.jaad.aac.gain.IMDCTTables.Companion.IMDCT_POST_TABLE_32
+import org.mewsic.jaad.aac.gain.IMDCTTables.Companion.IMDCT_TABLE_256
+import org.mewsic.jaad.aac.gain.IMDCTTables.Companion.IMDCT_TABLE_32
+import org.mewsic.jaad.aac.gain.Windows.Companion.KBD_256
+import org.mewsic.jaad.aac.gain.Windows.Companion.KBD_32
+import org.mewsic.jaad.aac.gain.Windows.Companion.SINE_256
+import org.mewsic.jaad.aac.gain.Windows.Companion.SINE_32
+import org.mewsic.jaad.aac.syntax.ICSInfo.WindowSequence
 
 //inverse modified discrete cosine transform
 internal class IMDCT(private val frameLen: Int) : GCConstants,

@@ -1,7 +1,7 @@
-package net.sourceforge.jaad.mp4.boxes.impl
+package org.mewsic.jaad.mp4.boxes.impl
 
-import net.sourceforge.jaad.mp4.MP4InputStream
-import net.sourceforge.jaad.mp4.boxes.BoxImpl
+import org.mewsic.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.boxes.BoxImpl
 
 class PixelAspectRatioBox : BoxImpl("Pixel Aspect Ratio Box") {
     var horizontalSpacing: Long = 0

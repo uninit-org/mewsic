@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.mp4.boxes
+package org.mewsic.jaad.mp4.boxes
 
 object Utils {
     private const val UNDETERMINED = 4294967295L

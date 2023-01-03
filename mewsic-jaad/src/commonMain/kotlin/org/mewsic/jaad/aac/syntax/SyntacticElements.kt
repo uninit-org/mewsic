@@ -1,11 +1,11 @@
-package net.sourceforge.jaad.aac.syntax
+package org.mewsic.jaad.aac.syntax
 
-import net.sourceforge.jaad.aac.*
-import net.sourceforge.jaad.aac.filterbank.FilterBank
-import net.sourceforge.jaad.aac.sbr.SBR
-import net.sourceforge.jaad.aac.tools.IS
-import net.sourceforge.jaad.aac.tools.LTPrediction
-import net.sourceforge.jaad.aac.tools.MS
+import org.mewsic.jaad.aac.*
+import org.mewsic.jaad.aac.filterbank.FilterBank
+import org.mewsic.jaad.aac.sbr.SBR
+import org.mewsic.jaad.aac.tools.IS
+import org.mewsic.jaad.aac.tools.LTPrediction
+import org.mewsic.jaad.aac.tools.MS
 import kotlin.math.*
 
 class SyntacticElements(config: DecoderConfig) : Constants {

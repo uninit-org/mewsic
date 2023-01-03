@@ -1,6 +1,6 @@
-package net.sourceforge.jaad.mp4.boxes.impl.samplegroupentries
+package org.mewsic.jaad.mp4.boxes.impl.samplegroupentries
 
-import net.sourceforge.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.MP4InputStream
 
 class HintSampleGroupEntry :
     SampleGroupDescriptionEntry("Hint Sample Group Entry") {

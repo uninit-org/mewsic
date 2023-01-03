@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.spi.javasound
+package org.mewsic.jaad.spi.javasound
 
 import org.mewsic.commons.lang.Log
 import kotlin.jvm.JvmOverloads

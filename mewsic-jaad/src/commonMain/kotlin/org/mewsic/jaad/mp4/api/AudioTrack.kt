@@ -1,13 +1,13 @@
-package net.sourceforge.jaad.mp4.api
+package org.mewsic.jaad.mp4.api
 
-import net.sourceforge.jaad.mp4.MP4InputStream
-import net.sourceforge.jaad.mp4.boxes.Box
-import net.sourceforge.jaad.mp4.boxes.BoxTypes
-import net.sourceforge.jaad.mp4.boxes.impl.ESDBox
-import net.sourceforge.jaad.mp4.boxes.impl.SampleDescriptionBox
-import net.sourceforge.jaad.mp4.boxes.impl.SoundMediaHeaderBox
-import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.AudioSampleEntry
-import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.CodecSpecificBox
+import org.mewsic.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.boxes.Box
+import org.mewsic.jaad.mp4.boxes.BoxTypes
+import org.mewsic.jaad.mp4.boxes.impl.ESDBox
+import org.mewsic.jaad.mp4.boxes.impl.SampleDescriptionBox
+import org.mewsic.jaad.mp4.boxes.impl.SoundMediaHeaderBox
+import org.mewsic.jaad.mp4.boxes.impl.sampleentries.AudioSampleEntry
+import org.mewsic.jaad.mp4.boxes.impl.sampleentries.codec.CodecSpecificBox
 
 class AudioTrack(trak: Box, `in`: MP4InputStream) : Track(trak, `in`) {
     enum class AudioCodec : Codec {

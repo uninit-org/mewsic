@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.aac.huffman
+package org.mewsic.jaad.aac.huffman
 
 interface HCB {
     companion object {

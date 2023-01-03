@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.aac
+package org.mewsic.jaad.aac
 
 /**
  * All possible channel configurations for AAC.

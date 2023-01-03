@@ -1,10 +1,10 @@
-package net.sourceforge.jaad.aac.filterbank
+package org.mewsic.jaad.aac.filterbank
 
-import net.sourceforge.jaad.aac.AACException
-import net.sourceforge.jaad.aac.filterbank.MDCTTables.Companion.MDCT_TABLE_128
-import net.sourceforge.jaad.aac.filterbank.MDCTTables.Companion.MDCT_TABLE_1920
-import net.sourceforge.jaad.aac.filterbank.MDCTTables.Companion.MDCT_TABLE_2048
-import net.sourceforge.jaad.aac.filterbank.MDCTTables.Companion.MDCT_TABLE_240
+import org.mewsic.jaad.aac.AACException
+import org.mewsic.jaad.aac.filterbank.MDCTTables.Companion.MDCT_TABLE_128
+import org.mewsic.jaad.aac.filterbank.MDCTTables.Companion.MDCT_TABLE_1920
+import org.mewsic.jaad.aac.filterbank.MDCTTables.Companion.MDCT_TABLE_2048
+import org.mewsic.jaad.aac.filterbank.MDCTTables.Companion.MDCT_TABLE_240
 
 internal class MDCT(private val N: Int) : MDCTTables {
     private val N2: Int = N shr 1

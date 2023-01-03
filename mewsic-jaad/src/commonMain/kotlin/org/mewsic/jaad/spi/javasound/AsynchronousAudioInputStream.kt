@@ -1,6 +1,6 @@
-package net.sourceforge.jaad.spi.javasound
+package org.mewsic.jaad.spi.javasound
 
-import net.sourceforge.jaad.spi.javasound.CircularBuffer.Trigger
+import org.mewsic.jaad.spi.javasound.CircularBuffer.Trigger
 
 internal abstract class AsynchronousAudioInputStream(
     `in`: org.mewsic.commons.streams.api.InputStream?,

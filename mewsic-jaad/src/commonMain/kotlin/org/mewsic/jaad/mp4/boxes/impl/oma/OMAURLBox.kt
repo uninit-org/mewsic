@@ -1,7 +1,7 @@
-package net.sourceforge.jaad.mp4.boxes.impl.oma
+package org.mewsic.jaad.mp4.boxes.impl.oma
 
-import net.sourceforge.jaad.mp4.MP4InputStream
-import net.sourceforge.jaad.mp4.boxes.FullBox
+import org.mewsic.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.boxes.FullBox
 
 /**
  * This box is used for several sub-boxes of the user-data box in an OMA DRM

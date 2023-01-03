@@ -1,14 +1,14 @@
-package net.sourceforge.jaad.mp4.boxes
+package org.mewsic.jaad.mp4.boxes
 
-import net.sourceforge.jaad.mp4.MP4InputStream
-import net.sourceforge.jaad.mp4.boxes.impl.*
-import net.sourceforge.jaad.mp4.boxes.impl.drm.FairPlayDataBox
-import net.sourceforge.jaad.mp4.boxes.impl.fd.*
-import net.sourceforge.jaad.mp4.boxes.impl.meta.*
-import net.sourceforge.jaad.mp4.boxes.impl.oma.*
-import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.*
-import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.*
-import net.sourceforge.jaad.mp4.boxes.impl.samplegroupentries.*
+import org.mewsic.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.boxes.impl.*
+import org.mewsic.jaad.mp4.boxes.impl.drm.FairPlayDataBox
+import org.mewsic.jaad.mp4.boxes.impl.fd.*
+import org.mewsic.jaad.mp4.boxes.impl.meta.*
+import org.mewsic.jaad.mp4.boxes.impl.oma.*
+import org.mewsic.jaad.mp4.boxes.impl.sampleentries.*
+import org.mewsic.jaad.mp4.boxes.impl.sampleentries.codec.*
+import org.mewsic.jaad.mp4.boxes.impl.samplegroupentries.*
 import org.mewsic.commons.lang.Log
 
 object BoxFactory : BoxTypes() {

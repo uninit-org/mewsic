@@ -1,6 +1,6 @@
-package net.sourceforge.jaad.aac.syntax
+package org.mewsic.jaad.aac.syntax
 
-import net.sourceforge.jaad.aac.AACException
+import org.mewsic.jaad.aac.AACException
 
 internal class DSE : Element() {
     private lateinit var dataStreamBytes: ByteArray

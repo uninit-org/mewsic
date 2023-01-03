@@ -1,6 +1,6 @@
-package net.sourceforge.jaad.mp4.boxes
+package org.mewsic.jaad.mp4.boxes
 
-import net.sourceforge.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.MP4InputStream
 
 open class BoxImpl(override val name: String) : Box {
     override var size: Long = 0

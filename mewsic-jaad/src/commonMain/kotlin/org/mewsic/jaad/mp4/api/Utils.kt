@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.mp4.api
+package org.mewsic.jaad.mp4.api
 
 internal object Utils {
     private const val DATE_OFFSET = 2082850791998L

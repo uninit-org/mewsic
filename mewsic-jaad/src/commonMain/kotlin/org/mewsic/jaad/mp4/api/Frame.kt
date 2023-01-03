@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.mp4.api
+package org.mewsic.jaad.mp4.api
 
 class Frame internal constructor(type: Type, offset: Long, size: Long, time: Double) :
     Comparable<Frame> {

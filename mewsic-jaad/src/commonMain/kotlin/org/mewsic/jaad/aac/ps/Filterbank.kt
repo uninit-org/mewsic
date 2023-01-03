@@ -1,10 +1,10 @@
-package net.sourceforge.jaad.aac.ps
+package org.mewsic.jaad.aac.ps
 
-import net.sourceforge.jaad.aac.ps.PSTables.Companion.p12_13_34
-import net.sourceforge.jaad.aac.ps.PSTables.Companion.p2_13_20
-import net.sourceforge.jaad.aac.ps.PSTables.Companion.p4_13_34
-import net.sourceforge.jaad.aac.ps.PSTables.Companion.p8_13_20
-import net.sourceforge.jaad.aac.ps.PSTables.Companion.p8_13_34
+import org.mewsic.jaad.aac.ps.PSTables.Companion.p12_13_34
+import org.mewsic.jaad.aac.ps.PSTables.Companion.p2_13_20
+import org.mewsic.jaad.aac.ps.PSTables.Companion.p4_13_34
+import org.mewsic.jaad.aac.ps.PSTables.Companion.p8_13_20
+import org.mewsic.jaad.aac.ps.PSTables.Companion.p8_13_34
 
 class Filterbank(numTimeSlotsRate: Int) : PSTables {
     private val frame_len: Int

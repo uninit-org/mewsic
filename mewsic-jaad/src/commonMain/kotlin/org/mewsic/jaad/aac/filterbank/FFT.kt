@@ -1,10 +1,10 @@
-package net.sourceforge.jaad.aac.filterbank
+package org.mewsic.jaad.aac.filterbank
 
-import net.sourceforge.jaad.aac.AACException
-import net.sourceforge.jaad.aac.filterbank.FFTTables.Companion.FFT_TABLE_480
-import net.sourceforge.jaad.aac.filterbank.FFTTables.Companion.FFT_TABLE_512
-import net.sourceforge.jaad.aac.filterbank.FFTTables.Companion.FFT_TABLE_60
-import net.sourceforge.jaad.aac.filterbank.FFTTables.Companion.FFT_TABLE_64
+import org.mewsic.jaad.aac.AACException
+import org.mewsic.jaad.aac.filterbank.FFTTables.Companion.FFT_TABLE_480
+import org.mewsic.jaad.aac.filterbank.FFTTables.Companion.FFT_TABLE_512
+import org.mewsic.jaad.aac.filterbank.FFTTables.Companion.FFT_TABLE_60
+import org.mewsic.jaad.aac.filterbank.FFTTables.Companion.FFT_TABLE_64
 
 internal class FFT(private val length: Int) : FFTTables {
     private val roots: Array<FloatArray> = when (length) {

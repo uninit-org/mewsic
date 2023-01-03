@@ -1,7 +1,7 @@
-package net.sourceforge.jaad.mp4.boxes.impl
+package org.mewsic.jaad.mp4.boxes.impl
 
-import net.sourceforge.jaad.mp4.MP4InputStream
-import net.sourceforge.jaad.mp4.boxes.FullBox
+import org.mewsic.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.boxes.FullBox
 
 /**
  * The shadow sync table provides an optional set of sync samples that can be

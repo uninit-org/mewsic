@@ -1,11 +1,11 @@
-package net.sourceforge.jaad.aac.sbr
+package org.mewsic.jaad.aac.sbr
 
-import net.sourceforge.jaad.aac.SampleFrequency
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.HI_RES
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.LO_RES
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.OFFSET
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.offsetIndexTable
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.startMinTable
+import org.mewsic.jaad.aac.SampleFrequency
+import org.mewsic.jaad.aac.sbr.Constants.Companion.HI_RES
+import org.mewsic.jaad.aac.sbr.Constants.Companion.LO_RES
+import org.mewsic.jaad.aac.sbr.Constants.Companion.OFFSET
+import org.mewsic.jaad.aac.sbr.Constants.Companion.offsetIndexTable
+import org.mewsic.jaad.aac.sbr.Constants.Companion.startMinTable
 import kotlin.math.log2
 import kotlin.math.max
 import kotlin.math.min

@@ -1,6 +1,6 @@
-package net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec
+package org.mewsic.jaad.mp4.boxes.impl.sampleentries.codec
 
-import net.sourceforge.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.MP4InputStream
 
 //defined in ISO 14496-15 as 'AVC Configuration Record'
 class AVCSpecificBox : CodecSpecificBox("AVC Specific Box") {

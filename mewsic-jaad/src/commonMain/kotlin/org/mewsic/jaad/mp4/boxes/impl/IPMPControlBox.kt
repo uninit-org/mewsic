@@ -1,8 +1,8 @@
-package net.sourceforge.jaad.mp4.boxes.impl
+package org.mewsic.jaad.mp4.boxes.impl
 
-import net.sourceforge.jaad.mp4.MP4InputStream
-import net.sourceforge.jaad.mp4.boxes.FullBox
-import net.sourceforge.jaad.mp4.od.Descriptor
+import org.mewsic.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.boxes.FullBox
+import org.mewsic.jaad.mp4.od.Descriptor
 
 /**
  * The IPMP Control Box may contain IPMP descriptors which may be referenced by

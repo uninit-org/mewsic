@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.aac.gain
+package org.mewsic.jaad.aac.gain
 
 //sine and kbd windows
 internal interface Windows {

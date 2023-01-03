@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.aac.huffman
+package org.mewsic.jaad.aac.huffman
 
 //codebooks: {bit length, codeword, values...}
 internal interface Codebooks {

@@ -1,11 +1,11 @@
-package net.sourceforge.jaad.mp4.api
+package org.mewsic.jaad.mp4.api
 
-import net.sourceforge.jaad.mp4.api.Track.Codec
-import net.sourceforge.jaad.mp4.api.drm.ITunesProtection
-import net.sourceforge.jaad.mp4.boxes.Box
-import net.sourceforge.jaad.mp4.boxes.BoxTypes
-import net.sourceforge.jaad.mp4.boxes.impl.OriginalFormatBox
-import net.sourceforge.jaad.mp4.boxes.impl.SchemeTypeBox
+import org.mewsic.jaad.mp4.api.Track.Codec
+import org.mewsic.jaad.mp4.api.drm.ITunesProtection
+import org.mewsic.jaad.mp4.boxes.Box
+import org.mewsic.jaad.mp4.boxes.BoxTypes
+import org.mewsic.jaad.mp4.boxes.impl.OriginalFormatBox
+import org.mewsic.jaad.mp4.boxes.impl.SchemeTypeBox
 
 /**
  * This class contains information about a DRM system.
@@ -24,8 +24,8 @@ abstract class Protection protected constructor(sinf: Box) {
         //TODO: currently it tests for audio and video codec, can do this any other way?
         if (!AudioTrack.AudioCodec.Companion.forType(type).also { c = it }
                 .equals(AudioTrack.AudioCodec.UNKNOWN_AUDIO_CODEC)) originalFormat =
-            c else if (net.sourceforge.jaad.mp4.api.VideoTrack.VideoCodec.Companion.forType(type)
-                .also { c = it } != net.sourceforge.jaad.mp4.api.VideoTrack.VideoCodec.UNKNOWN_VIDEO_CODEC
+            c else if (org.mewsic.jaad.mp4.api.VideoTrack.VideoCodec.Companion.forType(type)
+                .also { c = it } != org.mewsic.jaad.mp4.api.VideoTrack.VideoCodec.UNKNOWN_VIDEO_CODEC
         ) originalFormat =
             c else originalFormat = null
     }

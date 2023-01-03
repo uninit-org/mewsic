@@ -1,7 +1,7 @@
-package net.sourceforge.jaad.aac.transport
+package org.mewsic.jaad.aac.transport
 
-import net.sourceforge.jaad.aac.AACException
-import net.sourceforge.jaad.aac.syntax.*
+import org.mewsic.jaad.aac.AACException
+import org.mewsic.jaad.aac.syntax.*
 
 class ADIFHeader private constructor() {
     private var id: Long = 0

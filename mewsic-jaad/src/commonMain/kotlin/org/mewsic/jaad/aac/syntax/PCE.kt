@@ -1,8 +1,8 @@
-package net.sourceforge.jaad.aac.syntax
+package org.mewsic.jaad.aac.syntax
 
-import net.sourceforge.jaad.aac.AACException
-import net.sourceforge.jaad.aac.Profile
-import net.sourceforge.jaad.aac.SampleFrequency
+import org.mewsic.jaad.aac.AACException
+import org.mewsic.jaad.aac.Profile
+import org.mewsic.jaad.aac.SampleFrequency
 
 class PCE : Element() {
     class TaggedElement(val isIsCPE: Boolean, val tag: Int)

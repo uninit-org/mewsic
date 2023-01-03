@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.aac.sbr
+package org.mewsic.jaad.aac.sbr
 
 import kotlin.math.max
 import kotlin.math.min

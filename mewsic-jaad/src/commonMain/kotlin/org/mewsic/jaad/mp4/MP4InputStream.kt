@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.mp4
+package org.mewsic.jaad.mp4
 
 import org.mewsic.commons.lang.Arrays
 import org.mewsic.commons.streams.FileInputStream

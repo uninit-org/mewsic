@@ -1,9 +1,9 @@
-package net.sourceforge.jaad.mp4.api.drm
+package org.mewsic.jaad.mp4.api.drm
 
-import net.sourceforge.jaad.mp4.api.Protection
-import net.sourceforge.jaad.mp4.boxes.Box
-import net.sourceforge.jaad.mp4.boxes.BoxTypes
-import net.sourceforge.jaad.mp4.boxes.impl.drm.FairPlayDataBox
+import org.mewsic.jaad.mp4.api.Protection
+import org.mewsic.jaad.mp4.boxes.Box
+import org.mewsic.jaad.mp4.boxes.BoxTypes
+import org.mewsic.jaad.mp4.boxes.impl.drm.FairPlayDataBox
 
 class ITunesProtection(sinf: Box) : Protection(sinf) {
     val userID: String

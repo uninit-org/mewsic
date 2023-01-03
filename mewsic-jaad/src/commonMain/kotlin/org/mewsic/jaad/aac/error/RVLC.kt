@@ -1,10 +1,10 @@
-package net.sourceforge.jaad.aac.error
+package org.mewsic.jaad.aac.error
 
-import net.sourceforge.jaad.aac.AACException
-import net.sourceforge.jaad.aac.huffman.HCB
-import net.sourceforge.jaad.aac.syntax.BitStream
-import net.sourceforge.jaad.aac.syntax.ICSInfo
-import net.sourceforge.jaad.aac.syntax.ICStream
+import org.mewsic.jaad.aac.AACException
+import org.mewsic.jaad.aac.huffman.HCB
+import org.mewsic.jaad.aac.syntax.BitStream
+import org.mewsic.jaad.aac.syntax.ICSInfo
+import org.mewsic.jaad.aac.syntax.ICStream
 
 /**
  * Reversable variable length coding

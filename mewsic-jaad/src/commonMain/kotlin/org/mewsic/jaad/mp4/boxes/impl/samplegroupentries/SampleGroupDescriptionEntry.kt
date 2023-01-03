@@ -1,7 +1,7 @@
-package net.sourceforge.jaad.mp4.boxes.impl.samplegroupentries
+package org.mewsic.jaad.mp4.boxes.impl.samplegroupentries
 
-import net.sourceforge.jaad.mp4.MP4InputStream
-import net.sourceforge.jaad.mp4.boxes.BoxImpl
+import org.mewsic.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.boxes.BoxImpl
 
 abstract class SampleGroupDescriptionEntry protected constructor(name: String) : BoxImpl(name) {
     @Throws(Exception::class)

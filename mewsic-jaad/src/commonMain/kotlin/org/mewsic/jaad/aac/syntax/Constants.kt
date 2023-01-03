@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.aac.syntax
+package org.mewsic.jaad.aac.syntax
 
 interface Constants {
     companion object {

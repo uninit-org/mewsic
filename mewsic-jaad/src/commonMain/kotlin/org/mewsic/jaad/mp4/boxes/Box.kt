@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.mp4.boxes
+package org.mewsic.jaad.mp4.boxes
 
 interface Box {
     val parent: Box?

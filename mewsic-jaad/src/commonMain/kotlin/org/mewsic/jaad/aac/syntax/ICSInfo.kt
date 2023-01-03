@@ -1,15 +1,15 @@
-package net.sourceforge.jaad.aac.syntax
+package org.mewsic.jaad.aac.syntax
 
-import net.sourceforge.jaad.aac.AACException
-import net.sourceforge.jaad.aac.DecoderConfig
-import net.sourceforge.jaad.aac.Profile
-import net.sourceforge.jaad.aac.SampleFrequency
-import net.sourceforge.jaad.aac.syntax.ScaleFactorBands.Companion.SWB_LONG_WINDOW_COUNT
-import net.sourceforge.jaad.aac.syntax.ScaleFactorBands.Companion.SWB_OFFSET_LONG_WINDOW
-import net.sourceforge.jaad.aac.syntax.ScaleFactorBands.Companion.SWB_OFFSET_SHORT_WINDOW
-import net.sourceforge.jaad.aac.syntax.ScaleFactorBands.Companion.SWB_SHORT_WINDOW_COUNT
-import net.sourceforge.jaad.aac.tools.ICPrediction
-import net.sourceforge.jaad.aac.tools.LTPrediction
+import org.mewsic.jaad.aac.AACException
+import org.mewsic.jaad.aac.DecoderConfig
+import org.mewsic.jaad.aac.Profile
+import org.mewsic.jaad.aac.SampleFrequency
+import org.mewsic.jaad.aac.syntax.ScaleFactorBands.Companion.SWB_LONG_WINDOW_COUNT
+import org.mewsic.jaad.aac.syntax.ScaleFactorBands.Companion.SWB_OFFSET_LONG_WINDOW
+import org.mewsic.jaad.aac.syntax.ScaleFactorBands.Companion.SWB_OFFSET_SHORT_WINDOW
+import org.mewsic.jaad.aac.syntax.ScaleFactorBands.Companion.SWB_SHORT_WINDOW_COUNT
+import org.mewsic.jaad.aac.tools.ICPrediction
+import org.mewsic.jaad.aac.tools.LTPrediction
 
 
 class ICSInfo(private val frameLength: Int) : Constants, ScaleFactorBands {

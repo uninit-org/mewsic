@@ -1,8 +1,8 @@
-package net.sourceforge.jaad.aac.tools
+package org.mewsic.jaad.aac.tools
 
-import net.sourceforge.jaad.aac.huffman.HCB
-import net.sourceforge.jaad.aac.syntax.CPE
-import net.sourceforge.jaad.aac.syntax.Constants
+import org.mewsic.jaad.aac.huffman.HCB
+import org.mewsic.jaad.aac.syntax.CPE
+import org.mewsic.jaad.aac.syntax.Constants
 
 /**
  * Intensity stereo

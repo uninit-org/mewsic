@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.aac.tools
+package org.mewsic.jaad.aac.tools
 
 /**
  * Tables of coefficients used for TNS.

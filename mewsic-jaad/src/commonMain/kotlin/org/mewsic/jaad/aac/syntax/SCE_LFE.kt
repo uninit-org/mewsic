@@ -1,7 +1,7 @@
-package net.sourceforge.jaad.aac.syntax
+package org.mewsic.jaad.aac.syntax
 
-import net.sourceforge.jaad.aac.AACException
-import net.sourceforge.jaad.aac.DecoderConfig
+import org.mewsic.jaad.aac.AACException
+import org.mewsic.jaad.aac.DecoderConfig
 
 internal class SCE_LFE(frameLength: Int) : Element() {
     val iCStream: ICStream

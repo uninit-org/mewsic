@@ -1,11 +1,11 @@
-package net.sourceforge.jaad.aac
+package org.mewsic.jaad.aac
 
-import net.sourceforge.jaad.aac.filterbank.FilterBank
-import net.sourceforge.jaad.aac.syntax.BitStream
-import net.sourceforge.jaad.aac.syntax.Constants
-import net.sourceforge.jaad.aac.syntax.PCE
-import net.sourceforge.jaad.aac.syntax.SyntacticElements
-import net.sourceforge.jaad.aac.transport.ADIFHeader
+import org.mewsic.jaad.aac.filterbank.FilterBank
+import org.mewsic.jaad.aac.syntax.BitStream
+import org.mewsic.jaad.aac.syntax.Constants
+import org.mewsic.jaad.aac.syntax.PCE
+import org.mewsic.jaad.aac.syntax.SyntacticElements
+import org.mewsic.jaad.aac.transport.ADIFHeader
 
 /**
  * Main AAC decoder class

@@ -1,12 +1,12 @@
-package net.sourceforge.jaad.mp4.api.codec
+package org.mewsic.jaad.mp4.api.codec
 
-import net.sourceforge.jaad.mp4.api.DecoderInfo
-import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.QCELPSpecificBox
+import org.mewsic.jaad.mp4.api.DecoderInfo
+import org.mewsic.jaad.mp4.boxes.impl.sampleentries.codec.QCELPSpecificBox
 
-net.sourceforge.jaad.mp4.boxes.impl .sampleentries.codec.CodecSpecificBox
-import net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec.QCELPSpecificBox
+org.mewsic.jaad.mp4.boxes.impl .sampleentries.codec.CodecSpecificBox
+import org.mewsic.jaad.mp4.boxes.impl.sampleentries.codec.QCELPSpecificBox
 
-import net.sourceforge.jaad.mp4.api.DecoderInfo
+import org.mewsic.jaad.mp4.api.DecoderInfo
 
 class QCELPDecoderInfo(box: CodecSpecificBox) : DecoderInfo() {
     private val box: QCELPSpecificBox

@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.adts
+package org.mewsic.jaad.adts
 
 import org.mewsic.commons.streams.DataInputStream
 import org.mewsic.commons.streams.api.SeekableInputStream

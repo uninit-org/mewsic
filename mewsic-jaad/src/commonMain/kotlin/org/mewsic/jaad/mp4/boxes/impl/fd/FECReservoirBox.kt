@@ -1,7 +1,7 @@
-package net.sourceforge.jaad.mp4.boxes.impl.fd
+package org.mewsic.jaad.mp4.boxes.impl.fd
 
-import net.sourceforge.jaad.mp4.MP4InputStream
-import net.sourceforge.jaad.mp4.boxes.FullBox
+import org.mewsic.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.boxes.FullBox
 
 /**
  * The FEC reservoir box associates the source file identified in the file

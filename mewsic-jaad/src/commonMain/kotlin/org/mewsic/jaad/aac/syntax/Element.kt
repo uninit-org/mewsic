@@ -1,8 +1,8 @@
-package net.sourceforge.jaad.aac.syntax
+package org.mewsic.jaad.aac.syntax
 
-import net.sourceforge.jaad.aac.AACException
-import net.sourceforge.jaad.aac.SampleFrequency
-import net.sourceforge.jaad.aac.sbr.SBR
+import org.mewsic.jaad.aac.AACException
+import org.mewsic.jaad.aac.SampleFrequency
+import org.mewsic.jaad.aac.sbr.SBR
 
 abstract class Element : Constants {
     var elementInstanceTag = 0

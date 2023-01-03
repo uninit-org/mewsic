@@ -1,6 +1,6 @@
-package net.sourceforge.jaad.mp4.boxes.impl.sampleentries.codec
+package org.mewsic.jaad.mp4.boxes.impl.sampleentries.codec
 
-import net.sourceforge.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.MP4InputStream
 
 class H263SpecificBox : CodecSpecificBox("H.263 Specific Box") {
     var level = 0

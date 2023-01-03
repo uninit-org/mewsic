@@ -1,4 +1,4 @@
-package net.sourceforge.jaad.aac.error
+package org.mewsic.jaad.aac.error
 
 internal interface RVLCTables {
     companion object {

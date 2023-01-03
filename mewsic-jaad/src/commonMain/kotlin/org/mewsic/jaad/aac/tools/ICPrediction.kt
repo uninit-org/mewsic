@@ -1,8 +1,8 @@
-package net.sourceforge.jaad.aac.tools
+package org.mewsic.jaad.aac.tools
 
-import net.sourceforge.jaad.aac.AACException
-import net.sourceforge.jaad.aac.SampleFrequency
-import net.sourceforge.jaad.aac.syntax.*
+import org.mewsic.jaad.aac.AACException
+import org.mewsic.jaad.aac.SampleFrequency
+import org.mewsic.jaad.aac.syntax.*
 import kotlin.math.*
 
 /**

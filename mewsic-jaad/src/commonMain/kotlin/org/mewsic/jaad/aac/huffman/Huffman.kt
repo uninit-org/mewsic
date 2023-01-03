@@ -1,9 +1,9 @@
-package net.sourceforge.jaad.aac.huffman
+package org.mewsic.jaad.aac.huffman
 
-import net.sourceforge.jaad.aac.AACException
-import net.sourceforge.jaad.aac.huffman.Codebooks.Companion.CODEBOOKS
-import net.sourceforge.jaad.aac.huffman.Codebooks.Companion.HCB_SF
-import net.sourceforge.jaad.aac.syntax.BitStream
+import org.mewsic.jaad.aac.AACException
+import org.mewsic.jaad.aac.huffman.Codebooks.Companion.CODEBOOKS
+import org.mewsic.jaad.aac.huffman.Codebooks.Companion.HCB_SF
+import org.mewsic.jaad.aac.syntax.BitStream
 import kotlin.math.abs
 
 //TODO: implement decodeSpectralDataER

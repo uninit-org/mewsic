@@ -1,9 +1,9 @@
-package net.sourceforge.jaad.aac.sbr
+package org.mewsic.jaad.aac.sbr
 
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.FIXFIX
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.FIXVAR
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.VARFIX
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.VARVAR
+import org.mewsic.jaad.aac.sbr.Constants.Companion.FIXFIX
+import org.mewsic.jaad.aac.sbr.Constants.Companion.FIXVAR
+import org.mewsic.jaad.aac.sbr.Constants.Companion.VARFIX
+import org.mewsic.jaad.aac.sbr.Constants.Companion.VARVAR
 
 internal object TFGrid : Constants {
     /* function constructs new time border vector */ /* first build into temp vector to be able to use previous vector on error */

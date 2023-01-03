@@ -1,12 +1,12 @@
-package net.sourceforge.jaad.mp4
+package org.mewsic.jaad.mp4
 
-import net.sourceforge.jaad.mp4.api.Brand
-import net.sourceforge.jaad.mp4.api.Movie
-import net.sourceforge.jaad.mp4.boxes.Box
-import net.sourceforge.jaad.mp4.boxes.BoxFactory
-import net.sourceforge.jaad.mp4.boxes.BoxTypes
-import net.sourceforge.jaad.mp4.boxes.impl.FileTypeBox
-import net.sourceforge.jaad.mp4.boxes.impl.ProgressiveDownloadInformationBox
+import org.mewsic.jaad.mp4.api.Brand
+import org.mewsic.jaad.mp4.api.Movie
+import org.mewsic.jaad.mp4.boxes.Box
+import org.mewsic.jaad.mp4.boxes.BoxFactory
+import org.mewsic.jaad.mp4.boxes.BoxTypes
+import org.mewsic.jaad.mp4.boxes.impl.FileTypeBox
+import org.mewsic.jaad.mp4.boxes.impl.ProgressiveDownloadInformationBox
 import org.mewsic.commons.streams.FileInputStream
 
 /**

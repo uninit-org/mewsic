@@ -1,7 +1,7 @@
-package net.sourceforge.jaad.aac.sbr
+package org.mewsic.jaad.aac.sbr
 
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.HI_RES
-import net.sourceforge.jaad.aac.sbr.Constants.Companion.LO_RES
+import org.mewsic.jaad.aac.sbr.Constants.Companion.HI_RES
+import org.mewsic.jaad.aac.sbr.Constants.Companion.LO_RES
 
 internal object NoiseEnvelope : Constants {
     private val E_deq_tab = floatArrayOf(

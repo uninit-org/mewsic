@@ -17,9 +17,9 @@
  *  License along with this library.
  *  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.sourceforge.jaad.mp4.boxes.impl.sampleentries
+package org.mewsic.jaad.mp4.boxes.impl.sampleentries
 
-import net.sourceforge.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.MP4InputStream
 
 class FDHintSampleEntry : SampleEntry("FD Hint Sample Entry") {
     private var hintTrackVersion = 0

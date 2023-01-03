@@ -1,6 +1,6 @@
-package net.sourceforge.jaad.aac.syntax
+package org.mewsic.jaad.aac.syntax
 
-import net.sourceforge.jaad.aac.AACException
+import org.mewsic.jaad.aac.AACException
 
 class BitStream {
     private var buffer: ByteArray? = null

@@ -1,7 +1,7 @@
-package net.sourceforge.jaad.mp4.boxes.impl
+package org.mewsic.jaad.mp4.boxes.impl
 
-import net.sourceforge.jaad.mp4.MP4InputStream
-import net.sourceforge.jaad.mp4.boxes.FullBox
+import org.mewsic.jaad.mp4.MP4InputStream
+import org.mewsic.jaad.mp4.boxes.FullBox
 
 /**
  * This description table gives information about the characteristics of sample
@@ -43,7 +43,7 @@ class SampleGroupDescriptionBox : FullBox("Sample Group Description Box") {
      * in the case it varies from entry to entry and default length is therefore 0.
      */
     val descriptionLength: Long = 0
-    private lateinit var entries: Array<net.sourceforge.jaad.mp4.boxes.impl.samplegroupentries.SampleGroupDescriptionEntry>
+    private lateinit var entries: Array<org.mewsic.jaad.mp4.boxes.impl.samplegroupentries.SampleGroupDescriptionEntry>
 
     @Throws(Exception::class)
     override fun decode(`in`: MP4InputStream) {
