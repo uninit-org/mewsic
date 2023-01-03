@@ -44,7 +44,7 @@ internal class CCE(frameLength: Int) : Element(),
     }
 
     @Throws(AACException::class)
-    override fun decode(`in`: BitStream, conf: DecoderConfig?) {
+    fun decode(`in`: BitStream, conf: DecoderConfig?) {
         couplingPoint = 2 * `in`.readBit()
         coupledCount = `in`.readBits(3)
         var gainCount = 0

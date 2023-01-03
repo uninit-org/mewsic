@@ -29,7 +29,7 @@ class ICPrediction {
     }
 
     @Throws(AACException::class)
-    override fun decode(`in`: BitStream, maxSFB: Int, sf: SampleFrequency) {
+    fun decode(`in`: BitStream, maxSFB: Int, sf: SampleFrequency) {
         val predictorCount = sf.predictorCount
         if (`in`.readBool().also { predictorReset = it }) predictorResetGroup = `in`.readBits(5)
         val maxPredSFB = sf.maximalPredictionSFB

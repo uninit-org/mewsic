@@ -297,7 +297,7 @@ class SBR(
 
     /* table 2 */
     @Throws(AACException::class)
-    override fun decode(ld: BitStream, cnt: Int): Int {
+    fun decode(ld: BitStream, cnt: Int): Int {
         var result = 0
         var num_align_bits = 0
         val num_sbr_bits1 = ld.position.toLong()

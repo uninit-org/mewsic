@@ -65,7 +65,7 @@ interface Box {
      * @param type the type of child boxes to look for
      * @return this box's children with the given type
      */
-    fun getChildren(type: Long): List<Box>?
+    fun getChildrenOfType(type: Long): List<Box>?
 
     /**
      * Returns the child box with the specified type. If this box has no child

@@ -28,7 +28,7 @@ class LTPrediction(private val frameLength: Int) : Constants {
     }
 
     @Throws(AACException::class)
-    override fun decode(`in`: BitStream, info: ICSInfo, profile: Profile) {
+    fun decode(`in`: BitStream, info: ICSInfo, profile: Profile) {
         lag = 0
         if (profile == Profile.AAC_LD) {
             lagUpdate = `in`.readBool()

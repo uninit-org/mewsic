@@ -196,7 +196,7 @@ class PS(sr: SampleFrequency?, numTimeSlotsRate: Int) : PSConstants,
     }
 
     @Throws(AACException::class)
-    override fun decode(ld: BitStream): Int {
+    fun decode(ld: BitStream): Int {
         val tmp: Int
         var n: Int
         val bits = ld.position.toLong()

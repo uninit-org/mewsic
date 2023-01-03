@@ -39,9 +39,9 @@ open class BoxImpl(override val name: String) : Box {
     open fun decode(`in`: MP4InputStream) {
     }
 
-    fun getParent(): Box? {
-        return parent
-    }
+//    fun getParent(): Box? {
+//        return parent
+//    }
 
     override fun toString(): String {
         return name + " [" + BoxFactory.typeToString(type) + "]"
@@ -75,11 +75,11 @@ open class BoxImpl(override val name: String) : Box {
         return box
     }
 
-    fun getChildren(): List<Box> {
-        return children.toList()
-    }
+//    fun getChildren(): List<Box> {
+//        return children.toList()
+//    }
 
-    override fun getChildren(type: Long): List<Box> {
+    override fun getChildrenOfType(type: Long): List<Box> {
         val l: MutableList<Box> =
             ArrayList<Box>()
         for (box in children) {

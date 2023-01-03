@@ -13,7 +13,7 @@ abstract class Descriptor protected constructor() {
     var type = 0
     var size = 0
     var start: Long = 0
-    private val children: MutableList<Descriptor>
+    val children: MutableList<Descriptor>
 
     init {
         children = ArrayList<Descriptor>()
@@ -30,10 +30,6 @@ abstract class Descriptor protected constructor() {
             desc = createDescriptor(`in`)
             children.add(desc)
         }
-    }
-
-    fun getChildren(): List<Descriptor> {
-        return children.toList()
     }
 
     companion object {

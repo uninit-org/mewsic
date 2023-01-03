@@ -38,7 +38,7 @@ class GainControl(private val frameLen: Int) : GCConstants {
     }
 
     @Throws(AACException::class)
-    override fun decode(`in`: BitStream, winSeq: WindowSequence?) {
+    fun decode(`in`: BitStream, winSeq: WindowSequence?) {
         maxBand = `in`.readBits(2) + 1
         val wdLen: Int
         val locBits: Int

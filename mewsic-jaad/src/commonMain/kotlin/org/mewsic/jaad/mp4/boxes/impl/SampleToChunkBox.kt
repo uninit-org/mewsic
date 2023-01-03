@@ -1,5 +1,6 @@
 package org.mewsic.jaad.mp4.boxes.impl
 
+import org.mewsic.jaad.mp4.MP4InputStream
 import org.mewsic.jaad.mp4.boxes.FullBox
 
 class SampleToChunkBox : FullBox("Sample To Chunk Box") {

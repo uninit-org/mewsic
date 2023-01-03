@@ -11,7 +11,7 @@ internal class SCE_LFE(frameLength: Int) : Element() {
     }
 
     @Throws(AACException::class)
-    override fun decode(`in`: BitStream?, conf: DecoderConfig?) {
+    fun decode(`in`: BitStream?, conf: DecoderConfig?) {
         readElementInstanceTag(`in`!!)
         iCStream.decode(`in`, false, conf!!)
     }

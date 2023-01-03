@@ -44,7 +44,7 @@ class ShadowSyncSampleBox : FullBox("Shadow Sync Sample Box") {
      *
      * @return the sample number pairs
      */
-    var sampleNumbers: Array<LongArray>
+    lateinit var sampleNumbers: Array<LongArray>
         private set
 
     @Throws(Exception::class)

@@ -26,7 +26,7 @@ class TNS : Constants, TNSTables {
     }
 
     @Throws(AACException::class)
-    override fun decode(`in`: BitStream, info: ICSInfo) {
+    fun decode(`in`: BitStream, info: ICSInfo) {
         val windowCount = info.windowCount
         val bits = if (info.isEightShortFrame) SHORT_BITS else LONG_BITS
         var w: Int

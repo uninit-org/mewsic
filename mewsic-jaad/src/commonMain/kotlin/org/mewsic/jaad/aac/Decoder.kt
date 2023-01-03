@@ -54,7 +54,7 @@ class Decoder(decoderSpecificInfo: ByteArray?) : Constants {
     }
 
     @Throws(AACException::class)
-    private override fun decode(buffer: SampleBuffer) {
+    fun decode(buffer: SampleBuffer) {
         if (ADIFHeader.isPresent(`in`)) {
             adifHeader = ADIFHeader.readHeader(`in`)
             val pce: PCE = adifHeader!!.firstPCE!!

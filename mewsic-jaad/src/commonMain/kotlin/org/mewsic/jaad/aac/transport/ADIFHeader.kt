@@ -12,15 +12,15 @@ class ADIFHeader private constructor() {
     private var bitstreamType = false
     private var bitrate = 0
     private var pceCount = 0
-    private var adifBufferFullness: IntArray
-    private var pces: Array<PCE?>
+    private lateinit var adifBufferFullness: IntArray
+    private lateinit var pces: Array<PCE?>
 
     init {
         copyrightID = ByteArray(9)
     }
 
     @Throws(AACException::class)
-    private override fun decode(`in`: BitStream) {
+    private fun decode(`in`: BitStream) {
         var i: Int
         id = `in`.readBits(32).toLong() //'ADIF'
         copyrightIDPresent = `in`.readBool()

@@ -65,7 +65,7 @@ class ICSInfo(private val frameLength: Int) : Constants, ScaleFactorBands {
 
     /* ========== decoding ========== */
     @Throws(AACException::class)
-    override fun decode(`in`: BitStream, conf: DecoderConfig, commonWindow: Boolean) {
+    fun decode(`in`: BitStream, conf: DecoderConfig, commonWindow: Boolean) {
         val sf: SampleFrequency = conf.getSampleFrequency()
         if (sf == SampleFrequency.SAMPLE_FREQUENCY_NONE) throw AACException("invalid sample frequency")
         `in`.skipBit() //reserved

@@ -49,7 +49,7 @@ class SyntacticElements(config: DecoderConfig) : Constants {
     }
 
     @Throws(AACException::class)
-    override fun decode(`in`: BitStream) {
+    fun decode(`in`: BitStream) {
         val start = `in`.position //should be 0
         var type: Int
         var prev: Element? = null

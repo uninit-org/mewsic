@@ -147,10 +147,10 @@ abstract class Track internal constructor(trak: Box, `in`: MP4InputStream) {
     //TODO: implement other entry descriptors
     protected fun findDecoderSpecificInfo(esds: ESDBox) {
         val ed: Descriptor = esds.entryDescriptor!!
-        val children: List<Descriptor> = ed.getChildren()
+        val children: List<Descriptor> = ed.children
         var children2: List<Descriptor?>
         for (e in children) {
-            children2 = e.getChildren()
+            children2 = e.children
             for (e2 in children2) {
                 when (e2.type) {
                     Descriptor.TYPE_DECODER_SPECIFIC_INFO -> decoderSpecificInfo = e2 as DecoderSpecificInfo
@@ -230,29 +230,6 @@ abstract class Track internal constructor(trak: Box, `in`: MP4InputStream) {
         return decoderSpecificInfo!!.data
     }
 
-    /**
-     * Returns the `DecoderInfo`, if present. It contains
-     * configuration information for the decoder. If the structure is not
-     * present, the track contains a decoder specific info.
-     *
-     * @see .getDecoderSpecificInfo
-     * @return the codec specific structure
-     */
-    fun getDecoderInfo(): DecoderInfo? {
-        return decoderInfo
-    }
-
-    /**
-     * Returns the `ProtectionInformation` object that contains
-     * details about the DRM system used. If no protection is present this
-     * method returns null.
-     *
-     * @return a `ProtectionInformation` object or null if no
-     * protection is used
-     */
-    fun getProtection(): Protection? {
-        return protection
-    }
     //reading
     /**
      * Indicates if there are more frames to be read in this track.

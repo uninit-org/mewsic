@@ -19,7 +19,7 @@ class Movie(moov: Box, `in`: MP4InputStream) {
 
         //create tracks
         mvhd = moov.getChild(BoxTypes.MOVIE_HEADER_BOX) as MovieHeaderBox
-        val trackBoxes: List<Box> = moov.getChildren(BoxTypes.TRACK_BOX)!!
+        val trackBoxes: List<Box> = moov.getChildrenOfType(BoxTypes.TRACK_BOX)!!
         tracks = ArrayList<Track>(trackBoxes.size)
         var track: Track?
         for (i in trackBoxes.indices) {
@@ -41,7 +41,7 @@ class Movie(moov: Box, `in`: MP4InputStream) {
         protections = ArrayList<Protection>()
         if (moov.hasChild(BoxTypes.ITEM_PROTECTION_BOX)) {
             val ipro: Box = moov.getChild(BoxTypes.ITEM_PROTECTION_BOX) as ItemProtectionBox
-            for (sinf in ipro.getChildren(BoxTypes.PROTECTION_SCHEME_INFORMATION_BOX)!!) {
+            for (sinf in ipro.getChildrenOfType(BoxTypes.PROTECTION_SCHEME_INFORMATION_BOX)!!) {
                 protections.add(Protection.parse(sinf))
             }
         }

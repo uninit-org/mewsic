@@ -34,15 +34,15 @@ class VideoTrack(trak: Box, `in`: MP4InputStream) : Track(trak, `in`) {
 
         //sample descriptions: 'mp4v' has an ESDBox, all others have a CodecSpecificBox
         val stsd: SampleDescriptionBox = stbl.getChild(BoxTypes.SAMPLE_DESCRIPTION_BOX) as SampleDescriptionBox
-        if (stsd.getChildren().get(0) is VideoSampleEntry) {
-            sampleEntry = stsd.getChildren().get(0) as VideoSampleEntry
+        if (stsd.children.get(0) is VideoSampleEntry) {
+            sampleEntry = stsd.children.get(0) as VideoSampleEntry
             val type: Long = sampleEntry!!.type
             if (type == BoxTypes.MP4V_SAMPLE_ENTRY) findDecoderSpecificInfo(sampleEntry!!.getChild(BoxTypes.ESD_BOX) as ESDBox) else if (type == BoxTypes.ENCRYPTED_VIDEO_SAMPLE_ENTRY || type == BoxTypes.DRMS_SAMPLE_ENTRY) {
                 findDecoderSpecificInfo(sampleEntry!!.getChild(BoxTypes.ESD_BOX) as ESDBox)
                 protection =
                     Protection.Companion.parse(sampleEntry!!.getChild(BoxTypes.PROTECTION_SCHEME_INFORMATION_BOX)!!)
             } else decoderInfo =
-                DecoderInfo.parse(sampleEntry!!.getChildren().get(0) as CodecSpecificBox)
+                DecoderInfo.parse(sampleEntry!!.children.get(0) as CodecSpecificBox)
             codec = VideoCodec.forType(sampleEntry!!.type)
         } else {
             sampleEntry = null

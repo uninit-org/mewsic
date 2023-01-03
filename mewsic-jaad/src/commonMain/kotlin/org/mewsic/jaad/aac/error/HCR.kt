@@ -1,9 +1,12 @@
 package org.mewsic.jaad.aac.error
 
+import org.mewsic.jaad.aac.AACException
 import org.mewsic.jaad.aac.huffman.HCB
 import org.mewsic.jaad.aac.syntax.BitStream
 import org.mewsic.jaad.aac.syntax.Constants
-
+import org.mewsic.jaad.aac.syntax.ICSInfo
+import org.mewsic.jaad.aac.syntax.ICStream
+import kotlin.math.*
 /**
  * Huffman Codeword Reordering
  * Decodes spectral data for ICStreams if error resilience is used for
@@ -78,14 +81,14 @@ object HCR : Constants {
     }
 
     //sectionDataResilience = hDecoder->aacSectionDataResilienceFlag
-    @Throws(AACException::class)
+    @Throws(Exception::class)
     fun decodeReorderedSpectralData(
         ics: ICStream,
         `in`: BitStream?,
         spectralData: ShortArray,
         sectionDataResilience: Boolean
     ) {
-        val info: ICSInfo = ics.getInfo()
+        val info: ICSInfo = ics.info
         val windowGroupCount: Int = info.windowGroupCount
         val maxSFB: Int = info.maxSFB
         val swbOffsets: IntArray = info.sWBOffsets
@@ -142,7 +145,7 @@ object HCR : Constants {
             sfb = 0
             while (sfb < maxSFB) {
                 w_idx = 0
-                while (4 * w_idx < java.lang.Math.min(swbOffsets[sfb + 1], swbOffsetMax) - swbOffsets[sfb]) {
+                while (4 * w_idx < min(swbOffsets[sfb + 1], swbOffsetMax) - swbOffsets[sfb]) {
                     g = 0
                     while (g < windowGroupCount) {
                         i = 0
@@ -155,7 +158,7 @@ object HCR : Constants {
                                     val sect_sfb_size = sectSFBOffsets!![g][sfb + 1] - sectSFBOffsets[g][sfb]
                                     val inc = if (thisSectCB < HCB.FIRST_PAIR_HCB) 4 else 2
                                     val group_cws_count: Int = 4 * info.getWindowGroupLength(g) / inc
-                                    val segwidth: Int = java.lang.Math.min(MAX_CW_LEN[thisSectCB], longestLen)
+                                    val segwidth: Int = min(MAX_CW_LEN[thisSectCB], longestLen)
 
                                     //read codewords until end of sfb or end of window group
                                     cws = 0
@@ -180,23 +183,23 @@ object HCR : Constants {
                                                 if (bitsread < spDataLen) {
                                                     val additional_bits = spDataLen - bitsread
                                                     segment[segmentsCount]!!.readSegment(additional_bits, `in`!!)
-                                                    segment[segmentsCount].len += segment[segmentsCount - 1].len
+                                                    segment[segmentsCount]!!.length += segment[segmentsCount - 1]!!.length
                                                     segment[segmentsCount]!!.rewindReverse()
-                                                    if (segment[segmentsCount - 1].len > 32) {
+                                                    if (segment[segmentsCount - 1]!!.length > 32) {
                                                         segment[segmentsCount - 1]!!.bufb =
                                                             (segment[segmentsCount]!!.bufb
-                                                                    + segment[segmentsCount - 1]!!.showBits(segment[segmentsCount - 1].len - 32))
+                                                                    + segment[segmentsCount - 1]!!.showBits(segment[segmentsCount - 1]!!.length - 32))
                                                         segment[segmentsCount - 1]!!.bufa =
                                                             (segment[segmentsCount]!!.bufa
                                                                     + segment[segmentsCount - 1]!!.showBits(32))
                                                     } else {
                                                         segment[segmentsCount - 1]!!.bufa =
                                                             (segment[segmentsCount]!!.bufa
-                                                                    + segment[segmentsCount - 1]!!.showBits(segment[segmentsCount - 1].len))
+                                                                    + segment[segmentsCount - 1]!!.showBits(segment[segmentsCount - 1]!!.length))
                                                         segment[segmentsCount - 1]!!.bufb =
                                                             segment[segmentsCount]!!.bufb
                                                     }
-                                                    segment[segmentsCount - 1].len += additional_bits
+                                                    segment[segmentsCount - 1]!!.length += additional_bits
                                                 }
                                                 bitsread = spDataLen
                                                 PCWs_done = 1
@@ -237,10 +240,10 @@ object HCR : Constants {
 
                     //data up
                     if (codewordID >= numberOfCodewords - segmentsCount) break
-                    if (codeword[codewordID]!!.decoded == 0 && segment[segmentID].len > 0) {
-                        if (codeword[codewordID]!!.bits.len !== 0) segment[segmentID]!!
+                    if (codeword[codewordID]!!.decoded == 0 && segment[segmentID]!!.length > 0) {
+                        if (codeword[codewordID]!!.bits!!.length != 0) segment[segmentID]!!
                             .concatBits(codeword[codewordID]!!.bits!!)
-                        val tmplen: Int = segment[segmentID].len
+                        val tmplen: Int = segment[segmentID]!!.length
                         /*int ret = Huffman.decodeSpectralDataER(segment[segmentID], codeword[codewordID].cb,
 								spectralData, codeword[codewordID].sp_offset);
 

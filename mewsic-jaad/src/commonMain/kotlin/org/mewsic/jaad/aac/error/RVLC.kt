@@ -1,10 +1,13 @@
 package org.mewsic.jaad.aac.error
 
 import org.mewsic.jaad.aac.AACException
+import org.mewsic.jaad.aac.error.RVLCTables.Companion.ESCAPE_BOOK
+import org.mewsic.jaad.aac.error.RVLCTables.Companion.RVLC_BOOK
 import org.mewsic.jaad.aac.huffman.HCB
 import org.mewsic.jaad.aac.syntax.BitStream
 import org.mewsic.jaad.aac.syntax.ICSInfo
 import org.mewsic.jaad.aac.syntax.ICStream
+import kotlin.math.abs
 
 /**
  * Reversable variable length coding
@@ -12,7 +15,7 @@ import org.mewsic.jaad.aac.syntax.ICStream
  */
 class RVLC : RVLCTables {
     @Throws(AACException::class)
-    override fun decode(`in`: BitStream, ics: ICStream, scaleFactors: Array<IntArray>) {
+    fun decode(`in`: BitStream, ics: ICStream, scaleFactors: Array<IntArray>) {
         val bits = if (ics.info.isEightShortFrame) 11 else 9
         val sfConcealment = `in`.readBool()
         val revGlobalGain = `in`.readBits(8)
@@ -62,7 +65,7 @@ class RVLC : RVLCTables {
 
     @Throws(AACException::class)
     private fun decodeEscapes(`in`: BitStream, ics: ICStream, scaleFactors: Array<IntArray>) {
-        val info: ICSInfo = ics.getInfo()
+        val info: ICSInfo = ics.info
         val windowGroupCount: Int = info.windowGroupCount
         val maxSFB: Int = info.maxSFB
         val sfbCB: Array<IntArray>? = null //ics.getSectionData().getSfbCB();
@@ -73,7 +76,7 @@ class RVLC : RVLCTables {
         for (g in 0 until windowGroupCount) {
             sfb = 0
             while (sfb < maxSFB) {
-                if (sfbCB!![g][sfb] == HCB.NOISE_HCB && !noiseUsed) noiseUsed = true else if (java.lang.Math.abs(
+                if (sfbCB!![g][sfb] == HCB.NOISE_HCB && !noiseUsed) noiseUsed = true else if (abs(
                         sfbCB[g][sfb]
                     ) == ESCAPE_FLAG
                 ) {

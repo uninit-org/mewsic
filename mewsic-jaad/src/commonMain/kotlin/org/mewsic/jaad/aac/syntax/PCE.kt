@@ -44,7 +44,7 @@ class PCE : Element() {
     }
 
     @Throws(AACException::class)
-    override fun decode(`in`: BitStream) {
+    fun decode(`in`: BitStream) {
         readElementInstanceTag(`in`)
         profile = Profile.forInt(`in`.readBits(2))
         sampleFrequency = SampleFrequency.forInt(`in`.readBits(4))

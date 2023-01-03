@@ -70,7 +70,7 @@ class ICStream(private val frameLength: Int) : Constants, HCB, ScaleFactorTable,
 
     /* ========= decoding ========== */
     @Throws(AACException::class)
-    override fun decode(`in`: BitStream, commonWindow: Boolean, conf: DecoderConfig) {
+    fun decode(`in`: BitStream, commonWindow: Boolean, conf: DecoderConfig) {
         if (conf.isScalefactorResilienceUsed && rvlc == null) rvlc = RVLC()
         val er: Boolean = conf.getProfile()!!.isErrorResilientProfile
         globalGain = `in`.readBits(8)

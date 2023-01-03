@@ -25,6 +25,10 @@ class ByteArrayOutputStream(private val array: ByteArray) : SeekableOutputStream
         this.offset = offset.toInt()
     }
 
+    override fun back(offset: Long) {
+        this.offset -= offset.toInt()
+    }
+
     override fun position(): Long {
         return offset.toLong()
     }

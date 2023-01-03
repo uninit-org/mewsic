@@ -2,11 +2,8 @@ package org.mewsic.jaad.mp4.api.codec
 
 import org.mewsic.jaad.mp4.api.DecoderInfo
 import org.mewsic.jaad.mp4.boxes.impl.sampleentries.codec.CodecSpecificBox
+import org.mewsic.jaad.mp4.boxes.impl.sampleentries.codec.SMVSpecificBox
 
-org.mewsic.jaad.mp4.boxes.impl .sampleentries.codec.SMVSpecificBox
-import org.mewsic.jaad.mp4.boxes.impl.sampleentries.codec.CodecSpecificBox
-
-import org.mewsic.jaad.mp4.api.DecoderInfo
 
 class SMVDecoderInfo(box: CodecSpecificBox) : DecoderInfo() {
     private val box: SMVSpecificBox

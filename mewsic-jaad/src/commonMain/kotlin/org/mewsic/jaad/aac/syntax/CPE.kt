@@ -21,7 +21,7 @@ class CPE internal constructor(frameLength: Int) : Element(), Constants {
     }
 
     @Throws(AACException::class)
-    override fun decode(`in`: BitStream, conf: DecoderConfig) {
+    fun decode(`in`: BitStream, conf: DecoderConfig) {
         val profile: Profile = conf.getProfile()!!
         val sf: SampleFrequency = conf.getSampleFrequency()
         if (sf == SampleFrequency.SAMPLE_FREQUENCY_NONE) throw AACException("invalid sample frequency")

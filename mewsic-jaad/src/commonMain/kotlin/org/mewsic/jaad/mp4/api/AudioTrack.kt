@@ -35,15 +35,15 @@ class AudioTrack(trak: Box, `in`: MP4InputStream) : Track(trak, `in`) {
 
         //sample descriptions: 'mp4a' and 'enca' have an ESDBox, all others have a CodecSpecificBox
         val stsd: SampleDescriptionBox = stbl.getChild(BoxTypes.SAMPLE_DESCRIPTION_BOX) as SampleDescriptionBox
-        if (stsd.getChildren()[0] is AudioSampleEntry) {
-            sampleEntry = stsd.getChildren()[0] as AudioSampleEntry
+        if (stsd.children[0] is AudioSampleEntry) {
+            sampleEntry = stsd.children[0] as AudioSampleEntry
             val type: Long = sampleEntry!!.type
             if (sampleEntry!!.hasChild(BoxTypes.ESD_BOX)) findDecoderSpecificInfo(sampleEntry!!.getChild(BoxTypes.ESD_BOX) as ESDBox) else decoderInfo =
-                DecoderInfo.parse(sampleEntry!!.getChildren()[0] as CodecSpecificBox)
+                DecoderInfo.parse(sampleEntry!!.children[0] as CodecSpecificBox)
             if (type == BoxTypes.ENCRYPTED_AUDIO_SAMPLE_ENTRY || type == BoxTypes.DRMS_SAMPLE_ENTRY) {
                 findDecoderSpecificInfo(sampleEntry!!.getChild(BoxTypes.ESD_BOX) as ESDBox)
                 protection =
-                    Protection.Companion.parse(sampleEntry!!.getChild(BoxTypes.PROTECTION_SCHEME_INFORMATION_BOX))
+                    Protection.Companion.parse(sampleEntry!!.getChild(BoxTypes.PROTECTION_SCHEME_INFORMATION_BOX)!!)
                 codec = protection!!.getOriginalFormat()!!
             } else codec = AudioCodec.forType(sampleEntry!!.type)
         } else {
@@ -54,10 +54,6 @@ class AudioTrack(trak: Box, `in`: MP4InputStream) : Track(trak, `in`) {
 
     override val type: Type
         get() = Type.AUDIO
-
-    fun getCodec(): Codec {
-        return codec
-    }
 
     val balance: Double
         /**

@@ -34,7 +34,7 @@ internal class FIL(private val downSampledSBR: Boolean) : Element(), Constants {
     private var dri: DynamicRangeInfo? = null
 
     @Throws(AACException::class)
-    override fun decode(
+    fun decode(
         `in`: BitStream,
         prev: Element,
         sf: SampleFrequency,

@@ -6,7 +6,7 @@ internal class DSE : Element() {
     private lateinit var dataStreamBytes: ByteArray
 
     @Throws(AACException::class)
-    override fun decode(`in`: BitStream) {
+    fun decode(`in`: BitStream) {
         val byteAlign = `in`.readBool()
         var count = `in`.readBits(8)
         if (count == 255) count += `in`.readBits(8)
