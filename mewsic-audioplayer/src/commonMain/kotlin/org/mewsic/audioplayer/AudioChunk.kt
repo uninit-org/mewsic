@@ -1,5 +1,7 @@
 package org.mewsic.audioplayer
 
+import org.mewsic.commons.lang.Log
+
 class AudioChunk(
     val channels: Int,
     val sampleRate: Int,
@@ -16,5 +18,7 @@ class AudioChunk(
         if (channels > 2) {
             audioByChannel = audioByChannel.copyOfRange(0, 2)
         }
+        Log.info("AudioChunk: $channels -> 2")
+
     }
 }

@@ -4,11 +4,15 @@ import org.mewsic.audioplayer.ext.toAmplitude
 import org.mewsic.audioplayer.ext.toDecibels
 import org.mewsic.audioplayer.AudioChunk
 import org.mewsic.audioplayer.Player
+import org.mewsic.audioplayer.source.AudioSource
 import javax.sound.sampled.*
 
 object PlayerImpl : Player() {
     private val audioStreamQueue = mutableListOf<AudioInputStream>()
     private val targetFormat = AudioFormat(44100f, 16, 2, true, false)
+
+
+    @Suppress("NewApi") // This is desktop, so we can use the new API.
     private val line: SourceDataLine = AudioSystem.getSourceDataLine(targetFormat).apply {
         open(targetFormat)
         addLineListener {
@@ -16,7 +20,7 @@ object PlayerImpl : Player() {
                 if (!paused && audioStreamQueue.isNotEmpty()) {
                     val audioStream = audioStreamQueue.removeAt(0)
                     val newStream = AudioSystem.getAudioInputStream(targetFormat, audioStream)
-                    write(newStream.readAllBytes(), 0, newStream.available())
+                    write(newStream.readNBytes(newStream.available()), 0, newStream.available())
                 } else {
                     pause()
                 }
@@ -30,7 +34,11 @@ object PlayerImpl : Player() {
             gain.value = value.toDecibels()
         }
 
-    override fun play(chunk: AudioChunk) {
+    override fun play(source: AudioSource) {
+        TODO("Not yet implemented")
+    }
+
+    fun play(chunk: AudioChunk) {
         val currentFormat = AudioFormat(
             AudioFormat.Encoding.PCM_FLOAT,
             chunk.sampleRate.toFloat(),

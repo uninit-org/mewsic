@@ -17,4 +17,5 @@ include(
     ":mewsic-audioplayer",
     ":mewsic-innertube",
     ":mewsic-application",
+    ":mewsic-test-suite-gui",
 )

@@ -7,6 +7,7 @@ import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.*
 import org.jetbrains.compose.ComposeExtension
 import org.jetbrains.compose.ComposePlugin
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.DesktopExtension
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
@@ -62,6 +63,7 @@ open class MewsicApplicationPlugin : MewsicCommonPlugin {
         }
     }
 
+    @OptIn(ExperimentalComposeLibrary::class)
     private fun Project.setupCompose() {
         apply<ComposePlugin>()
 
@@ -81,6 +83,8 @@ open class MewsicApplicationPlugin : MewsicCommonPlugin {
                             TargetFormat.Msi,
                             // Linux
                             TargetFormat.Deb,
+                            TargetFormat.Rpm,
+                            TargetFormat.AppImage
                         )
                     }
 
@@ -101,6 +105,7 @@ open class MewsicApplicationPlugin : MewsicCommonPlugin {
                         implementation(compose.foundation)
                         implementation(compose.material)
                         implementation(compose.runtime)
+                        implementation(compose.material3)
                     }
                 }
 

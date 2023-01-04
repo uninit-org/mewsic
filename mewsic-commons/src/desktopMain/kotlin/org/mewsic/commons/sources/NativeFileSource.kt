@@ -75,6 +75,10 @@ actual class NativeFileSource actual constructor(private val path: String) : Sou
             _indice = offset - _effective_position
         }
 
+        override fun back(offset: Long) {
+            _indice = -offset - _effective_position
+        }
+
         override fun position(): Long {
             return _effective_position
         }

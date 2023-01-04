@@ -1,6 +1,7 @@
 package org.mewsic.audioplayer
 
 import android.media.*
+import org.mewsic.audioplayer.source.AudioSource
 import kotlin.concurrent.thread
 
 object PlayerImpl : Player() {
@@ -19,12 +20,20 @@ object PlayerImpl : Player() {
         AudioTrack.MODE_STREAM,
         AudioManager.AUDIO_SESSION_ID_GENERATE
     )
+    private var SIGNAL_OFF = false
+    private val playingThread = thread(start = true, isDaemon = true, name = "mewsic_player") {
+        while (true) {
+            if (!paused && audioStreamQueue.isNotEmpty()) {
+                val audioStream = audioStreamQueue.removeAt(0)
+                track.write(audioStream, 0, audioStream.size)
+            } else {
+                pause()
+            }
+        }
 
-    private val playingThread = thread {
-        TODO()
     }
-
-    override fun play(chunk: AudioChunk) {
+    override fun play(source: AudioSource) { TODO() }
+    fun play(chunk: AudioChunk) {
         chunk.ensureStereo()
 
         val bytes = ByteArray(chunk.samples * 4 * chunk.channels)
