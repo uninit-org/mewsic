@@ -1,5 +1,6 @@
 package org.mewsic.jaad.aac.tools
 
+import org.mewsic.commons.lang.Log
 import org.mewsic.jaad.aac.AACException
 import org.mewsic.jaad.aac.SampleFrequency
 import org.mewsic.jaad.aac.syntax.*
@@ -38,11 +39,8 @@ class ICPrediction {
         for (sfb in 0 until length) {
             predictionUsed[sfb] = `in`.readBool()
         }
-//        Constants.LOGGER.log(
-//            java.util.logging.Level.WARNING,
-//            "ICPrediction: maxSFB={0}, maxPredSFB={1}",
-//            intArrayOf(maxSFB, maxPredSFB)
-//        )
+        Log.warn("ICPrediction: maxSFB: $maxSFB, maxPredSFB: $maxPredSFB, predictorCount: $predictorCount")
+
         /*//if maxSFB<maxPredSFB set remaining to false
 		for(int sfb = length; sfb<maxPredSFB; sfb++) {
 		predictionUsed[sfb] = false;

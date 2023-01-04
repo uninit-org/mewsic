@@ -118,15 +118,6 @@ class MP4Container {
     }
 
     companion object {
-        init {
-//            val log: java.util.logging.Logger = java.util.logging.Logger.getLogger("MP4 API")
-//            for (h in log.getHandlers()) {
-//                log.removeHandler(h)
-//            }
-//            log.setLevel(java.util.logging.Level.WARNING)
-//            val h: java.util.logging.ConsoleHandler = java.util.logging.ConsoleHandler()
-//            h.setLevel(java.util.logging.Level.ALL)
-//            log.addHandler(h)
-        }
+
     }
 }

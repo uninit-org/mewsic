@@ -5,13 +5,16 @@ import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import org.gradle.api.*
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.*
+import org.jetbrains.compose.ComposeBuildConfig
 import org.jetbrains.compose.ComposeExtension
 import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.DesktopExtension
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import java.lang.invoke.MethodHandles
 import java.util.*
+import kotlin.reflect.KProperty
 
 open class MewsicApplicationPlugin : MewsicCommonPlugin {
     override fun apply(target: Project) = target.apply()
@@ -62,9 +65,14 @@ open class MewsicApplicationPlugin : MewsicCommonPlugin {
             }
         }
     }
+    val Project.composeVersion: String
+        get() = "1.4.0-alpha04"
 
     @OptIn(ExperimentalComposeLibrary::class)
     private fun Project.setupCompose() {
+
+
+
         apply<ComposePlugin>()
 
         configure<ComposeExtension> {
@@ -97,6 +105,7 @@ open class MewsicApplicationPlugin : MewsicCommonPlugin {
 
         configure<KotlinMultiplatformExtension> {
             val compose = (this as ExtensionAware).the<ComposePlugin.Dependencies>()
+
 
             sourceSets {
                 val commonMain by getting {

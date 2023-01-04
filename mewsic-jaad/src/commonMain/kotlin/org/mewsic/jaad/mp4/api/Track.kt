@@ -1,5 +1,6 @@
 package org.mewsic.jaad.mp4.api
 
+import org.mewsic.commons.lang.Log
 import org.mewsic.jaad.mp4.MP4InputStream
 import org.mewsic.jaad.mp4.boxes.Box
 import org.mewsic.jaad.mp4.boxes.BoxTypes
@@ -57,11 +58,7 @@ abstract class Track internal constructor(trak: Box, `in`: MP4InputStream) {
                 location = try {
                     url.location
                 } catch (e: Exception) {
-//                    java.util.logging.Logger.getLogger("MP4 API").log(
-//                        java.util.logging.Level.WARNING,
-//                        "Parsing URL-Box failed: {0}, url: {1}",
-//                        arrayOf<String>(e.toString(), url.getLocation())
-//                    )
+                    Log.warn("Parsing URL-Box failed: $e, url: ${url.location}")
                     null
                 }
             }

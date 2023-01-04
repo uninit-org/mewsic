@@ -75,9 +75,13 @@ interface MewsicCommonPlugin : Plugin<Project> {
             js("browser", IR) {
                 browser()
             }
-
+            val kotlinx_coroutines_version: String by project
             sourceSets {
-                val commonMain by getting
+                val commonMain by getting {
+                    dependencies {
+                        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version")
+                    }
+                }
                 val commonTest by getting {
                     dependencies {
                         implementation(kotlin("test"))
@@ -93,6 +97,10 @@ interface MewsicCommonPlugin : Plugin<Project> {
 
                 val desktopMain by getting {
                     dependsOn(jvmMain)
+                    dependencies {
+                        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version")
+                    }
+
                 }
                 val desktopTest by getting {
                     dependsOn(jvmTest)
@@ -100,9 +108,21 @@ interface MewsicCommonPlugin : Plugin<Project> {
 
                 val androidMain by getting {
                     dependsOn(jvmMain)
+                    dependencies {
+                        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_version")
+                    }
                 }
                 val androidTest by getting {
                     dependsOn(jvmTest)
+                }
+                val browserMain by getting {
+                    dependsOn(commonMain)
+                    dependencies {
+                        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$kotlinx_coroutines_version")
+                    }
+                }
+                val browserTest by getting {
+                    dependsOn(commonTest)
                 }
             }
         }

@@ -1,5 +1,6 @@
 package org.mewsic.jaad.mp4.api
 
+import org.mewsic.commons.lang.Log
 import org.mewsic.jaad.mp4.boxes.Box
 import org.mewsic.jaad.mp4.boxes.BoxTypes
 import org.mewsic.jaad.mp4.boxes.impl.CopyrightBox
@@ -384,8 +385,7 @@ class MetaData internal constructor() {
                 if (key == NERO_TAGS[18]);
                 if (key == NERO_TAGS[19]) put<Int?>(Field.TEMPO, `val`!!.toInt())
             } catch (e: NumberFormatException) {
-//                java.util.logging.Logger.getLogger("MP4 API")
-//                    .log(java.util.logging.Level.SEVERE, "Exception in MetaData.parseNeroTags: {0}", e.toString())
+                Log.error("NumberFormatException in MetaData.parseNeroTags: ${e.toString()}" )
             }
         }
     }

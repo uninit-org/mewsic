@@ -1,5 +1,6 @@
 package org.mewsic.jaad.mp4.od
 
+import org.mewsic.commons.lang.Log
 import org.mewsic.jaad.mp4.MP4InputStream
 
 /**
@@ -67,18 +68,14 @@ abstract class Descriptor protected constructor() {
             //skip remaining bytes
             val remaining: Long = size - (`in`.getOffset() - desc.start)
             if (remaining > 0) {
-//                java.util.logging.Logger.getLogger("MP4 Boxes").log(
-//                    java.util.logging.Level.INFO,
-//                    "Descriptor: bytes left: {0}, offset: {1}",
-//                    arrayOf(remaining, `in`.getOffset())
-//                )
+                Log.info("Descriptor: bytes left: $remaining, offset: ${`in`.getOffset()}, start: ${desc.start}, size: ${desc.size}")
                 `in`.skipBytes(remaining)
             }
             desc.size += read //include type and size fields
             return desc
         }
 
-        private fun forTag(tag: Int): Descriptor {
+        fun forTag(tag: Int): Descriptor {
             val desc: Descriptor
             when (tag) {
                 TYPE_OBJECT_DESCRIPTOR -> desc = ObjectDescriptor()
