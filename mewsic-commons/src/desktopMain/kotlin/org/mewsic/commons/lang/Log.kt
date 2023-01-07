@@ -13,6 +13,9 @@ actual object Log {
     }
 
     actual fun log(level: Level, message: String) {
+        if (alsoHandler != null) {
+            alsoHandler?.handle(level, message)
+        }
         if (level.ordinal >= minLevel.ordinal) {
             println("[${level.name}] $message")
         }
@@ -23,6 +26,11 @@ actual object Log {
     actual fun warn(message: String) = log(Level.WARN, message)
     actual fun error(message: String) = log(Level.ERROR, message)
     actual fun fatal(message: String) = log(Level.FATAL, message)
+    actual fun interface AlsoHandler {
+        actual fun handle(level: Level, message: String)
+    }
+
+    actual var alsoHandler: AlsoHandler? = null
 
 
 }

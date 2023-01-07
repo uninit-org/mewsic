@@ -82,4 +82,17 @@ class SequenceInputStream(sequence: Sequence<ByteArray>) : InputStream {
         }
         return skipped
     }
+
+    fun collect(): ByteArray {
+        val list = mutableListOf<ByteArray>()
+        while (isOpen) {
+            getNextIfRequired()
+            if (current == null) {
+                break
+            }
+            list.add(current!!)
+            current = null
+        }
+        return list.flatMap { it.toList() }.toByteArray()
+    }
 }

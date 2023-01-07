@@ -18,4 +18,5 @@ include(
     ":mewsic-innertube",
     ":mewsic-application",
     ":mewsic-test-suite-gui",
+    ":mewsic-kmedia",
 )

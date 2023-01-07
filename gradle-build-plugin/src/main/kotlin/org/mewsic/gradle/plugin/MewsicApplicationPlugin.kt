@@ -65,8 +65,6 @@ open class MewsicApplicationPlugin : MewsicCommonPlugin {
             }
         }
     }
-    val Project.composeVersion: String
-        get() = "1.4.0-alpha04"
 
     @OptIn(ExperimentalComposeLibrary::class)
     private fun Project.setupCompose() {

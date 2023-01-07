@@ -1,5 +1,6 @@
 package org.mewsic.jaad.mp4.boxes
 
+@Deprecated("Now implemented in mewsic-kmedia")
 open class BoxTypes {
     companion object {
         const val EXTENDED_TYPE: Long = 1970628964 //uuid

@@ -46,11 +46,12 @@ class MP4Container {
     private var pdin: ProgressiveDownloadInformationBox? = null
     private var moov: Box? = null
     private var movie: Movie? = null
+    var isContentRead: Boolean = false
 
     constructor(`in`: org.mewsic.commons.streams.api.InputStream) {
         this.`in` = MP4InputStream(`in`)
         boxes = mutableListOf()
-        readContent()
+
     }
 
     constructor(`in`: FileInputStream?) {
@@ -60,7 +61,7 @@ class MP4Container {
     }
 
     @Throws(Exception::class)
-    private fun readContent() {
+    fun readContent() {
         //read all boxes
         var box: Box? = null
         var type: Long
@@ -70,6 +71,7 @@ class MP4Container {
             if (boxes.isEmpty() && box.type != BoxTypes.FILE_TYPE_BOX) throw MP4Exception(
                 "no MP4 signature found"
             )
+
             boxes.add(box)
             type = box.type
             if (type == BoxTypes.FILE_TYPE_BOX) {
@@ -83,6 +85,35 @@ class MP4Container {
                 if (moovFound) break else if (!`in`.hasRandomAccess()) throw MP4Exception("movie box at end of file, need random access")
             }
         }
+        isContentRead = true
+
+    }
+    fun readContent(t: (eventName: String, args: Map<String, Any>) -> Unit) {
+        t("READ_CONTENT", mapOf("message" to "Reading content"))
+        var box: Box? = null
+        var type: Long
+        var moovFound = false
+        while (`in`.hasLeft()) {
+            box = BoxFactory.parseBox(null, `in`)
+            if (boxes.isEmpty() && box.type != BoxTypes.FILE_TYPE_BOX) throw MP4Exception(
+                "no MP4 signature found"
+            )
+            t("BOX", mapOf("box" to box, "type" to box.type))
+            boxes.add(box)
+            type = box.type
+            if (type == BoxTypes.FILE_TYPE_BOX) {
+                if (ftyp == null) ftyp = box as FileTypeBox?
+            } else if (type == BoxTypes.MOVIE_BOX) {
+                if (movie == null) moov = box
+                moovFound = true
+            } else if (type == BoxTypes.PROGRESSIVE_DOWNLOAD_INFORMATION_BOX) {
+                if (pdin == null) pdin = box as ProgressiveDownloadInformationBox?
+            } else if (type == BoxTypes.MEDIA_DATA_BOX) {
+                if (moovFound) break else if (!`in`.hasRandomAccess()) throw MP4Exception("movie box at end of file, need random access")
+            }
+        }
+        isContentRead = true
+        t("OPEN", mapOf("SUCCESS" to isContentRead))
     }
 
     val majorBrand: Brand?

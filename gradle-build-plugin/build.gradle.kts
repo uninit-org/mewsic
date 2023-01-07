@@ -25,7 +25,7 @@ dependencies {
 
     implementation("com.android.tools.build:gradle:7.3.1")
 
-    implementation("org.jetbrains.compose:compose-gradle-plugin:1.3.0-rc01")
+    implementation("org.jetbrains.compose:compose-gradle-plugin:1.2.1")
 }
 
 gradlePlugin {

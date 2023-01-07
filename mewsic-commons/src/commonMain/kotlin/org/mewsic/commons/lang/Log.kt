@@ -8,8 +8,13 @@ expect object Log {
         ERROR,
         FATAL
     }
+    fun interface AlsoHandler {
+        fun handle(level: Level, message: String)
+    }
+    var alsoHandler: AlsoHandler?
     actual var minLevel: Level
         private set
+
 
     fun setMinLevel(level: Level)
     fun log(level: Level, message: String)

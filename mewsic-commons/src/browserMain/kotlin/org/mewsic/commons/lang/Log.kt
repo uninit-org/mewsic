@@ -13,7 +13,9 @@ actual object Log {
         private set
 
     actual fun log(level: Level, message: String) {
-
+        if (alsoHandler != null) {
+            alsoHandler?.handle(level, message)
+        }
         when (level) {
             Level.DEBUG -> console.info(message)
             Level.INFO -> console.log(message)
@@ -32,4 +34,10 @@ actual object Log {
     actual fun setMinLevel(level: Level) {
         minLevel = level
     }
+
+    actual fun interface AlsoHandler {
+        actual fun handle(level: Level, message: String)
+    }
+
+    actual var alsoHandler: AlsoHandler? = null
 }

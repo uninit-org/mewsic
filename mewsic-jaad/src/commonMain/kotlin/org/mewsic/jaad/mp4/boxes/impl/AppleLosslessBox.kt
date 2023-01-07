@@ -3,7 +3,7 @@ package org.mewsic.jaad.mp4.boxes.impl
 import org.mewsic.jaad.mp4.MP4InputStream
 import org.mewsic.jaad.mp4.boxes.FullBox
 
-class AppleLosslessBox : FullBox("Apple Lossless Box") {
+class  AppleLosslessBox : FullBox("Apple Lossless Box") {
     var maxSamplePerFrame: Long = 0
         private set
     var maxCodedFrameSize: Long = 0

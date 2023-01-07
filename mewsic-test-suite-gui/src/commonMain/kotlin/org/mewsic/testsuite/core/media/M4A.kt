@@ -14,7 +14,14 @@ class M4A(byteArray: ByteArray, var eventWatcher: EventWatcher? = null) {
     init {
         Log.info("Opening M4A, passing to MP4Container constructor")
         mediaStream = MP4Container(source.open())
-        eventWatcher?.onEvent("SUCCESS", mapOf("message" to "M4A opened successfully"))
+        eventWatcher?.onEvent("OPEN", mapOf("message" to "M4A opened"))
+
+    }
+    fun doRead() {
+        eventWatcher?.onEvent("READ", mapOf("message" to "Reading M4A"))
+        mediaStream.readContent { eventName, args ->
+            eventWatcher?.onEvent(eventName, args)
+        }
     }
 
     fun brand(): Pair<String, String> {
