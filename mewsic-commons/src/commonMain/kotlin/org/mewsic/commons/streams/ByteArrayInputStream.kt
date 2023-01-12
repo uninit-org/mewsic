@@ -4,6 +4,13 @@ import org.mewsic.commons.streams.api.SeekableInputStream
 
 class ByteArrayInputStream(private val array: ByteArray) : SeekableInputStream {
     private var offset = 0
+    override fun get(position: Long): Byte = array[position.toInt()]
+
+    override fun get(range: ULongRange): ByteArray = array.sliceArray(range.first.toInt()..range.last.toInt())
+
+    override fun get(range: LongRange): ByteArray = array.sliceArray(range.first.toInt()..range.last.toInt())
+
+    override fun get(range: IntRange): ByteArray = array.sliceArray(range)
 
     override fun read() = array[offset++]
 

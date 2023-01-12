@@ -1,7 +1,7 @@
 use std::collections::HashMap;
-use crate::{warn};
+use crate::{error, warn};
 use crate::api::stream::InputStream;
-use crate::container::mpeg4::decode::MpegBox::{BitRateBox, ChapterBox};
+use crate::container::mpeg4::decode::MpegBox::{*};
 use crate::container::mpeg4::Mpeg4BoxSignatures;
 use crate::stream::DataInputStream;
 
@@ -12,7 +12,7 @@ pub enum MpegBox<'mpeg_life> {
         box_type: u64,
         offset: u64,
         name: Option<String>,
-        children: Vec<&'mpeg_life MpegBox<'mpeg_life>>,
+        children: Option<Vec<&'mpeg_life MpegBox<'mpeg_life>>>,
         version: u32,
         flags: u64,
 
@@ -40,7 +40,7 @@ pub enum MpegBox<'mpeg_life> {
         box_type: u64,
         offset: u64,
         name: Option<String>,
-        children: Vec<&'mpeg_life MpegBox<'mpeg_life>>,
+        children: Option<Vec<&'mpeg_life MpegBox<'mpeg_life>>>,
         version: u32,
         flags: u64,
 
@@ -52,7 +52,7 @@ pub enum MpegBox<'mpeg_life> {
         box_type: u64,
         offset: u64,
         name: Option<String>,
-        children: Vec<&'mpeg_life MpegBox<'mpeg_life>>,
+        children: Option<Vec<&'mpeg_life MpegBox<'mpeg_life>>>,
         /// Size of the decoding buffer for the elementary stream in bytes
         decoding_buffer_size: u64,
         /// Maximum rate in bits per second that can be used to decode the elementary stream
@@ -71,11 +71,45 @@ pub enum MpegBox<'mpeg_life> {
         box_type: u64,
         offset: u64,
         name: Option<String>,
-        children: Vec<&'mpeg_life MpegBox<'mpeg_life>>,
+        children: Option<Vec<&'mpeg_life MpegBox<'mpeg_life>>>,
         version: u32,
         flags: u64,
 
         chapters: HashMap<u64, String>,
+    },
+    ChunkOffsetBox {
+        parent: Option<&'mpeg_life MpegBox<'mpeg_life>>,
+        size: u64,
+        box_type: u64,
+        offset: u64,
+        name: Option<String>,
+        children: Option<Vec<&'mpeg_life MpegBox<'mpeg_life>>>,
+        version: u32,
+        flags: u64,
+
+        chunk_count: u64,
+        /// If small_chunk is true, then the chunks are 4 bytes each, otherwise they are 8 bytes each.
+        small_chunk: bool,
+        chunks: Vec<[u8; 8]> // hopefully this means 4 or 8 bytes
+
+    },
+    CleanAperatureBox {
+        parent: Option<&'mpeg_life MpegBox<'mpeg_life>>,
+        size: u64,
+        box_type: u64,
+        offset: u64,
+        name: Option<String>,
+        children: Option<Vec<&'mpeg_life MpegBox<'mpeg_life>>>,
+
+        clean_aperature_width_n: u64,
+        clean_aperature_width_d: u64,
+        clean_aperature_height_n: u64,
+        clean_aperature_height_d: u64,
+        horiz_off_n: u64,
+        horiz_off_d: u64,
+        vert_off_n: u64,
+        vert_off_d: u64,
+
     },
     DefaultBox {
         parent: Option<&'mpeg_life MpegBox<'mpeg_life>>,
@@ -83,7 +117,7 @@ pub enum MpegBox<'mpeg_life> {
         box_type: u64,
         offset: u64,
         name: Option<String>,
-        children: Vec<&'mpeg_life MpegBox<'mpeg_life>>,
+        children: Option<Vec<&'mpeg_life MpegBox<'mpeg_life>>>,
     },
     DefaultFullBox {
         parent: Option<&'mpeg_life MpegBox<'mpeg_life>>,
@@ -91,7 +125,7 @@ pub enum MpegBox<'mpeg_life> {
         box_type: u64,
         offset: u64,
         name: Option<String>,
-        children: Vec<&'mpeg_life MpegBox<'mpeg_life>>,
+        children: Option<Vec<&'mpeg_life MpegBox<'mpeg_life>>>,
         version: u32,
         flags: u64,
     },
@@ -101,53 +135,72 @@ pub enum MpegBox<'mpeg_life> {
             box_type: u64,
             offset: u64,
             name: Option<String>,
-            children: Vec<&'mpeg_life MpegBox<'mpeg_life>>,
-    }
+            children: Option<Vec<&'mpeg_life MpegBox<'mpeg_life>>>,
+    },
+    SampleSizeBox {
+        parent: Option<&'mpeg_life MpegBox<'mpeg_life>>,
+        size: u64,
+        box_type: u64,
+        offset: u64,
+        name: Option<String>,
+        children: Option<Vec<&'mpeg_life MpegBox<'mpeg_life>>>,
+        version: u32,
+        flags: u64,
+
+        sample_count: u32,
+        sample_sizes: Vec<u32>,
+    },
 }
 impl MpegBox<'_> {
-    pub fn read_from(stream: &mut DataInputStream) -> MpegBox {
+    pub fn read_maybe_child_from<'mpeg_life>(stream: &mut DataInputStream, parent: Option<&'mpeg_life MpegBox<'mpeg_life>>) -> Option<MpegBox<'mpeg_life>> {
         let offset = stream.get_position();
-        let mut size = stream.read_u32() as u64;
-        let box_type = stream.read_u32() as u64;
+        let mut size: u64 = stream.read_u32()? as u64;
+        let mut box_type: u64 = stream.read_u32()? as u64;
         if size == 1 {
-            size = stream.read_u64();
+            size = stream.read_u64()?;
         }
 
         return match box_type {
             Mpeg4BoxSignatures::ADDITIONAL_METADATA_CONTAINER_BOX => {
                 warn!("Currently parsing {}, which we don't have a custom box for yet", Mpeg4BoxSignatures::ADDITIONAL_METADATA_CONTAINER_BOX);
-                MpegBox::DefaultBox {
-                    parent: None,
+                Some(DefaultBox {
+                    parent,
                     size,
                     box_type,
                     offset,
-                    name: None,
-                    children: Vec::new(),
-                }
+                    name: Some("Additional Metadata Container Box".to_string()),
+                    children: None,
+                })
 
             }
             Mpeg4BoxSignatures::APPLE_LOSSLESS_BOX => {
-                let version = stream.read_u8() as u32;
-                let flags = stream.read_bytes(3) as u64;
-                let max_sample_per_frame = stream.read_u32() as u64;
-                stream.skip(1);
-                let sample_size = stream.read_u8() as u32;
-                let history_mult = stream.read_u8() as u32;
-                let initial_history = stream.read_u8() as u32;
-                let k_modifier = stream.read_u8() as u32;
-                let channels = stream.read_u8() as u32;
-                stream.skip(2);
-                let max_coded_frame_size = stream.read_u32() as u64;
-                let bit_rate = stream.read_u32() as u64;
-                let sample_rate = stream.read_u32() as u64;
+                let version = stream.read_u8()? as u32;
+                let flags = stream.read_bytes(3)?;
+                let max_sample_per_frame = stream.read_u32()? as u64;
+                if stream.skip(1) != 1 {
+                    error!("MpegBox read failed: could not skip into stream");
+                    return None;
+                }
+                let sample_size = stream.read_u8()? as u32;
+                let history_mult = stream.read_u8()? as u32;
+                let initial_history = stream.read_u8()? as u32;
+                let k_modifier = stream.read_u8()? as u32;
+                let channels = stream.read_u8()? as u32;
+                if stream.skip(2) != 2 {
+                    error!("MpegBox read failed: could not skip into stream");
+                    return None;
+                }
+                let max_coded_frame_size = stream.read_u32()? as u64;
+                let bit_rate = stream.read_u32()? as u64;
+                let sample_rate = stream.read_u32()? as u64;
 
-                MpegBox::AppleLosslessBox {
-                    parent: None,
+                Some(MpegBox::AppleLosslessBox {
+                    parent,
                     size,
                     box_type,
                     offset,
                     name: Some(String::from("Apple Lossless Box")),
-                    children: Vec::new(),
+                    children: None,
                     version,
                     flags,
 
@@ -160,82 +213,137 @@ impl MpegBox<'_> {
                     initial_history,
                     k_modifier,
                     channels,
-                }
+                })
             }
             Mpeg4BoxSignatures::BINARY_XML_BOX => {
-                let version = stream.read_u8() as u32;
-                let flags = stream.read_bytes(3) as u64;
+                let version = stream.read_u8()? as u32;
+                let flags = stream.read_bytes(3)?;
                 let data = stream.read_some_here((size - 8) as usize);
 
-                MpegBox::BinaryXmlBox {
-                    parent: None,
+                Some(MpegBox::BinaryXmlBox {
+                    parent,
                     size,
                     box_type,
                     offset,
                     name: Some(String::from("Binary XML Box")),
-                    children: Vec::new(),
+                    children: None,
                     version,
                     flags,
 
                     data,
-                }
+                })
 
             }
             Mpeg4BoxSignatures::BIT_RATE_BOX => {
-                BitRateBox {
-                    parent: None,
+                Some(BitRateBox {
+                    parent,
                     size,
                     box_type,
                     offset,
                     name: Some(String::from("Bit Rate Box")),
-                    children: vec![],
-                    decoding_buffer_size: stream.read_u32() as u64,
-                    max_bitrate: stream.read_u32() as u64,
-                    avg_bitrate: stream.read_u32() as u64,
-                }
+                    children: None,
+                    decoding_buffer_size: stream.read_u32()? as u64,
+                    max_bitrate: stream.read_u32()? as u64,
+                    avg_bitrate: stream.read_u32()? as u64,
+                })
 
             }
             Mpeg4BoxSignatures::CHAPTER_BOX => {
-                let version = stream.read_u8() as u32;
-                let flags = stream.read_bytes(3) as u64;
+                let version = stream.read_u8()? as u32;
+                let flags = stream.read_bytes(3)? as u64;
                 let mut chapters = HashMap::new();
 
                 stream.skip(4);
-                let entry_count = stream.read_u8() as u64;
+                let entry_count = stream.read_u8()? as u64;
                 for _ in 0..entry_count {
-                    let timestamp = stream.read_u64();
-                    let title_len = stream.read_u8() as usize;
+                    let timestamp = stream.read_u64()?;
+                    let title_len = stream.read_u8()? as usize;
                     let title = stream.read_string(title_len);
                     chapters.insert(timestamp, title);
                 }
-                ChapterBox {
-                    parent: None,
+                Some(ChapterBox {
+                    parent,
                     size,
                     box_type,
                     offset,
                     name: Some(String::from("Chapter Box")),
-                    children: vec![],
+                    children: None,
                     version,
                     flags,
 
                     chapters,
-                }
+                })
             }
-            Mpeg4BoxSignatures::CHUNK_OFFSET_BOX => {
-                todo!()
-
-            }
+            Mpeg4BoxSignatures::CHUNK_OFFSET_BOX |
             Mpeg4BoxSignatures::CHUNK_LARGE_OFFSET_BOX => {
-                todo!()
+                let chunk_size = match box_type {
+                    Mpeg4BoxSignatures::CHUNK_OFFSET_BOX => 4,
+                    Mpeg4BoxSignatures::CHUNK_LARGE_OFFSET_BOX => 8,
+                    _ => 0,
+                };
+                let version = stream.read_u8()? as u32;
+                let flags = stream.read_bytes(3)? as u64;
+                let entry_count = stream.read_u32()? as u64;
+                let mut chunks = Vec::new();
+                for _ in 0..entry_count {
+                    let mut chunk_buf: [u8; 8] = [0; 8];
+                    if stream.read_some_there(&mut chunk_buf, 0, chunk_size) != chunk_size {
+                        error!("MpegBox read failed: could not read chunk offset");
+                        return None;
+                    }
+                    chunks.push(chunk_buf);
+                }
+                Some(ChunkOffsetBox {
+                    parent,
+                    size,
+                    box_type,
+                    offset,
+                    name: Some(String::from("Chunk Offset Box")),
+                    children: None,
+                    version,
+                    flags,
 
+                    chunks,
+                    small_chunk: chunk_size == 4,
+                    chunk_count: entry_count,
+                })
             }
             Mpeg4BoxSignatures::CLEAN_APERTURE_BOX => {
-                todo!()
+                Some(CleanAperatureBox {
+                    parent,
+                    size,
+                    box_type,
+                    offset,
+                    name: Some(String::from("Clean Aperature Box")),
+                    children: None,
+                    clean_aperature_width_n: stream.read_u32()? as u64,
+                    clean_aperature_width_d: stream.read_u32()? as u64,
+                    clean_aperature_height_n: stream.read_u32()? as u64,
+                    clean_aperature_height_d: stream.read_u32()? as u64,
+                    horiz_off_n: stream.read_u32()? as u64,
+                    horiz_off_d: stream.read_u32()? as u64,
+                    vert_off_n: stream.read_u32()? as u64,
+                    vert_off_d: stream.read_u32()? as u64,
+                })
 
             }
-            Mpeg4BoxSignatures::COMPACT_SAMPLE_SIZE_BOX => {
-                todo!()
+            Mpeg4BoxSignatures::COMPACT_SAMPLE_SIZE_BOX |
+            Mpeg4BoxSignatures::SAMPLE_SIZE_BOX => {
+                let compact = box_type == Mpeg4BoxSignatures::COMPACT_SAMPLE_SIZE_BOX;
+                let mut size: u32 = 0;
+                if compact {
+                    if stream.skip(3) != 3 {
+                        error!("MpegBox read failed: could not skip into stream");
+                        return None;
+                    }
+                    size = stream.read_u8()? as u32;
+                } else {
+                    size = stream.read_u32()?;
+                }
+                let count = stream.read_u32()?;
+                let mut sizes = Vec::new();
 
+                None
             }
             Mpeg4BoxSignatures::COMPOSITION_TIME_TO_SAMPLE_BOX => {
                 todo!()
@@ -1008,7 +1116,7 @@ impl MpegBox<'_> {
             _ => {
                 warn!("Unknown box type: {}", box_type);
                 let mut unknown_box = MpegBox::Unknown {
-                    parent: None,
+                    parent,
                     size,
                     box_type: box_type as u64,
                     offset,
@@ -1016,13 +1124,22 @@ impl MpegBox<'_> {
                     children: Vec::new(),
                 };
                 unknown_box.read_children(stream);
-                unknown_box
+                Some(unknown_box)
             }
         }
-
-
+    }
+    pub fn read_from(stream: &mut DataInputStream) -> Option<MpegBox> {
+        MpegBox::read_maybe_child_from(stream, None)
     }
     pub fn read_children(&mut self, from: &mut DataInputStream) {
-
+        while let Some(child) = MpegBox::read_maybe_child_from(from, Some(self)) {
+            match self {
+                _ => {
+                    panic!("we shouldn't be here, make sure to add each new box type when implemented!")
+                }
+            }
+        }
     }
 }
+
+

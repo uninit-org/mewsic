@@ -10,6 +10,14 @@ class FileInputStream(val path: String) : SeekableInputStream{
 
     }
 
+    override fun get(position: Long): Byte = stream[position]
+
+    override fun get(range: ULongRange): ByteArray = stream[range]
+
+    override fun get(range: LongRange): ByteArray = stream[range]
+
+    override fun get(range: IntRange): ByteArray = stream[range]
+
     override fun read(): Byte {
         return stream.read()
     }

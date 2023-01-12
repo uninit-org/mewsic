@@ -4,7 +4,7 @@ import org.mewsic.jaad.mp4.MP4InputStream
 import org.mewsic.jaad.mp4.boxes.BoxTypes
 import org.mewsic.jaad.mp4.boxes.FullBox
 
-class ChunkOffsetBox : FullBox("Chunk Offset Box") {
+class   ChunkOffsetBox : FullBox("Chunk Offset Box") {
     lateinit var chunks: LongArray
         private set
 
