@@ -10,11 +10,11 @@ data class SoundCloudPublicUser(
     val avatarUrl: String,
     val city: String? = null,
     @SerialName("comments_count")
-    val commentsCount: Int,
+    val commentsCount: Int? = null,
     @SerialName("country_code")
     val countryCode: String? = null,
     @SerialName("created_at")
-    val createdAt: String,
+    val createdAt: String? = null,
     // TODO: Subscriptions
 //    @SerialName("creator_subscriptions")
 //    val creatorSubscriptions: List<CreatorSubscription>,
@@ -24,13 +24,13 @@ data class SoundCloudPublicUser(
     @SerialName("followers_count")
     val followersCount: Int,
     @SerialName("followings_count")
-    val followingsCount: Int,
+    val followingsCount: Int? = null,
     @SerialName("first_name")
     val firstName: String,
     @SerialName("full_name")
     val fullName: String,
     @SerialName("groups_count")
-    val groupsCount: Int,
+    val groupsCount: Int? = null,
     val id: Int,
     val kind: String,
     @SerialName("last_modified")
@@ -38,18 +38,18 @@ data class SoundCloudPublicUser(
     @SerialName("last_name")
     val lastName: String,
     @SerialName("likes_count")
-    val likesCount: Int,
+    val likesCount: Int? = null,
     @SerialName("playlist_likes_count")
-    val playlistLikesCount: Int,
+    val playlistLikesCount: Int? = null,
     val permalink: String,
     @SerialName("permalink_url")
     val permalinkUrl: String,
     @SerialName("playlist_count")
-    val playlistCount: Int,
+    val playlistCount: Int? = null,
     @SerialName("reposts_count")
     val repostsCount: Int? = null,
     @SerialName("track_count")
-    val trackCount: Int,
+    val trackCount: Int? = null,
     val uri: String,
     val urn: String,
     val username: String,

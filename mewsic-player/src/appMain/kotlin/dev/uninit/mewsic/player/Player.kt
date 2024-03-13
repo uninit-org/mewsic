@@ -2,12 +2,17 @@ package dev.uninit.mewsic.player
 
 import dev.uninit.mewsic.media.stream.MediaStream
 import dev.uninit.mewsic.media.track.MediaTrack
+import dev.uninit.mewsic.utils.platform.logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import org.bytedeco.ffmpeg.global.avutil
 import org.bytedeco.ffmpeg.global.avutil.av_log_set_level
+import kotlin.time.Duration.Companion.minutes
 
 abstract class Player {
     val queue = Queue()
@@ -17,6 +22,8 @@ abstract class Player {
             field = value
             currentStream?.gain = value
         }
+    var autoPlayEnabled = true
+    protected var lastPlay = Instant.DISTANT_PAST
 
     protected var currentStream: MediaStream? = null
         set(value) {
@@ -34,10 +41,24 @@ abstract class Player {
         if (currentStream == null) {
             setPlayIndex(0)
         }
+
+        if (currentStream != null && lastPlay != Instant.DISTANT_PAST && lastPlay - Clock.System.now() > 1.minutes) {
+            logger.info("Resuming from long pause, reloading stream")
+            val offset = currentStream!!.offset
+            val newStream = currentTrack!!.createStream()
+            newStream.seekTo(offset)
+            currentStream = newStream
+        }
     }
     open suspend fun pause() {
         // FIXME: Streams may get invalidated if paused for too long
-        // Add some kind of timeout to set the stream to null?
+        // Should be fixed.
+
+        if (state == PlayerState.PAUSED) {
+            logger.warn("pause() invoked with state already set to pause")
+            return
+        }
+        lastPlay = Clock.System.now()
         state = PlayerState.PAUSED
     }
 
@@ -45,6 +66,7 @@ abstract class Player {
         val oldStream = currentStream
         currentTrack = queue.items.getOrNull(index)
         currentStream = currentTrack?.createStream()
+        lastPlay = Instant.DISTANT_PAST
         oldStream?.dispose()
     }
 
@@ -58,6 +80,10 @@ abstract class Player {
             LoopMode.OFF -> (index + 1)  // TODO: Check if autoplay is enabled
             LoopMode.ONE -> index
             LoopMode.ALL -> (index + 1) % queue.items.size
+        }
+
+        if (autoPlayEnabled && nextIndex > queue.items.lastIndex) {
+            queue.items.add(currentTrack!!.provider.getRelatedTracks(currentTrack!!).first())
         }
 
         setPlayIndex(nextIndex)

@@ -2,9 +2,11 @@ package dev.uninit.mewsic.media.track
 
 import dev.uninit.mewsic.client.soundcloud.SoundCloudClient
 import dev.uninit.mewsic.client.soundcloud.response.SoundCloudTrack
+import dev.uninit.mewsic.media.provider.SoundCloudMediaProvider
 import dev.uninit.mewsic.media.stream.MediaStream
 
 class SoundCloudMediaTrack(
+    override val provider: SoundCloudMediaProvider,
     private val client: SoundCloudClient,
     val track: SoundCloudTrack
 ) : MediaTrack {
@@ -22,6 +24,6 @@ class SoundCloudMediaTrack(
         // TODO: Consider downloading and converting to an easier format to handle depending on duration?
         // TODO: Perhaps write a caching system for this?
         val url = client.getDownloadUrl(track)
-        return UrlMediaTrack(url).createStream()
+        return UrlMediaTrack(provider, url, artist, title, album, albumArtist, thumbnailBase64, albumTrack, albumTrackTotal, year, duration).createStream()
     }
 }

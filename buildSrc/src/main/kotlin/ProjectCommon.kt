@@ -2,13 +2,19 @@
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.TestedExtension
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import com.github.gmazzo.buildconfig.BuildConfigExtension
+import com.github.gmazzo.buildconfig.generators.BuildConfigKotlinGenerator
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.*
+import org.jetbrains.compose.internal.utils.getLocalProperty
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.konan.target.Family
+import java.util.*
 
 
 private fun TestedExtension.configureCommon(project: Project) {
@@ -88,8 +94,6 @@ fun Project.configureCommon() {
         jvm("desktop")
         androidTarget()
         linuxX64()
-        linuxArm64()
-        mingwX64()
         androidNativeArm64()
         androidNativeArm32()
         androidNativeX64()
@@ -122,17 +126,21 @@ fun Project.configureCommon() {
                 dependsOn(nativeMain)
             }
 
+            val linuxNativeMain by creating {
+                dependsOn(desktopNativeMain)
+            }
+
             val linuxX64Main by getting {
-                dependsOn(desktopNativeMain)
+                dependsOn(linuxNativeMain)
             }
 
-            val linuxArm64Main by getting {
-                dependsOn(desktopNativeMain)
-            }
+//            val linuxArm64Main by getting {
+//                dependsOn(linuxNativeMain)
+//            }
 
-            val mingwX64Main by getting {
-                dependsOn(desktopNativeMain)
-            }
+//            val mingwX64Main by getting {
+//                dependsOn(desktopNativeMain)
+//            }
 
             val androidNativeMain by creating {
                 dependsOn(nativeMain)
@@ -159,7 +167,19 @@ fun Project.configureCommon() {
     extensions.findByType<BaseAppModuleExtension>()?.configureCommon(this)
     extensions.findByType<LibraryExtension>()?.configureCommon(this)
 
+    configure<BuildConfigExtension> {
+        generator = BuildConfigKotlinGenerator()
+        packageName = "${project.group}.buildconfig"
+        className = "${project.name.removePrefix("mewsic-").split("-").joinToString("") { it.capitalize(Locale.getDefault()) }}BuildConfig"
+        buildConfigField("kotlin.String", "VERSION", "\"${project.version}\"")
+        buildConfigField("kotlin.Boolean", "IS_DEVELOPMENT", (getLocalProperty("development") ?: "false").toString())
+    }
+
     with(tasks) {
+        rootProject.tasks.named("prepareKotlinBuildScriptModel") {
+            dependsOn(tasks.named("generateNonAndroidBuildConfig"))
+        }
+
         withType<JavaCompile> {
             sourceCompatibility = Versions.jvmTarget.toString()
             targetCompatibility = Versions.jvmTarget.toString()
@@ -200,5 +220,25 @@ fun NamedDomainObjectContainer<KotlinSourceSet>.desktopNativeMain(configure: Kot
 fun NamedDomainObjectContainer<KotlinSourceSet>.androidNativeMain(configure: KotlinSourceSet.() -> Unit) {
     val androidNativeMain by getting {
         configure()
+    }
+}
+
+fun KotlinMultiplatformExtension.nativeTargets(block: KotlinNativeTarget.() -> Unit) {
+    targets.filterIsInstance<KotlinNativeTarget>().onEach(block)
+}
+
+fun KotlinMultiplatformExtension.linuxTargets(block: KotlinNativeTarget.() -> Unit) {
+    nativeTargets {
+        if (konanTarget.family == Family.LINUX) {
+            block()
+        }
+    }
+}
+
+fun KotlinMultiplatformExtension.androidNativeTargets(block: KotlinNativeTarget.() -> Unit) {
+    nativeTargets {
+        if (konanTarget.family == Family.ANDROID) {
+            block()
+        }
     }
 }

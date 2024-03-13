@@ -1,5 +1,6 @@
 package dev.uninit.mewsic.media.track
 
+import dev.uninit.mewsic.media.provider.MediaProvider
 import dev.uninit.mewsic.media.stream.MediaStream
 import dev.uninit.mewsic.utils.platform.logger
 import org.bytedeco.ffmpeg.avcodec.AVPacket
@@ -14,6 +15,7 @@ import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 interface MediaTrack {
+    val provider: MediaProvider
     val artist: String
     val title: String
     val thumbnailBase64: String?

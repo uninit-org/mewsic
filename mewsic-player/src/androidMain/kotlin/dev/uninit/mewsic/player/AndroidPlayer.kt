@@ -5,8 +5,10 @@ import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioTrack
-import kotlinx.coroutines.delay
 import dev.uninit.mewsic.utils.platform.logger
+import kotlinx.coroutines.delay
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 class AndroidPlayer(private val ctx: Context) : Player() {
     private val bufferSize = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_FLOAT)
@@ -28,6 +30,7 @@ class AndroidPlayer(private val ctx: Context) : Player() {
     override suspend fun loop() {
         track.play()
         val buffer = ByteArray(bufferSize)
+        val floatBuf = FloatArray(bufferSize / 4)
 
         while (true) {
             while (state != PlayerState.PLAYING) {
@@ -39,11 +42,19 @@ class AndroidPlayer(private val ctx: Context) : Player() {
             }
 
             val read = currentStream!!.copyInto(buffer, 0, buffer.size)
-            logger.deubg("Read $read bytes from stream")
+            val buf = ByteBuffer.wrap(buffer).also { it.order(ByteOrder.BIG_ENDIAN) }
+            for (i in 0 until read / 4) {
+                floatBuf[i] = buf.float
+            }
+
             if (read == -1) {
                 nextTrack()
             } else {
-                track.write(buffer, 0, read)
+                val err = track.write(floatBuf, 0, read / 4, AudioTrack.WRITE_BLOCKING)
+                if (err < 0) {
+                    logger.error("Error writing to audio track: $err")
+                }
+                track.flush()
             }
         }
     }

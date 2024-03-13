@@ -14,7 +14,7 @@ class LocalMediaProvider(
         libraryPaths.forEach { libraryPath ->
             libraryPath.walkTopDown().forEach { file ->
                 if (file.isFile) {
-                    val mediaItem = FileMediaTrack(file)
+                    val mediaItem = FileMediaTrack(this@LocalMediaProvider, file)
                     emit(mediaItem)
                 }
             }
@@ -30,7 +30,7 @@ class LocalMediaProvider(
         if (track is FileMediaTrack) {
             track.file.parentFile.walkTopDown().forEach { file ->
                 if (file.isFile && file != track.file) {
-                    val mediaItem = FileMediaTrack(file)
+                    val mediaItem = FileMediaTrack(this@LocalMediaProvider, file)
                     emit(mediaItem)
                 }
             }

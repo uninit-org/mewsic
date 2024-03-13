@@ -8,7 +8,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface MediaProvider {
-    // TODO: Consider switching to Flow instead of Sequence?
     suspend fun allTracks(): Flow<MediaTrack>
     suspend fun allPlaylists(): Flow<MediaPlaylist>
 

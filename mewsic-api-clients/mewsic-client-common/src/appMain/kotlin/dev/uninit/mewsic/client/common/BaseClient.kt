@@ -2,6 +2,7 @@ package dev.uninit.mewsic.client.common
 
 import dev.uninit.mewsic.client.common.platform.getPlatformHttpClient
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
@@ -12,6 +13,8 @@ abstract class BaseClient : Client {
                 ignoreUnknownKeys = true
             })
         }
+
+        install(Logging)
 
         configure()
     }

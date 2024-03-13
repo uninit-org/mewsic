@@ -1,6 +1,7 @@
 package dev.uninit.mewsic.client.soundcloud
 
 import dev.uninit.mewsic.client.common.platform.getPlatformHttpClient
+import dev.uninit.mewsic.client.soundcloud.response.SoundCloudRelatedResponse
 import dev.uninit.mewsic.client.soundcloud.response.SoundCloudSearchResponse
 import dev.uninit.mewsic.client.soundcloud.response.SoundCloudTrack
 import dev.uninit.mewsic.client.soundcloud.response.exposed.SoundCloudPublicTrack
@@ -33,6 +34,8 @@ class PublicSoundCloudClient : SoundCloudClient() {
         var offset = 0
 
         while (true) {
+            println("URL: https://api-v2.soundcloud.com/search/tracks?q=$query&client_id=$clientId&limit=$chunkSize&offset=$offset")
+
             val results = httpClient.get("https://api-v2.soundcloud.com/search/tracks") {
                 parameter("q", query)
                 parameter("client_id", clientId)
@@ -40,7 +43,7 @@ class PublicSoundCloudClient : SoundCloudClient() {
                 parameter("offset", offset)
             }.body<SoundCloudSearchResponse<SoundCloudPublicTrack>>()
 
-            emitAll(results.collection.asFlow().onEach { it.initializeThumbnail() })
+            emitAll(results.collection.asFlow().onEach(SoundCloudPublicTrack::initializeThumbnail))
 
             if (results.collection.size < chunkSize) {
                 break
@@ -81,13 +84,15 @@ class PublicSoundCloudClient : SoundCloudClient() {
         var offset = 0
 
         while (true) {
+            println("URL: https://api-v2.soundcloud.com/tracks/${track.id}/related?client_id=$clientId&limit=$chunkSize&offset=$offset")
+
             val related = httpClient.get("https://api-v2.soundcloud.com/tracks/${track.id}/related") {
                 parameter("client_id", clientId)
                 parameter("limit", chunkSize)
                 parameter("offset", offset)
-            }.body<SoundCloudSearchResponse<SoundCloudPublicTrack>>()
+            }.body<SoundCloudRelatedResponse<SoundCloudPublicTrack>>()
 
-            emitAll(related.collection.asFlow().onEach { it.initializeThumbnail() })
+            emitAll(related.collection.asFlow().onEach(SoundCloudPublicTrack::initializeThumbnail))
 
             if (related.collection.size < chunkSize) {
                 break

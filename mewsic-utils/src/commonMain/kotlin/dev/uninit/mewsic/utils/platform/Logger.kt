@@ -121,7 +121,7 @@ val Any.logger: LoggerBase
     get() {
         val namespaceParts = (this::class.qualifiedName ?: this::class.simpleName ?: this::class.toString()).split(".").toMutableList()
         val className = namespaceParts.removeLast()
-        val namespace = namespaceParts.joinToString(".") { it.first().toString() }
+        val namespace = namespaceParts.joinToString(".") { if (it.first().isLowerCase()) it.first().toString() else it }
         val prefix = if (namespace.isBlank()) className else "$namespace.$className"
         return Logger.withPrefix("[$prefix]")
     }

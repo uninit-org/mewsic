@@ -1,0 +1,12 @@
+headers = audio_api.h
+package = android.audio
+
+---
+
+// 4e762dd0-e09e-11ee-bd3d-0242ac120002
+effect_uuid_t EFFECT_UUID_CUSTOM = { 0x4e762dd0, 0xe09e, 0x11ee, 0xbd, 0x3d, { 0x02, 0x42, 0xac, 0x12, 0x00, 0x02 } };
+
+struct CustomEffectHandle {
+    struct effect_interface_s* itfe;
+    void* engine;
+};

@@ -19,7 +19,7 @@ data class SoundCloudPublicTrack(
     val caption: String? = null,
     val commentable: Boolean,
     @SerialName("comment_count")
-    val commentCount: Int,
+    val commentCount: Int? = null,
     @SerialName("created_at")
     val createdAt: String,
     val description: String? = null,
@@ -74,7 +74,7 @@ data class SoundCloudPublicTrack(
     val urn: String,
     @SerialName("user_id")
     val userId: Int,
-    val visuals: String? = null,
+    val visuals: Visuals? = null,
     @SerialName("waveform_url")
     val waveformUrl: String,
     @SerialName("display_date")
@@ -126,6 +126,23 @@ data class SoundCloudPublicTrack(
                 val mimeType: String,
             )
         }
+    }
+
+    @Serializable
+    data class Visuals(
+        val urn: String,
+        val enabled: Boolean,
+        val visuals: List<Entry>,
+//        val tracking: T?,
+    ) {
+        @Serializable
+        data class Entry(
+            val urn: String,
+            @SerialName("visual_url")
+            val visualUrl: String,
+            @SerialName("entry_time")
+            val entryTime: Int,
+        )
     }
 
     companion object {

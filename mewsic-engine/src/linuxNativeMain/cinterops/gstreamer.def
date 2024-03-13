@@ -1,0 +1,27 @@
+headers = gst/gst.h gst/gstplugin.h gst/base/base.h gst/audio/audio.h
+package = gst
+
+# TODO: Support compiling against ARM
+compilerOpts.linux = -I/usr/include/glib-2.0/ -I/usr/lib/glib-2.0/include/ -I/usr/include/gstreamer-1.0/
+linkerOpts.linux = -L/usr/lib/ -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lgstaudio-1.0 -lgstbase-1.0
+
+---
+
+struct GstMEClass {
+    GstAudioFilterClass parent_class;
+};
+
+struct GstME {
+    GstAudioFilter filter;
+
+    int channels;
+    GMutex lock;
+
+    void* engine;
+    void* dbus;
+};
+
+typedef struct GstME GstME_T;
+typedef struct GstMEClass GstME_TClass;
+
+G_DEFINE_TYPE(GstME_T, gst_mewsic_engine, GST_TYPE_AUDIO_FILTER);

@@ -1,18 +1,20 @@
 package dev.uninit.mewsic.media.track
 
+import dev.uninit.mewsic.media.provider.MediaProvider
 import dev.uninit.mewsic.media.stream.LibAVMediaStream
 import dev.uninit.mewsic.media.stream.MediaStream
 
 class UrlMediaTrack(
+    override val provider: MediaProvider,
     private val url: String,
     artist: String = "Unknown",
     title: String = url,
     album: String? = null,
     albumArtist: String? = null,
     albumArtBase64: String? = null,
-    albumTrack: Int = -1,
-    albumTrackTotal: Int = -1,
-    year: Int = -1,
+    albumTrack: Int? = null,
+    albumTrackTotal: Int? = null,
+    year: Int? = null,
     duration: Long = -1
 ) : MediaTrack {
     override var artist = artist

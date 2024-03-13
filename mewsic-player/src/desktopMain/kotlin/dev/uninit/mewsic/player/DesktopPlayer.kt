@@ -44,5 +44,10 @@ class DesktopPlayer : Player() {
         }
     }
 
+    override suspend fun pause() {
+        super.pause()
+
+    }
+
     // TODO: Implement MPRIS on Linux
 }

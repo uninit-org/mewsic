@@ -1,0 +1,12 @@
+headers = gio/gio.h
+package = gio
+
+# TODO: Support compiling against ARM
+compilerOpts.linux = -I/usr/include/glib-2.0/ -I/usr/lib/glib-2.0/include/
+linkerOpts.linux = -L/usr/lib/ -lglib-2.0 -lgio-2.0
+
+---
+
+struct DBusHandleWrapper {
+    void* handle;
+};

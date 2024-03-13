@@ -11,17 +11,13 @@ import org.bytedeco.ffmpeg.global.avutil.*
 import java.nio.BufferOverflowException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.util.*
 
 class LibAVMediaStream(private val url: String) : MediaStream {
     init {
         logger.debug("Opening stream: $url")
     }
 
-    private val isLinuxOrAndroid = System.getProperty("os.name").lowercase(Locale.getDefault()).let {
-//        it.contains("linux") ||
-                it.contains("android")
-    }
+    private val isAndroid = System.getProperty("java.vendor") == "The Android Project" || System.getProperty("java.vm.vendor") == "The Android Project"
 
     private val fmtCtx = avformat_alloc_context().also {
         if (avformat_open_input(it, url, null, null) != 0) {
@@ -99,7 +95,7 @@ class LibAVMediaStream(private val url: String) : MediaStream {
         av_opt_set(
             it,
             "sample_fmts",
-            av_get_sample_fmt_name(if (isLinuxOrAndroid) AV_SAMPLE_FMT_FLTP else AV_SAMPLE_FMT_S16P).string,
+            av_get_sample_fmt_name(if (isAndroid) AV_SAMPLE_FMT_FLTP else AV_SAMPLE_FMT_S16P).string,
             AV_OPT_SEARCH_CHILDREN
         )
         av_opt_set(it, "sample_rates", "44100", AV_OPT_SEARCH_CHILDREN)
@@ -116,7 +112,7 @@ class LibAVMediaStream(private val url: String) : MediaStream {
 
 
     private val frame = av_frame_alloc()
-    private val sampleSize = if (isLinuxOrAndroid) 4 else 2
+    private val sampleSize = if (isAndroid) 4 else 2
     private val packet = av_packet_alloc().also {
         av_new_packet(it, sampleSize * 2 * 128)
     }
@@ -256,8 +252,13 @@ class LibAVMediaStream(private val url: String) : MediaStream {
                 return -1
             }
 
-            if (av_read_frame(fmtCtx, packet) != 0) {
-                logger.info("Failed to read frame, likely EOF")
+            val err = av_read_frame(fmtCtx, packet)
+            if (err != 0) {
+                if (err != AVERROR_EOF) {
+                    val array = ByteArray(32)
+                    av_make_error_string(array, array.size.toLong(), err)
+                    logger.error("Failed to read frame (${array.decodeToString().trimEnd('?')})")
+                }
                 break
             }
 
@@ -284,7 +285,7 @@ class LibAVMediaStream(private val url: String) : MediaStream {
                 av_frame_unref(frame)
 
                 while (av_buffersink_get_frame(abuffersinkCtx, frame) >= 0) {
-                    val written = if (isLinuxOrAndroid) frame.readIntoFloat(wrapped) else frame.readIntoShort(wrapped)
+                    val written = if (isAndroid) frame.readIntoFloat(wrapped) else frame.readIntoShort(wrapped)
                     total += written
 
                     av_frame_unref(frame)
