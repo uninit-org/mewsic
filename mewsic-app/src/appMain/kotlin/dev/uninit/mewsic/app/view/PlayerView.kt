@@ -1,14 +1,19 @@
 package dev.uninit.mewsic.app.view
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import dev.uninit.mewsic.app.component.LocalPlayer
+import dev.uninit.mewsic.app.component.MewsicButton
 import dev.uninit.mewsic.client.soundcloud.PublicSoundCloudClient
 import dev.uninit.mewsic.media.provider.SoundCloudMediaProvider
 import dev.uninit.mewsic.utils.platform.Logger
@@ -32,8 +37,11 @@ fun PlayerView(component: PlayerComponent) {
         client.initialSetup()
     }
 
-    Column {
-        Button(
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+    ) {
+        MewsicButton(
             onClick = {
                 scope.launch {
                     // TODO: remove this line, it's just for testing
@@ -45,12 +53,14 @@ fun PlayerView(component: PlayerComponent) {
             Text("Play")
         }
 
-        Button(
+        Spacer(Modifier.height(8.dp))
+
+        MewsicButton(
             onClick = {
                 scope.launch {
                     player.pause()
                 }
-            }
+            },
         ) {
             Text("Pause")
         }

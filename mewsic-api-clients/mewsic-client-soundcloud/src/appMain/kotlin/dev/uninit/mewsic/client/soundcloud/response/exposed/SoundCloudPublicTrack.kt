@@ -69,7 +69,7 @@ data class SoundCloudPublicTrack(
     val tagList: String,
     override val title: String,
     @SerialName("track_format")
-    val trackFormat: String,
+    val trackFormat: String? = null,
     val uri: String,
     val urn: String,
     @SerialName("user_id")

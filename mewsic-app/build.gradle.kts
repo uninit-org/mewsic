@@ -1,14 +1,13 @@
-import dev.icerock.gradle.MRVisibility
-
 plugins {
     `mewsic-app`
     id("org.jetbrains.compose")
-    id("dev.icerock.mobile.multiplatform-resources")
 }
 
 kotlin {
     sourceSets {
         commonMain {
+//            kotlin.setSrcDirs(kotlin.srcDirs.filter { !it.absolutePath.contains("compose/resourceGenerator") })
+
             dependencies {
                 implementation(project(":mewsic-api-clients:mewsic-client-soundcloud"))
                 implementation(project(":mewsic-engine"))
@@ -25,6 +24,9 @@ kotlin {
         }
 
         appMain {
+//            configureResClassGeneration()
+//            configureResourceAccessorsGeneration()
+
             dependencies {
                 implementation(compose.ui)
                 implementation(compose.animation)
@@ -39,8 +41,6 @@ kotlin {
                 implementation("com.russhwolf:multiplatform-settings:${Versions.multiplatformSettings}")
                 implementation("com.arkivanov.decompose:decompose:${Versions.decompose}")
                 implementation("com.arkivanov.decompose:extensions-compose-jetbrains:${Versions.decompose}")
-                implementation("dev.icerock.moko:resources:${Versions.mokoResources}")
-                implementation("dev.icerock.moko:resources-compose:${Versions.mokoResources}")
             }
         }
 
@@ -54,13 +54,12 @@ kotlin {
     }
 }
 
-multiplatformResources {
-    multiplatformResourcesPackage = "${android.namespace}.resources"
-    multiplatformResourcesVisibility = MRVisibility.Internal
-    multiplatformResourcesSourceSet = "appMain"
-}
-
 compose {
+    resources {
+        packageOfResClass = "dev.uninit.mewsic.app.generated"
+        generateResClass = always
+    }
+
     desktop {
         application {
             mainClass = "dev.uninit.mewsic.app.MainKt"
