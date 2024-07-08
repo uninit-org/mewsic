@@ -12,14 +12,16 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("gradle-plugin", "1.9.23"))
-    implementation(kotlin("serialization", "1.9.23"))
+    implementation(kotlin("gradle-plugin", "2.0.0"))
+    implementation(kotlin("serialization", "2.0.0"))
+    implementation("org.jetbrains.kotlin:compose-compiler-gradle-plugin:2.0.0")
+    implementation("com.google.devtools.ksp:symbol-processing-gradle-plugin:2.0.0-1.0.22")
 
     implementation("com.github.ben-manes:gradle-versions-plugin:0.51.0")
     implementation("com.github.gmazzo.buildconfig:plugin:5.3.5")
 
-    implementation("org.jetbrains.compose:compose-gradle-plugin:1.6.10-beta03")
-    implementation("com.android.tools.build:gradle:8.4.0")
+    implementation("org.jetbrains.compose:compose-gradle-plugin:1.6.11")
+    implementation("com.android.tools.build:gradle:8.5.0")
     implementation("org.bytedeco.gradle-javacpp-platform:org.bytedeco.gradle-javacpp-platform.gradle.plugin:1.5.10")
 }
 

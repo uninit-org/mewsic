@@ -1,6 +1,6 @@
 package dev.uninit.mewsic.media.stream
 
-import dev.uninit.mewsic.utils.platform.logger
+import dev.uninit.mewsic.utils.platform.makeLogger
 import org.bytedeco.ffmpeg.avformat.AVFormatContext
 import org.bytedeco.ffmpeg.avutil.AVDictionary
 import org.bytedeco.ffmpeg.avutil.AVFrame
@@ -13,6 +13,8 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 class LibAVMediaStream(private val url: String) : MediaStream {
+    private val logger = makeLogger()
+
     init {
         logger.debug("Opening stream: $url")
     }

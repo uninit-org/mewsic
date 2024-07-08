@@ -3,7 +3,6 @@ package dev.uninit.mewsic.app.component
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import com.russhwolf.settings.SharedPreferencesSettings
 import dev.uninit.mewsic.utils.platform.AndroidPlatform

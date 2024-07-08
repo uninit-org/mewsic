@@ -1,12 +1,13 @@
 package dev.uninit.mewsic.player
 
-import dev.uninit.mewsic.utils.platform.logger
+import dev.uninit.mewsic.utils.platform.makeLogger
 import kotlinx.coroutines.delay
 import java.util.*
 import javax.sound.sampled.AudioFormat
 import javax.sound.sampled.AudioSystem
 
 class DesktopPlayer : Player() {
+    private val logger = makeLogger()
     private val isLinux = System.getProperty("os.name").lowercase(Locale.getDefault()).contains("linux")
     private val frameSize = 1024
 

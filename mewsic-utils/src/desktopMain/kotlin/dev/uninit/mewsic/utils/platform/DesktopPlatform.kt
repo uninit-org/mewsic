@@ -13,6 +13,7 @@ open class DesktopPlatform : Platform {
         UNKNOWN,
     }
 
+    private val logger = makeLogger()
     private val osName = System.getProperty("os.name").lowercase(Locale.getDefault())
     private val osType = when {
         osName.contains("win") -> OperatingSystem.WINDOWS

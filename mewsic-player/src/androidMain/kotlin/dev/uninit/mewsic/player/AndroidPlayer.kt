@@ -5,12 +5,13 @@ import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioTrack
-import dev.uninit.mewsic.utils.platform.logger
+import dev.uninit.mewsic.utils.platform.makeLogger
 import kotlinx.coroutines.delay
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 class AndroidPlayer(private val ctx: Context) : Player() {
+    private val logger = makeLogger()
     private val bufferSize = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_FLOAT)
     private val track = AudioTrack(
         AudioAttributes.Builder()

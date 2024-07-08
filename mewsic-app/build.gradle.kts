@@ -1,18 +1,19 @@
 plugins {
     `mewsic-app`
+    kotlin("plugin.compose")
     id("org.jetbrains.compose")
+    id("com.google.devtools.ksp")
 }
 
 kotlin {
     sourceSets {
         commonMain {
-//            kotlin.setSrcDirs(kotlin.srcDirs.filter { !it.absolutePath.contains("compose/resourceGenerator") })
-
             dependencies {
                 implementation(project(":mewsic-api-clients:mewsic-client-soundcloud"))
                 implementation(project(":mewsic-engine"))
                 implementation(project(":mewsic-media"))
                 implementation(project(":mewsic-player"))
+                implementation(project(":mewsic-plugin-api"))
                 implementation(project(":mewsic-utils"))
             }
         }
@@ -24,9 +25,6 @@ kotlin {
         }
 
         appMain {
-//            configureResClassGeneration()
-//            configureResourceAccessorsGeneration()
-
             dependencies {
                 implementation(compose.ui)
                 implementation(compose.animation)
@@ -40,7 +38,9 @@ kotlin {
                 implementation(compose.components.resources)
                 implementation("com.russhwolf:multiplatform-settings:${Versions.multiplatformSettings}")
                 implementation("com.arkivanov.decompose:decompose:${Versions.decompose}")
-                implementation("com.arkivanov.decompose:extensions-compose-jetbrains:${Versions.decompose}")
+                implementation("com.arkivanov.decompose:extensions-compose:${Versions.decompose}")
+
+                implementation("com.google.auto.service:auto-service-annotations:${Versions.autoService}")
             }
         }
 
@@ -52,6 +52,11 @@ kotlin {
             }
         }
     }
+}
+
+dependencies {
+    add("kspAndroid", "dev.zacsweers.autoservice:auto-service-ksp:${Versions.autoServiceKsp}")
+    add("kspDesktop", "dev.zacsweers.autoservice:auto-service-ksp:${Versions.autoServiceKsp}")
 }
 
 compose {
@@ -74,10 +79,11 @@ compose {
                 windows {
                     perUserInstall = true
                     dirChooser = true
+                    iconFile = project.file("src/androidMain/res/mipmap-xxxhdpi/ic_launcher.webp")
                 }
 
                 linux {
-
+                    iconFile = project.file("src/androidMain/res/mipmap-xxxhdpi/ic_launcher.webp")
                 }
             }
 
@@ -85,7 +91,8 @@ compose {
                 release {
                     proguard {
                         configurationFiles.from(
-                            project.rootProject.file("proguard/desktop-rules.pro")
+                            project.rootProject.file("proguard/common-rules.pro"),
+                            project.rootProject.file("proguard/desktop-rules.pro"),
                         )
                     }
                 }

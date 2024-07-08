@@ -2,7 +2,7 @@ package dev.uninit.mewsic.player
 
 import dev.uninit.mewsic.media.stream.MediaStream
 import dev.uninit.mewsic.media.track.MediaTrack
-import dev.uninit.mewsic.utils.platform.logger
+import dev.uninit.mewsic.utils.platform.makeLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -15,6 +15,7 @@ import org.bytedeco.ffmpeg.global.avutil.av_log_set_level
 import kotlin.time.Duration.Companion.minutes
 
 abstract class Player {
+    private val logger = makeLogger()
     val queue = Queue()
     var currentTrack: MediaTrack? = null
     var gain = 1.0f
@@ -127,10 +128,10 @@ abstract class Player {
 
     // FIXME: This crashes for some reason?
 //    companion object : LogCallback() {
-//        private val logger = Logger.withPrefix("[libav]")
+//        private val log = log.withPrefix("[libav]")
 //
 //        init {
-//            logger.info("Setting up libav logging")
+//            log.info("Setting up libav logging")
 //            avutil.av_log_set_callback(this)
 //        }
 //
@@ -138,13 +139,13 @@ abstract class Player {
 //            val message = msg?.string ?: "null"
 //
 //            when (level) {
-//                avutil.AV_LOG_ERROR -> logger.error(message)
-//                avutil.AV_LOG_WARNING -> logger.warn(message)
-//                avutil.AV_LOG_INFO -> logger.info(message)
-//                avutil.AV_LOG_DEBUG -> logger.debug(message)
+//                avutil.AV_LOG_ERROR -> log.error(message)
+//                avutil.AV_LOG_WARNING -> log.warn(message)
+//                avutil.AV_LOG_INFO -> log.info(message)
+//                avutil.AV_LOG_DEBUG -> log.debug(message)
 //                avutil.AV_LOG_TRACE -> {}
-//                avutil.AV_LOG_FATAL -> logger.critical(message)
-//                avutil.AV_LOG_PANIC -> logger.critical(message)
+//                avutil.AV_LOG_FATAL -> log.critical(message)
+//                avutil.AV_LOG_PANIC -> log.critical(message)
 //                avutil.AV_LOG_QUIET -> {}
 //            }
 //        }

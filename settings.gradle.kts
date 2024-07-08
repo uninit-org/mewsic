@@ -7,5 +7,6 @@ include(
     ":mewsic-engine",
     ":mewsic-media",
     ":mewsic-player",
+    ":mewsic-plugin-api",
     ":mewsic-utils",
 )

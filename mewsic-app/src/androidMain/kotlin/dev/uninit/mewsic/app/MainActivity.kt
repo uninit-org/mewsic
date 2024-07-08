@@ -8,9 +8,11 @@ import com.arkivanov.decompose.defaultComponentContext
 import dev.uninit.mewsic.app.component.LocalComponentContext
 import dev.uninit.mewsic.app.component.LocalPlayer
 import dev.uninit.mewsic.player.AndroidPlayer
-import dev.uninit.mewsic.utils.platform.logger
+import dev.uninit.mewsic.utils.platform.makeLogger
 
 class MainActivity : ComponentActivity() {
+    private val logger = makeLogger()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

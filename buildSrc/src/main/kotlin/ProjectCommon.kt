@@ -37,8 +37,8 @@ private fun TestedExtension.configureCommon(project: Project) {
     }
 
     compileOptions {
-        sourceCompatibility = Versions.jvmTarget
-        targetCompatibility = Versions.jvmTarget
+        sourceCompatibility = Versions.javaTarget
+        targetCompatibility = Versions.javaTarget
     }
 
     buildTypes {
@@ -54,8 +54,8 @@ private fun TestedExtension.configureCommon(project: Project) {
             isMinifyEnabled = true
             signingConfig = signingConfigs.getByName("release")
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                project.rootProject.file("proguard/android-rules.pro")
+                project.rootProject.file("proguard/common-rules.pro"),
+                project.rootProject.file("proguard/android-rules.pro"),
             )
         }
     }
@@ -181,13 +181,13 @@ fun Project.configureCommon() {
         }
 
         withType<JavaCompile> {
-            sourceCompatibility = Versions.jvmTarget.toString()
-            targetCompatibility = Versions.jvmTarget.toString()
+            sourceCompatibility = Versions.javaTarget.toString()
+            targetCompatibility = Versions.javaTarget.toString()
         }
 
         withType<KotlinCompile> {
-            kotlinOptions {
-                jvmTarget = Versions.jvmTarget.toString()
+            compilerOptions {
+                jvmTarget = Versions.jvmTarget
             }
         }
     }

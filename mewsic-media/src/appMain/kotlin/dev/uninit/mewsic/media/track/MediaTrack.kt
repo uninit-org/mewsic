@@ -2,7 +2,7 @@ package dev.uninit.mewsic.media.track
 
 import dev.uninit.mewsic.media.provider.MediaProvider
 import dev.uninit.mewsic.media.stream.MediaStream
-import dev.uninit.mewsic.utils.platform.logger
+import dev.uninit.mewsic.utils.platform.makeLogger
 import org.bytedeco.ffmpeg.avcodec.AVPacket
 import org.bytedeco.ffmpeg.avutil.AVDictionary
 import org.bytedeco.ffmpeg.avutil.AVDictionaryEntry
@@ -39,6 +39,8 @@ interface MediaTrack {
     }
 
     companion object {
+        private val logger = makeLogger()
+
         class MediaQueryResults(
             val artist: String?,
             val title: String?,
